@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.farming_using_ai_and_blockchain_front_end">
    <application
-        android:label="farming_using_ai_and_blockchain_front_end"
+        android:label="Agro App"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
