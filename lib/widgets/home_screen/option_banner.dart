@@ -1,5 +1,9 @@
+import 'package:farming_using_ai_and_blockchain_front_end/screens/options/plant_disease_detection.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/instance_manager.dart';
+import 'package:get/route_manager.dart';
 
 class OptionBanner extends StatelessWidget {
   const OptionBanner({
@@ -17,7 +21,9 @@ class OptionBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        onTapAction();
+        Get.to(PlantDiseaseDetection(),
+            transition: Transition.circularReveal,
+            duration: Duration(milliseconds: 1500));
       },
       child: Container(
         padding: EdgeInsets.only(left: 14, top: 20, right: 10, bottom: 10),

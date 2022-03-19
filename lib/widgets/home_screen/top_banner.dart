@@ -3,8 +3,11 @@ import 'dart:ui';
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/home_screen/settings_button.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
-class TopBanner extends StatelessWidget {
+class TopBanner extends StatefulWidget {
   const TopBanner({
     Key? key,
     required String username,
@@ -15,6 +18,20 @@ class TopBanner extends StatelessWidget {
 
   final String _username;
   final String _location;
+
+  @override
+  State<TopBanner> createState() => _TopBannerState();
+}
+
+class _TopBannerState extends State<TopBanner> {
+  var _location = "not found";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPosition();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +59,17 @@ class TopBanner extends StatelessWidget {
               Expanded(
                   child: Container(
                 // padding: EdgeInsets.only(left: 20, top: 20),
-                child: Text(
-                  "Hello, ${_username}",
-                  style: TextStyle(
-                      color: AppColor.homePageContainerTextBig,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 20),
+                child: Row(
+                  children: [
+                    Icon(FontAwesomeIcons.user),
+                    Text(
+                      " ${widget._username}",
+                      style: TextStyle(
+                          color: AppColor.homePageContainerTextBig,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 20),
+                    )
+                  ],
                 ), //Username
               )),
               Expanded(
@@ -57,7 +79,7 @@ class TopBanner extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.my_location_sharp,
-                      size: 14,
+                      size: 18,
                     ),
                     SizedBox(
                       width: 5,
@@ -74,5 +96,19 @@ class TopBanner extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<Placemark> getPosition() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    print(" altitude  ============> ${position.longitude}");
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    print("place ===========> ${placemarks[0].subLocality}");
+    setState(() {
+      _location =
+          "${placemarks[0].locality},\n  ${placemarks[0].subAdministrativeArea!}";
+    });
+    return placemarks[0];
   }
 }

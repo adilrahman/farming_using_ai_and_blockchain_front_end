@@ -39,6 +39,10 @@ dependencies:
   liquid_swipe: ^2.1.1
   font_awesome_flutter: ^9.2.0
   google_fonts: ^2.3.0
+  geolocator: ^8.2.0
+  geocoding: ^2.0.4
+  flutter_native_splash: ^2.1.1
+  get: ^4.6.1
 
 dev_dependencies:
   flutter_test:
@@ -55,6 +59,11 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
+
+flutter_native_splash:
+  image : assets/images/login_icon.png
+  color : "#f9f9f9" 
+
 flutter:
 
   # The following line ensures that the Material Icons font is

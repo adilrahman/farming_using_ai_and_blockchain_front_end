@@ -19,7 +19,7 @@ class TextFieldPassword extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           color: Colors.grey[600]?.withOpacity(0.5),
-          borderRadius: BorderRadius.circular(16)),
+          borderRadius: BorderRadius.circular(40)),
       child: TextField(
         controller: _passwordEditController,
         obscureText: true,
@@ -28,10 +28,9 @@ class TextFieldPassword extends StatelessWidget {
         decoration: const InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 18),
             prefixIcon: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Icon(FontAwesomeIcons.lock),
-            ),
-            hintStyle: kBodyText,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Icon(Icons.lock_outline)),
+            hintStyle: TextStyle(),
             hintText: "Password",
             border: InputBorder.none),
       ),
@@ -56,7 +55,7 @@ class TextFieldUserName extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           color: Colors.grey[600]?.withOpacity(0.5),
-          borderRadius: BorderRadius.circular(16)),
+          borderRadius: BorderRadius.circular(40)),
       child: TextField(
         controller: _userNameEditController,
         keyboardType: TextInputType.name,
@@ -66,9 +65,9 @@ class TextFieldUserName extends StatelessWidget {
             contentPadding: const EdgeInsets.symmetric(vertical: 18),
             prefixIcon: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Icon(FontAwesomeIcons.user),
+              child: Icon(Icons.person_outline),
             ),
-            hintStyle: kBodyText,
+            hintStyle: TextStyle(),
             hintText: _hintText,
             border: InputBorder.none),
       ),

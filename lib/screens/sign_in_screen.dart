@@ -1,7 +1,9 @@
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/palatte.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/screens/screens.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -15,18 +17,19 @@ class SignInScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(left: 15, right: 15, top: 2, bottom: 15),
       child: SingleChildScrollView(
-        child: Column(
+        child: (Column(
           children: [
             SizedBox(
               height: 20,
             ),
             Container(
+              height: 150,
+              width: 285,
               // Background Icon
-
-              child: Text(
-                "Agro App",
-                style: kHeading,
-              ),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/login_icon.png"),
+                      fit: BoxFit.fill)),
               // Image.asset("assets/images/login_icon.png"),
             ),
             SizedBox(
@@ -54,21 +57,22 @@ class SignInScreen extends StatelessWidget {
                   ),
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          primary: AppColor.gradientFirst,
+                          primary: Colors.green[500],
                           textStyle: const TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                           padding: EdgeInsets.symmetric(
-                              horizontal: 100, vertical: 18)),
+                              horizontal: 100, vertical: 13)),
                       onPressed: () {
                         print(_userNameEditController.text);
                         print(_passwordEditController.text);
+                        Get.to(HomeScreen(), transition: Transition.zoom);
                       },
                       child: const Text("Login"))
                 ],
               ),
             ),
           ],
-        ),
+        )),
       ),
     );
   }

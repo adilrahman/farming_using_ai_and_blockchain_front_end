@@ -18,7 +18,7 @@ class SignInAndUp extends StatelessWidget {
       child: Column(
         children: [
           TabBar(
-              padding: EdgeInsets.symmetric(horizontal: 40),
+              padding: EdgeInsets.symmetric(horizontal: 55),
               controller: _tabController,
               indicatorColor: Colors.green,
               unselectedLabelColor: Colors.grey,
