@@ -9,8 +9,10 @@ class MainLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(left: 0, right: 10),
       child: const SpinKitThreeInOut(
-        color: Colors.blueAccent,
+        color: Colors.white,
+        size: 20,
       ),
     );
   }

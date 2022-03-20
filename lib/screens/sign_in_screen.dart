@@ -15,57 +15,60 @@ class SignInScreen extends StatelessWidget {
     TextEditingController _userNameEditController = TextEditingController();
     TextEditingController _passwordEditController = TextEditingController();
     return Container(
-      padding: const EdgeInsets.only(left: 15, right: 15, top: 2, bottom: 15),
+      padding: const EdgeInsets.only(left: 0, right: 0, top: 2, bottom: 15),
       child: SingleChildScrollView(
         child: (Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
               height: 150,
               width: 285,
               // Background Icon
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage("assets/images/login_icon.png"),
                       fit: BoxFit.fill)),
               // Image.asset("assets/images/login_icon.png"),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
               //user name , passwrod and login button
               padding: const EdgeInsets.only(
-                left: 20,
-                right: 20,
+                left: 5,
+                right: 5,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextFieldUserName(
-                      newhintText: "Username",
-                      userNameEditController: _userNameEditController),
+                  GeneralTextField(
+                      textEditingController: _userNameEditController,
+                      hintText: "username",
+                      prefixIcon: Icon(Icons.person_outline)),
                   const SizedBox(
                     height: 10,
                   ),
-                  TextFieldPassword(
-                      passwordEditController: _passwordEditController),
+                  GeneralTextField(
+                      textEditingController: _passwordEditController,
+                      hintText: "password",
+                      prefixIcon: Icon(Icons.lock_outline)),
                   const SizedBox(
                     height: 20,
                   ),
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           primary: Colors.green[500],
-                          textStyle: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
                           padding: EdgeInsets.symmetric(
-                              horizontal: 100, vertical: 13)),
+                              horizontal: 70, vertical: 15)),
                       onPressed: () {
                         print(_userNameEditController.text);
                         print(_passwordEditController.text);
-                        Get.to(HomeScreen(), transition: Transition.zoom);
+                        Get.to(HomeScreen(),
+                            transition: Transition.cupertinoDialog,
+                            duration: Duration(milliseconds: 1200));
                       },
                       child: const Text("Login"))
                 ],

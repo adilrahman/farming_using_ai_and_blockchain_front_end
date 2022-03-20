@@ -1,3 +1,5 @@
+import 'package:farming_using_ai_and_blockchain_front_end/controllers/weather_and_location_controller.dart';
+
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
@@ -21,6 +23,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final WeatherAndLocationController locationController =
+      Get.put(WeatherAndLocationController(), tag: "location");
+
   var _username = "Adil rahman";
   static String _location = "not found";
   final _temp = "67 f";
@@ -58,58 +63,62 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.homePageBackground,
-      body: Container(
-        padding: const EdgeInsets.only(),
-        child: Column(
-          children: [
-            Stack(
+    return Obx(() => Scaffold(
+          backgroundColor: AppColor.homePageBackground,
+          body: Container(
+            padding: const EdgeInsets.only(),
+            child: Column(
               children: [
-                TopBanner(username: _username, location: _location),
-                WeatherBanner(
-                    temp: _temp,
-                    humidity: _humidity,
-                    rain_fall: _rain_fall,
-                    windSpeed: _windSpeed),
+                Stack(
+                  children: [
+                    TopBanner(
+                        username: _username,
+                        location: locationController.location.value),
+                    WeatherBanner(
+                        temp: _temp,
+                        humidity: _humidity,
+                        rain_fall: _rain_fall,
+                        windSpeed: _windSpeed),
+                  ],
+                ),
+                Expanded(
+                    child: RefreshIndicator(
+                  onRefresh: () async {
+                    await locationController.getLocation();
+
+                    print(
+                        " new freas ======== > ${locationController.location.value} ");
+                  },
+                  child: ListView.builder(
+                    itemCount: options.length,
+                    itemBuilder: (context, index) {
+                      var _bg_source = options[index][0].toString();
+                      var _serviceName = options[index][1].toString();
+                      var _onTapAction = options[index][2];
+                      print(_bg_source);
+
+                      return OptionBanner(
+                        bg_source: _bg_source,
+                        serviceName: _serviceName,
+                        onTapAction: _onTapAction,
+                      );
+                    },
+                  ),
+                ))
               ],
             ),
-            Expanded(
-                child: ListView.builder(
-              itemCount: options.length,
-              itemBuilder: (context, index) {
-                var _bg_source = options[index][0].toString();
-                var _serviceName = options[index][1].toString();
-                var _onTapAction = options[index][2];
-                print(_bg_source);
-
-                return OptionBanner(
-                  bg_source: _bg_source,
-                  serviceName: _serviceName,
-                  onTapAction: _onTapAction,
-                );
-              },
-            ))
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 
   // Future<Placemark> getPosition() async {
-  //   setState(() {
-  //     isLoading = true;
-  //   });
   //   Position position = await Geolocator.getCurrentPosition(
   //       desiredAccuracy: LocationAccuracy.high);
   //   print(" altitude  ============> ${position.longitude}");
   //   List<Placemark> placemarks =
   //       await placemarkFromCoordinates(position.latitude, position.longitude);
   //   print("place ===========> ${placemarks[0].subLocality}");
-  //   setState(() {
-  //     _location = "${position.longitude}";
-  //     isLoading = false;
-  //   });
+
   //   return placemarks[0];
   // }
 }

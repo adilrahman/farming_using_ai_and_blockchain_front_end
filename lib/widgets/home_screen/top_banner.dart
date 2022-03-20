@@ -1,14 +1,34 @@
-import 'dart:ui';
-
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/controllers/weather_and_location_controller.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/home_screen/settings_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
+
+// class TopBanner extends StatefulWidget {
+//   const TopBanner({
+//     Key? key,
+//     required String username,
+//     required String location,
+//   })  : _username = username,
+//         _location = location,
+//         super(key: key);
+
+//   final String _username;
+//   final String _location;
+
+//   @override
+//   State<TopBanner> createState() => _TopBannerState();
+// }
+
+//   const SettingsButton({
+//     Key? key,
+//   }) : super(key: key);
 
 class TopBanner extends StatefulWidget {
-  const TopBanner({
+  TopBanner({
     Key? key,
     required String username,
     required String location,
@@ -17,24 +37,27 @@ class TopBanner extends StatefulWidget {
         super(key: key);
 
   final String _username;
-  final String _location;
+  var _location;
 
   @override
   State<TopBanner> createState() => _TopBannerState();
 }
 
 class _TopBannerState extends State<TopBanner> {
-  var _location = "not found";
-
+  WeatherAndLocationController _locationController = Get.find(tag: "location");
+  var location = "not found";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getPosition();
+    _locationController.getLocation();
+    //  print(_locationController.count.value);
+    location = _locationController.location.value;
   }
 
   @override
   Widget build(BuildContext context) {
+    // location = _locationController.location.value;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 5),
       height: 260,
@@ -58,10 +81,12 @@ class _TopBannerState extends State<TopBanner> {
             children: [
               Expanded(
                   child: Container(
-                // padding: EdgeInsets.only(left: 20, top: 20),
                 child: Row(
                   children: [
-                    Icon(FontAwesomeIcons.user),
+                    Icon(
+                      FontAwesomeIcons.user,
+                      size: 19,
+                    ),
                     Text(
                       " ${widget._username}",
                       style: TextStyle(
@@ -79,14 +104,14 @@ class _TopBannerState extends State<TopBanner> {
                   children: [
                     Icon(
                       Icons.my_location_sharp,
-                      size: 18,
+                      size: 20,
                     ),
                     SizedBox(
                       width: 5,
                     ),
                     Text(
-                      "${_location}",
-                      style: TextStyle(fontSize: 12),
+                      "${widget._location}",
+                      style: TextStyle(fontSize: 11),
                     )
                   ],
                 ),
@@ -105,10 +130,10 @@ class _TopBannerState extends State<TopBanner> {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
     print("place ===========> ${placemarks[0].subLocality}");
-    setState(() {
-      _location =
-          "${placemarks[0].locality},\n  ${placemarks[0].subAdministrativeArea!}";
-    });
+    // setState(() {
+    //   _location =
+    //       "${placemarks[0].locality},\n  ${placemarks[0].subAdministrativeArea!}";
+    // });
     return placemarks[0];
   }
 }

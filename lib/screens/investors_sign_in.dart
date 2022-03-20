@@ -1,6 +1,7 @@
 import 'package:farming_using_ai_and_blockchain_front_end/palatte.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class InvestorsSignInScreen extends StatelessWidget {
   // Investors Sign in Screen
@@ -25,20 +26,18 @@ class InvestorsSignInScreen extends StatelessWidget {
             SizedBox(
               height: 50,
             ),
-            TextFieldUserName(
-              userNameEditController: _userEthAddress,
-              newhintText: "Etherium Address",
-            ),
+            GeneralTextField(
+                textEditingController: _userEthAddress,
+                hintText: "ethereum address",
+                prefixIcon: Icon(FontAwesomeIcons.ethereum)),
             const SizedBox(
               height: 20,
             ),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    primary: Colors.green,
-                    textStyle: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 100, vertical: 18)),
+                    primary: Colors.green[500],
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 70, vertical: 15)),
                 onPressed: () {
                   print(_userEthAddress.text);
                 },
