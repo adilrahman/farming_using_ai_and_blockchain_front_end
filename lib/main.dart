@@ -1,6 +1,5 @@
-import 'package:farming_using_ai_and_blockchain_front_end/screens/investors_sign_in.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/screens.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/screens/sign_in_or_sign_up.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/screens/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
@@ -39,7 +38,7 @@ class MyApp extends StatelessWidget {
         home: Scaffold(
           // backgroundColor: Colors.black,
           body: 1 != 1
-              ? SignUpScreen()
+              ? SettingsScreen()
               : Builder(builder: (context) {
                   return LiquidSwipe(
                       liquidController: _liquidController,
@@ -47,7 +46,7 @@ class MyApp extends StatelessWidget {
                       enableLoop: true,
                       initialPage: 0,
                       waveType: WaveType.liquidReveal,
-                      slideIconWidget: Icon(Icons.arrow_back_ios),
+                      slideIconWidget: const Icon(Icons.arrow_back_ios),
                       pages: [
                         SafeArea(child: SignInOrSignUp()),
                         InvestorsSignInScreen(),

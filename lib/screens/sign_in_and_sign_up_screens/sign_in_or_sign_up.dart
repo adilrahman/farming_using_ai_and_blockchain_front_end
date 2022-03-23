@@ -22,11 +22,13 @@ class _SignInOrSignUpState extends State<SignInOrSignUp>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        BackgroundImageOfSign(),
-        SignInAndUp(tabController: _tabController),
-      ],
+    return Scaffold(
+      body: Stack(
+        children: [
+          BackgroundImageOfSign(),
+          SignInAndUp(tabController: _tabController),
+        ],
+      ),
     );
   }
 }

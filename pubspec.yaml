@@ -43,6 +43,8 @@ dependencies:
   geocoding: ^2.0.4
   flutter_native_splash: ^2.1.1
   get: ^4.6.1
+  flutter_settings_screens: ^0.3.2-null-safety
+  percent_indicator: ^4.0.0
 
 dev_dependencies:
   flutter_test:

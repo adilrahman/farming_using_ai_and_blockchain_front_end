@@ -1,7 +1,8 @@
 import 'package:farming_using_ai_and_blockchain_front_end/controllers/weather_and_location_controller.dart';
-
+import 'application_services_screens/application_services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'application_services_screens/plant_disease_detection.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/palatte.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/home_screen/settings_button.dart';
@@ -12,7 +13,7 @@ import 'package:farming_using_ai_and_blockchain_front_end/widgets/loading.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -37,28 +38,32 @@ class _HomeScreenState extends State<HomeScreen> {
     print("=====================--------=> ${_location}");
   }
 
-  static var options = [
-    [
+  var options = [
+    const [
       "assets/images/bg_plant_disease_detection.jpg",
       "Plant Disease Detection",
-      onTapAction
+      PlantDiseaseDetectionScreen()
     ],
-    [
+    const [
       "assets/images/bg_crop_recommendation.jpeg",
       "Crop Recommendation",
-      onTapAction
+      CropRecommendationScreen()
     ],
-    [
+    const [
       "assets/images/bg_ferilizer_recommendation.jpg",
       "Fertilizer Recommendation",
-      onTapAction
+      FertilizerRecommendationScreen()
     ],
-    [
+    const [
       "assets/images/bg_time_to_fertilize.jpg",
       "Time to Fertilize",
-      onTapAction
+      RightTimeToFertilize()
     ],
-    ["assets/images/bg_crowdfunding.jpeg", "Crowdfunding", onTapAction],
+    const [
+      "assets/images/bg_crowdfunding.jpeg",
+      "Crowdfunding",
+      CrowdFundingScreen(),
+    ],
   ];
 
   @override
@@ -100,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return OptionBanner(
                         bg_source: _bg_source,
                         serviceName: _serviceName,
-                        onTapAction: _onTapAction,
+                        goToPage: _onTapAction,
                       );
                     },
                   ),
