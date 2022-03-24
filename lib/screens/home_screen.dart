@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   var _username = "Adil rahman";
   static String _location = "not found";
-  final _temp = "67 f";
+  final _temp = "67\u00000 C";
   final _humidity = "61%";
   final _rain_fall = "0.0mm";
   final _windSpeed = "3.9m/s";
@@ -80,19 +80,23 @@ class _HomeScreenState extends State<HomeScreen> {
                         username: _username,
                         location: locationController.location.value),
                     WeatherBanner(
-                        temp: _temp,
-                        humidity: _humidity,
-                        rain_fall: _rain_fall,
-                        windSpeed: _windSpeed),
+                      temp: locationController.temp.toString(),
+                      humidity: locationController.humidity.toString(),
+                      rain_fall: locationController.rainFall.toString(),
+                      windSpeed: locationController.windSpeed.toString(),
+                    )
                   ],
                 ),
                 Expanded(
                     child: RefreshIndicator(
                   onRefresh: () async {
-                    await locationController.getLocation();
+                    // await locationController.getLocation();
+                    await locationController.getCurrentWeatherData();
 
                     print(
                         " new freas ======== > ${locationController.location.value} ");
+                    print(
+                        "= ================================>  ${locationController.humidity}    <==========================================");
                   },
                   child: ListView.builder(
                     itemCount: options.length,

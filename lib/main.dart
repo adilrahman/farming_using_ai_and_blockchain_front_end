@@ -5,14 +5,17 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:get/get.dart';
 
+import 'controllers/weather_and_location_controller.dart';
+
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  // WeatherAndLocationController _locationController = Get.find(tag: "location");
-  // await _locationController.getLocation();
+
   runApp(MyApp());
   // whenever your initialization is completed, remove the splash screen:
   FlutterNativeSplash.remove();
+  // WeatherAndLocationController _locationController = Get.find(tag: "location");
+  // await _locationController.getCurrentWeatherData()();
 }
 
 class MyApp extends StatelessWidget {

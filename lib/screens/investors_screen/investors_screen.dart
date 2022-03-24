@@ -1,14 +1,9 @@
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/palatte.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/screens/screens.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/settings/settings_screen.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-
 import 'investors_detailed_screen.dart';
 
 class InvestorsScreen extends StatelessWidget {
@@ -25,9 +20,11 @@ class InvestorsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.homePageBackground,
-      body: SafeArea(
-          child: Container(
+      body: Container(
+        padding: EdgeInsets.only(top: 40),
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                colors: [AppColor.gradientFirst, AppColor.gradientSecond])),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -44,7 +41,9 @@ class InvestorsScreen extends StatelessWidget {
                 children: [
                   Text(
                     "farming projects",
-                    style: TextStyle(color: AppColor.homePageSubtitle),
+                    style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        color: AppColor.homePageContainerTextBig),
                   ),
                   Divider(
                     color: AppColor.homePageTitle,
@@ -55,24 +54,37 @@ class InvestorsScreen extends StatelessWidget {
 
             //farming projects
             Expanded(
-              child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: ListView.builder(
-                    // itemCount: 20,
-                    itemBuilder: (context, index) => FarmingProjectListView(
-                        projectname: _projectname,
-                        postedDate: _postedDate,
-                        description: _description,
-                        totalAmount: _totalAmount,
-                        percentageOfCompletion: _percentageOfCompletion,
-                        percentageOfCompletionInText:
-                            _percentageOfCompletionInText),
-                  )),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  print("object");
+                  Get.snackbar("title", "message");
+                },
+                child: Container(
+                    decoration: BoxDecoration(
+                        color: AppColor.homePageBackground,
+                        borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(70),
+                            topLeft: Radius.circular(70))),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                    child: OverflowBox(
+                      child: ListView.builder(
+                        // itemCount: 20,
+                        itemBuilder: (context, index) => FarmingProjectListView(
+                            projectname: _projectname,
+                            postedDate: _postedDate,
+                            description: _description,
+                            totalAmount: _totalAmount,
+                            percentageOfCompletion: _percentageOfCompletion,
+                            percentageOfCompletionInText:
+                                _percentageOfCompletionInText),
+                      ),
+                    )),
+              ),
             ),
           ],
         ),
-      )),
+      ),
     );
   }
 }
@@ -110,17 +122,26 @@ class FarmingProjectListView extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(33), bottomLeft: Radius.circular(33)),
+            boxShadow: [
+              BoxShadow(
+                  blurRadius: 10,
+                  offset: Offset(2, 5),
+                  color: AppColor.gradientSecond.withOpacity(0.9))
+            ],
+            borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(33),
+                bottomLeft: Radius.circular(33),
+                topLeft: Radius.circular(33),
+                bottomRight: Radius.circular(33)),
             gradient: LinearGradient(colors: [
               AppColor.gradientFirst.withOpacity(0.9),
               AppColor.gradientSecond.withOpacity(0.9),
             ])),
-        margin: const EdgeInsets.symmetric(vertical: 10),
+        margin: const EdgeInsets.symmetric(vertical: 9),
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
               width: double.infinity,
               height: 175,
               child: Column(
@@ -159,11 +180,11 @@ class FarmingProjectListView extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(color: Colors.white70),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       borderRadius:
                           BorderRadius.only(bottomLeft: Radius.circular(33)),
                     ),
@@ -171,13 +192,13 @@ class FarmingProjectListView extends StatelessWidget {
                     width: double.infinity,
                     child: Padding(
                       padding: const EdgeInsets.all(3.0),
-                      child: new LinearPercentIndicator(
+                      child: LinearPercentIndicator(
                         animation: true,
                         trailing: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(_totalAmount),
-                            Icon(
+                            const Icon(
                               FontAwesomeIcons.ethereum,
                               color: Colors.black,
                               size: 20,
@@ -221,7 +242,7 @@ class _UserNameSection extends StatelessWidget {
           const Icon(
             Icons.person_outline,
             size: 25,
-            color: Colors.black,
+            color: Colors.white,
           ),
           const SizedBox(
             width: 10,
@@ -229,8 +250,8 @@ class _UserNameSection extends StatelessWidget {
           Text(
             _username,
             style: TextStyle(
-                color: AppColor.homePageTitle,
-                fontWeight: FontWeight.w300,
+                color: AppColor.homePageContainerTextBig,
+                fontWeight: FontWeight.w600,
                 fontSize: 30),
           ),
           Expanded(child: Container()),
@@ -239,11 +260,11 @@ class _UserNameSection extends StatelessWidget {
               Get.to(
                 SettingsScreen(),
                 transition: Transition.circularReveal,
-                duration: Duration(seconds: 2),
+                duration: const Duration(seconds: 2),
               );
             },
-            icon: Icon(Icons.settings_outlined),
-            color: AppColor.homePageTitle,
+            icon: const Icon(Icons.settings_outlined),
+            color: Colors.white,
           )
         ],
       ),

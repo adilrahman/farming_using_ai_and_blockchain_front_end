@@ -50,9 +50,11 @@ class _TopBannerState extends State<TopBanner> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _locationController.getLocation();
+    _locationController.getCurrentWeatherData();
     //  print(_locationController.count.value);
     location = _locationController.location.value;
+    print(
+        "= ================================>  ${_locationController.humidity}    <==========================================");
   }
 
   @override

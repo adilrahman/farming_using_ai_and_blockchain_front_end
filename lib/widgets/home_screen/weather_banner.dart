@@ -1,24 +1,26 @@
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/controllers/weather_and_location_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 class WeatherBanner extends StatelessWidget {
-  const WeatherBanner({
+  WeatherBanner({
     Key? key,
-    required String temp,
-    required String humidity,
-    required String rain_fall,
-    required String windSpeed,
+    required temp,
+    required humidity,
+    required rain_fall,
+    required windSpeed,
   })  : _temp = temp,
         _humidity = humidity,
         _rain_fall = rain_fall,
         _windSpeed = windSpeed,
         super(key: key);
-
-  final String _temp;
-  final String _humidity;
-  final String _rain_fall;
-  final String _windSpeed;
+  WeatherAndLocationController _locationController = Get.find(tag: "location");
+  var _temp;
+  var _humidity;
+  var _rain_fall;
+  var _windSpeed;
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +59,11 @@ class WeatherBanner extends StatelessWidget {
                     ),
                     Stack(
                       children: [
-                        Text(
-                          "${_temp}\nTemperature",
-                          style: TextStyle(color: Colors.black, fontSize: 12),
-                        ),
+                        Obx(() => Text(
+                              "${_locationController.temp.toString()}\nTemperature",
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 12),
+                            )),
                       ],
                     )
                   ],
@@ -82,7 +85,7 @@ class WeatherBanner extends StatelessWidget {
                     Stack(
                       children: [
                         Text(
-                          "${_humidity}\nHumidity",
+                          "${_humidity.toString()}\nHumidity",
                           style: TextStyle(color: Colors.black, fontSize: 12),
                         ),
                       ],
@@ -111,7 +114,7 @@ class WeatherBanner extends StatelessWidget {
                     Stack(
                       children: [
                         Text(
-                          "${_rain_fall}\nRain fall",
+                          "${_rain_fall.toString()}\nRain fall",
                           style: TextStyle(color: Colors.black, fontSize: 12),
                         ),
                       ],
@@ -135,7 +138,7 @@ class WeatherBanner extends StatelessWidget {
                     Stack(
                       children: [
                         Text(
-                          "${_windSpeed}\nWindSpeed",
+                          "${_windSpeed.toString()}\nWindSpeed",
                           style: TextStyle(color: Colors.black, fontSize: 12),
                         ),
                       ],
