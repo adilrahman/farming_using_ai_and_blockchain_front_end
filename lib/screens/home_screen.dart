@@ -80,11 +80,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         username: _username,
                         location: locationController.location.value),
                     WeatherBanner(
-                      temp: locationController.temp.toString(),
-                      humidity: locationController.humidity.toString(),
-                      rain_fall: locationController.rainFall.toString(),
-                      windSpeed: locationController.windSpeed.toString(),
-                    )
+                        temp: locationController.temp,
+                        humidity: locationController.humidity,
+                        rain_fall: locationController.rainFall,
+                        windSpeed: locationController.windSpeed)
                   ],
                 ),
                 Expanded(

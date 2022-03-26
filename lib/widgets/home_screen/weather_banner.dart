@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+import '../loading.dart';
+
 class WeatherBanner extends StatelessWidget {
   WeatherBanner({
     Key? key,
@@ -16,7 +18,9 @@ class WeatherBanner extends StatelessWidget {
         _rain_fall = rain_fall,
         _windSpeed = windSpeed,
         super(key: key);
-  WeatherAndLocationController _locationController = Get.find(tag: "location");
+  final WeatherAndLocationController _locationController =
+      Get.find(tag: "location");
+  // not using this passing variable directley accessing through the controller in here
   var _temp;
   var _humidity;
   var _rain_fall;
@@ -25,131 +29,143 @@ class WeatherBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //weather display
-      margin: const EdgeInsets.only(top: 140, left: 10, right: 10),
-      padding: const EdgeInsets.only(left: 10, top: 10, right: 10),
-      width: MediaQuery.of(context).size.width,
-      height: 250,
-      decoration: BoxDecoration(
-          color: AppColor.homePageBackground,
-          boxShadow: const [
-            BoxShadow(
-                blurRadius: 45, offset: Offset(20, 20), color: Colors.black45),
-          ],
-          borderRadius: const BorderRadius.all(Radius.circular(10))),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-              child: Row(
-            children: [
-              Expanded(
-                  child: Center(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      FontAwesomeIcons.temperatureHigh,
-                      color: Colors.black,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Stack(
-                      children: [
-                        Obx(() => Text(
-                              "${_locationController.temp.toString()}\nTemperature",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 12),
-                            )),
-                      ],
-                    )
-                  ],
-                ),
-              )),
-              Expanded(
-                  child: Center(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      FontAwesomeIcons.dragon,
-                      color: Colors.black,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Stack(
-                      children: [
-                        Text(
-                          "${_humidity.toString()}\nHumidity",
-                          style: TextStyle(color: Colors.black, fontSize: 12),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ))
+        //weather display
+        margin: const EdgeInsets.only(top: 140, left: 10, right: 10),
+        padding: const EdgeInsets.only(left: 10, top: 10, right: 10),
+        width: MediaQuery.of(context).size.width,
+        height: 250,
+        decoration: BoxDecoration(
+            color: AppColor.homePageBackground,
+            boxShadow: const [
+              BoxShadow(
+                  blurRadius: 45,
+                  offset: Offset(20, 20),
+                  color: Colors.black45),
             ],
-          )),
-          Expanded(
-              child: Row(
-            children: [
-              Expanded(
-                  child: Center(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
+            borderRadius: const BorderRadius.all(Radius.circular(10))),
+        child: Obx(() => Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                    child: Row(
                   children: [
-                    const Icon(
-                      FontAwesomeIcons.cloudRain,
-                      color: Colors.black,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Stack(
-                      children: [
-                        Text(
-                          "${_rain_fall.toString()}\nRain fall",
-                          style: TextStyle(color: Colors.black, fontSize: 12),
-                        ),
-                      ],
-                    )
+                    Expanded(
+                        child: Center(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            FontAwesomeIcons.temperatureHigh,
+                            color: Colors.black,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Stack(
+                            children: [
+                              _locationController.isWeatherDataLoading == true
+                                  ? WeatherDataLoading()
+                                  : Text(
+                                      "${_locationController.temp}\nTemp",
+                                      style: const TextStyle(
+                                          color: Colors.black, fontSize: 12),
+                                    ),
+                            ],
+                          )
+                        ],
+                      ),
+                    )),
+                    Expanded(
+                        child: Center(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.cloud_outlined,
+                            color: Colors.black,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Stack(
+                            children: [
+                              _locationController.isWeatherDataLoading == true
+                                  ? WeatherDataLoading()
+                                  : Text(
+                                      "${_locationController.humidity}\nHumidity",
+                                      style: const TextStyle(
+                                          color: Colors.black, fontSize: 12),
+                                    ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ))
                   ],
-                ),
-              )),
-              Expanded(
-                  child: Center(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                )),
+                Expanded(
+                    child: Row(
                   children: [
-                    Icon(
-                      FontAwesomeIcons.wind,
-                      color: Colors.black,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Stack(
-                      children: [
-                        Text(
-                          "${_windSpeed.toString()}\nWindSpeed",
-                          style: TextStyle(color: Colors.black, fontSize: 12),
-                        ),
-                      ],
-                    )
+                    Expanded(
+                        child: Center(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            FontAwesomeIcons.cloudRain,
+                            color: Colors.black,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Stack(
+                            children: [
+                              _locationController.isWeatherDataLoading == true
+                                  ? WeatherDataLoading()
+                                  : Text(
+                                      "${_locationController.rainFall}\nclouds",
+                                      style: const TextStyle(
+                                          color: Colors.black, fontSize: 12),
+                                    ),
+                            ],
+                          )
+                        ],
+                      ),
+                    )),
+                    Expanded(
+                        child: Center(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            FontAwesomeIcons.wind,
+                            color: Colors.black,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Stack(
+                            children: [
+                              _locationController.isWeatherDataLoading == true
+                                  ? WeatherDataLoading()
+                                  : Text(
+                                      "${_locationController.windSpeed}\nWindSpeed",
+                                      style: const TextStyle(
+                                          color: Colors.black, fontSize: 12),
+                                    ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ))
                   ],
-                ),
-              ))
-            ],
-          )),
-        ],
-      ),
-    );
+                )),
+              ],
+            )));
   }
 }

@@ -7,6 +7,8 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
+import '../loading.dart';
+
 // class TopBanner extends StatefulWidget {
 //   const TopBanner({
 //     Key? key,
@@ -53,8 +55,8 @@ class _TopBannerState extends State<TopBanner> {
     _locationController.getCurrentWeatherData();
     //  print(_locationController.count.value);
     location = _locationController.location.value;
-    print(
-        "= ================================>  ${_locationController.humidity}    <==========================================");
+    // print(
+    // "= ================================>  ${_locationController.humidity}    <==========================================");
   }
 
   @override
@@ -75,9 +77,9 @@ class _TopBannerState extends State<TopBanner> {
       ),
       child: Column(
         children: [
-          SizedBox(height: 10),
-          SettingsButton(),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
+          const SettingsButton(),
+          const SizedBox(height: 10),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -85,7 +87,7 @@ class _TopBannerState extends State<TopBanner> {
                   child: Container(
                 child: Row(
                   children: [
-                    Icon(
+                    const Icon(
                       FontAwesomeIcons.user,
                       size: 19,
                     ),
@@ -100,24 +102,26 @@ class _TopBannerState extends State<TopBanner> {
                 ), //Username
               )),
               Expanded(
-                  child: Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Icon(
-                      Icons.my_location_sharp,
-                      size: 20,
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      "${widget._location}",
-                      style: TextStyle(fontSize: 11),
-                    )
-                  ],
-                ),
-              ))
+                  child: Obx(() => Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            const Icon(
+                              Icons.my_location_sharp,
+                              size: 20,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            _locationController.isWeatherDataLoading == true
+                                ? LocationDataLoading()
+                                : Text(
+                                    "${_locationController.location.value}",
+                                    style: TextStyle(fontSize: 11),
+                                  )
+                          ],
+                        ),
+                      )))
             ],
           ),
         ],
