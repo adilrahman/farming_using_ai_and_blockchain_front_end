@@ -42,8 +42,11 @@ class WeatherAndLocationController extends GetxController {
     http.Response response = await http.get(Uri.parse(api));
     var result = jsonDecode(response.body);
 
+    // fetching temp in farenheat
+    int tempInCelsius = (result['main']['temp'] - 273.15).round();
+
     humidity(result["main"]["humidity"].toString() + "%");
-    temp((result['main']['temp']).toString() + "K");
+    temp("$tempInCelsius\u2103");
     windSpeed(result["wind"]["speed"].toString() + "m/s");
     rainFall(result["clouds"]["all"].toString() + "%");
     isWeatherDataLoading.value = false;
