@@ -5,8 +5,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:get/get.dart';
 
-import 'controllers/weather_and_location_controller.dart';
-
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -22,7 +20,7 @@ class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
   final LiquidController _liquidController = LiquidController();
-// TODO : for the liquid swipe
+  // TODO : for the liquid swipe
   // final pages = [
   //   SignInScreen(),
   //   InvestorsSignInScreen(),
