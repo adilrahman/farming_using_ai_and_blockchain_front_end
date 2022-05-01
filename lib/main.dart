@@ -1,3 +1,4 @@
+import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/crowd_funding.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/screens.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
@@ -31,15 +32,15 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Agro App',
-        themeMode: ThemeMode.dark,
+        themeMode: ThemeMode.light,
         theme: ThemeData(
           brightness: Brightness.dark,
           primaryColor: Colors.green,
         ),
         home: Scaffold(
           // backgroundColor: Colors.black,
-          body: 1 != 1
-              ? SettingsScreen()
+          body: 1 == 1
+              ? CrowdFundingScreen()
               : Builder(builder: (context) {
                   return LiquidSwipe(
                       liquidController: _liquidController,
