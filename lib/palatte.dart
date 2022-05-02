@@ -10,3 +10,5 @@ const TextStyle kBodyText = TextStyle(
   fontSize: 20,
   color: Colors.white60,
 );
+
+const TextStyle projectDeatils = TextStyle(color: Colors.black);

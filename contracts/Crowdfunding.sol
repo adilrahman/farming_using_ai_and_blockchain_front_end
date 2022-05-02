@@ -1,10 +1,11 @@
-pragma solidity 0.5.4;
+pragma solidity 0.5.16;
+pragma experimental ABIEncoderV2;
 
 // import 'https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/math/SafeMath.sol';
 
 contract Crowdfunding {
     Project[] private projects;
-    mapping(address => Project[]) userProjectList;
+    mapping(address => Project[]) public userProjectList;
 
     function startProject(
         string calldata _ProjectName,
@@ -27,6 +28,7 @@ contract Crowdfunding {
         projects.push(newProject);
 
         newProject.setOwnerDetails(_creatorName, _phoneNumber);
+        userProjectList[msg.sender].push(newProject);
         // newProject.initialFund();
     }
 
@@ -37,6 +39,10 @@ contract Crowdfunding {
     function returnAllProjects() external view returns (Project[] memory) {
         return projects;
     }
+
+    function getMyprojects() public view returns (Project[] memory) {
+        return userProjectList[msg.sender];
+    }
 }
 
 contract Project {
@@ -44,10 +50,18 @@ contract Project {
 
     enum State {
         Fundraising,
-        Successful,
         Expired,
+        Successful,
         Cancelled
     }
+
+    struct withDrawDetail {
+        uint256 amount;
+        string useCase;
+        uint256 date;
+    }
+
+    withDrawDetail[] public withDrawDetailList;
 
     // State variables
 
@@ -107,10 +121,7 @@ contract Project {
             msg.value > minimunContribution,
             "should be greaterthan min amount"
         );
-        require(
-            (msg.value + currentBalance) <= GoalAmount,
-            "should be lessthan Goalamount"
-        );
+        // require((msg.value + currentBalance) <= (GoalAmount + 3000000),"should be lessthan Goalamount");
 
         contributions[msg.sender] = contributions[msg.sender] + msg.value;
         currentBalance += msg.value;
@@ -137,7 +148,8 @@ contract Project {
         }
     }
 
-    function payOut() internal returns (bool) {
+    function payOut() public returns (bool) {
+        require(msg.sender == creator, "your not the creator");
         require(state == State.Successful);
         uint256 totalRaised = currentBalance;
         currentBalance = 0;
@@ -176,7 +188,7 @@ contract Project {
 
     function getRefund() public returns (bool) {
         // require(state == State.Expired);
-        require(contributions[msg.sender] > 0);
+        require(contributions[msg.sender] > 0, "you didn't contributed yet");
 
         uint256 amountToRefund = contributions[msg.sender];
         contributions[msg.sender] = 0;
@@ -189,6 +201,33 @@ contract Project {
         }
         numberOfContributors--;
         return true;
+    }
+
+    function withDraw(uint256 _amount, string memory _useCase)
+        public
+        returns (bool)
+    {
+        require(msg.sender == creator, "your not the creator");
+        require(state == State.Successful);
+        if (creator.send(_amount)) {
+            withDrawDetail memory tmp = withDrawDetail(_amount, _useCase, now);
+            withDrawDetailList.push(tmp);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function returnAllWithDrawDetails()
+        public
+        view
+        returns (withDrawDetail[] memory)
+    {
+        return withDrawDetailList;
+    }
+
+    function getContractBalance() public view returns (uint256) {
+        return address(this).balance;
     }
 
     // get details about the project
