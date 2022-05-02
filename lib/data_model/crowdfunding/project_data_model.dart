@@ -1,6 +1,7 @@
 import 'package:web3dart/web3dart.dart';
 
 class Project {
+  var contractAddress;
   String creator;
   String creatorName;
   String phoneNumber;
@@ -14,7 +15,8 @@ class Project {
   int numberOfContributors;
 
   Project(
-      {required this.creator,
+      {required this.contractAddress,
+      required this.creator,
       required this.creatorName,
       required this.phoneNumber,
       required this.raiseBy,

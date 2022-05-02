@@ -12,8 +12,8 @@ class ProjectListModel extends ChangeNotifier {
   List<Project> myProjects = []; // used to store fethced projects
   final String _rpcUrl = "http://192.168.43.135:7545";
   final String _wsUrl = "ws://192.168.43.135:7545";
-  // final String _privateKey =
-  //     "0856c09520195c34cb55d25171f813d6401eedfdd7950f4446a0aeadf7718710";
+  final String _privateKey =
+      "a2e3be7520c7fcc66922cab1baae192a809a4e2ae085ac50dfb3dc3d94d5e0c8";
 
   Web3Client? _client;
   String? _abiOfFactory;
@@ -42,11 +42,11 @@ class ProjectListModel extends ChangeNotifier {
   var _returnAllWithDrawDetails;
   var _getSummary;
 
-  final List<String> PROJECT_STATE = [
-    "Fundraising",
-    "Expired",
-    "Successful",
-    "Cancelled"
+  final List<List> PROJECT_STATE = [
+    ["Fundraising", Colors.green],
+    ["Expired", Colors.red],
+    ["Successful", Colors.grey],
+    ["Cancelled", Colors.yellow]
   ];
 
   ProjectListModel() {
@@ -60,7 +60,7 @@ class ProjectListModel extends ChangeNotifier {
     );
     await getAbi();
     await getDeployedContract();
-    await getAllCurrentProject();
+    await getMyCurrentProject();
   }
 
   getAbi() async {
@@ -94,7 +94,7 @@ class ProjectListModel extends ChangeNotifier {
         ContractAbi.fromJson(_abiOfFactory!, "Crowdfunding"),
         _contractAddressOfFactory);
 
-    //TODO initializing contract functions
+    //TODO 1 :- initializing contract functions
     _createNewProject = _contractOfFactory.function("startProject");
     _countOfProjects = _contractOfFactory.function("numberOfProjects");
     _returnAllProjects = _contractOfFactory.function("returnAllProjects");
@@ -124,6 +124,7 @@ class ProjectListModel extends ChangeNotifier {
           .call(contract: _tmpContract, function: _getSummary, params: []);
 
       Project _tmpProject = Project(
+          contractAddress: myProjectsAddress[i],
           creator: _projectSummary[0].toString(),
           creatorName: _projectSummary[1].toString(),
           phoneNumber: _projectSummary[2].toString(),
@@ -139,12 +140,57 @@ class ProjectListModel extends ChangeNotifier {
       myProjects.add(_tmpProject);
 
       print(PROJECT_STATE[_tmpProject.state]);
+      notifyListeners();
+    }
+  }
+
+  getMyCurrentProject() async {
+    List<dynamic> credDetails = await getCredentials(_privateKey);
+    var _credentials = credDetails[0];
+    var _ownAddress = credDetails[1];
+    var myProjectsAddress = await _client!.call(
+        sender: _ownAddress,
+        contract: _contractOfFactory,
+        function: _getMyprojects,
+        params: []);
+
+    myProjectsAddress =
+        myProjectsAddress[0]; // coz it return a 2d array initially
+
+    myProjects.clear();
+    for (int i = 0; i < myProjectsAddress.length; i++) {
+      var _tmpContract = DeployedContract(
+          ContractAbi.fromJson(_abiOfProject!, "Project"),
+          myProjectsAddress[i]);
+
+      _getSummary = _tmpContract.function("getSummary");
+
+      var _projectSummary = await _client!
+          .call(contract: _tmpContract, function: _getSummary, params: []);
+
+      Project _tmpProject = Project(
+          contractAddress: myProjectsAddress[i],
+          creator: _projectSummary[0].toString(),
+          creatorName: _projectSummary[1].toString(),
+          phoneNumber: _projectSummary[2].toString(),
+          raiseBy: _projectSummary[3].toString(),
+          projectName: _projectSummary[4].toString(),
+          projectDescription: _projectSummary[5].toString(),
+          goalAmount: _projectSummary[6].toString(),
+          currentBalance: _projectSummary[7].toString(),
+          minimunContribution: _projectSummary[8].toString(),
+          state: int.parse(_projectSummary[9].toString()),
+          numberOfContributors: int.parse(_projectSummary[10].toString()));
+
+      myProjects.add(_tmpProject);
+
+      print(PROJECT_STATE[_tmpProject.state]);
+      notifyListeners();
     }
   }
 
   createNewProject(NewProjectModel _newProject) async {
-    List<dynamic> credDetails = await getCredentials(
-        "22a5f3e5f17a92ebd08abeb858f3974ac29d8dd1f5b875ce19096735b93a1117");
+    List<dynamic> credDetails = await getCredentials(_privateKey);
     String _projectName = _newProject.projectName;
     String _projectDescription = _newProject.projectDescription;
     int _goalAmount = int.parse(_newProject.goalAmount);
@@ -175,6 +221,30 @@ class ProjectListModel extends ChangeNotifier {
               _creatorName,
               _phoneNumber
             ]));
-    await getAllCurrentProject();
+    await getMyCurrentProject();
+  }
+
+  cancelMyProject(_projectContractAddress) async {
+    print("canceling canceling canceling canceling canceling canceling");
+    List<dynamic> credDetails = await getCredentials(_privateKey);
+
+    var _credentials = credDetails[0];
+    var _ownAddress = credDetails[1];
+
+    var _tmpContract = DeployedContract(
+        ContractAbi.fromJson(_abiOfProject!, "Project"),
+        _projectContractAddress);
+
+    _cancelTheProject = _tmpContract.function("cancelTheProject");
+
+    await _client!.sendTransaction(
+        _credentials,
+        Transaction.callContract(
+          contract: _tmpContract,
+          function: _cancelTheProject,
+          parameters: [],
+        ));
+    getMyCurrentProject();
+    notifyListeners();
   }
 }

@@ -47,11 +47,12 @@ class DetailedProjectView extends StatelessWidget {
                       child: Container(
                     width: 150,
                     height: 35,
-                    decoration: BoxDecoration(color: Colors.green),
+                    decoration: BoxDecoration(
+                        color: _projectModel.PROJECT_STATE[project.state][1]),
                     child: Center(
                       child: Text(
-                        _projectModel
-                            .PROJECT_STATE[project.state], //PROJECT STATE
+                        _projectModel.PROJECT_STATE[project.state]
+                            [0], //PROJECT STATE
                         style: TextStyle(
                             fontWeight: FontWeight.w400, fontSize: 20),
                       ),
@@ -202,33 +203,39 @@ class DetailedProjectView extends StatelessWidget {
                           )
                         : Container(),
                     SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: () {
-                        Get.defaultDialog(
-                            barrierDismissible: false,
-                            title: "Private Key",
-                            titlePadding: EdgeInsets.only(
-                                top: 15, left: 10, right: 10, bottom: 10),
-                            contentPadding: EdgeInsets.only(
-                                top: 15, left: 10, right: 10, bottom: 10),
-                            content: Container(
-                              child: TextField(),
+                    project.state == 3
+                        ? Container()
+                        : ElevatedButton(
+                            onPressed: () {
+                              Get.defaultDialog(
+                                  barrierDismissible: false,
+                                  title: "Private Key",
+                                  titlePadding: EdgeInsets.only(
+                                      top: 15, left: 10, right: 10, bottom: 10),
+                                  contentPadding: EdgeInsets.only(
+                                      top: 15, left: 10, right: 10, bottom: 10),
+                                  content: Container(
+                                    child: TextField(),
+                                  ),
+                                  confirm: TextButton(
+                                      onPressed: () {
+                                        _projectModel.cancelMyProject(
+                                            project.contractAddress);
+                                      },
+                                      child: Text("confirm")),
+                                  cancel: TextButton(
+                                    onPressed: () {
+                                      Get.back();
+                                    },
+                                    child: Text("cancel"),
+                                  ));
+                            },
+                            child: Container(
+                              child: Center(child: Text("CANCEL")),
+                              width: double.infinity,
+                              height: 50,
                             ),
-                            confirm: TextButton(
-                                onPressed: () {}, child: Text("confirm")),
-                            cancel: TextButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              child: Text("cancel"),
-                            ));
-                      },
-                      child: Container(
-                        child: Center(child: Text("CANCEL")),
-                        width: double.infinity,
-                        height: 50,
-                      ),
-                    )
+                          )
                   ],
                 ),
               ),

@@ -46,7 +46,7 @@ class currentProjectsStatusScreen extends StatelessWidget {
           Expanded(
             child: RefreshIndicator(
               onRefresh: () async {
-                _projectModel.getAllCurrentProject();
+                _projectModel.getMyCurrentProject();
                 Get.snackbar("title", "message");
               },
               child: Container(
@@ -74,7 +74,9 @@ class currentProjectsStatusScreen extends StatelessWidget {
                         percentageOfCompletionInText:
                             _percentageOfCompletionInText,
                         projectState: _projectModel.PROJECT_STATE[
-                            _projectModel.myProjects[index].state],
+                            _projectModel.myProjects[index].state][0],
+                        stateColor: _projectModel.PROJECT_STATE[
+                            _projectModel.myProjects[index].state][1],
                       ),
                     ),
                   )),
@@ -98,6 +100,7 @@ class FarmingProjectListView extends StatelessWidget {
     required double percentageOfCompletion,
     required String percentageOfCompletionInText,
     required String projectState,
+    required stateColor,
   })  : _projectModel = projectModel,
         _projectIndex = projectIndex,
         _projectname = projectname,
@@ -107,6 +110,7 @@ class FarmingProjectListView extends StatelessWidget {
         _percentageOfCompletion = percentageOfCompletion,
         _percentageOfCompletionInText = percentageOfCompletionInText,
         _projectState = projectState,
+        _stateColor = stateColor,
         super(key: key);
 
   final String _projectname;
@@ -118,6 +122,7 @@ class FarmingProjectListView extends StatelessWidget {
   final String _projectState;
   final int _projectIndex;
   final _projectModel;
+  final _stateColor;
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +225,7 @@ class FarmingProjectListView extends StatelessWidget {
                         child: Container(
                       width: 200,
                       height: 35,
-                      decoration: BoxDecoration(color: Colors.green),
+                      decoration: BoxDecoration(color: _stateColor),
                       child: Center(
                         child: Text(
                           _projectState,
