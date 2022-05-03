@@ -6,7 +6,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:get/get.dart';
 
-import 'screens/application_services_screens/crowd_funding/detailedProjectViewScreen.dart';
+import 'screens/application_services_screens/crowd_funding/detailed_project_view_screen.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         ),
         home: Scaffold(
           // backgroundColor: Colors.black,
-          body: 1 == 1
+          body: 1 != 1
               ? CrowdFundingScreen()
               : Builder(builder: (context) {
                   return LiquidSwipe(

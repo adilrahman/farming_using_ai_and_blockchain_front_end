@@ -18,6 +18,21 @@ class MainLoading extends StatelessWidget {
   }
 }
 
+class ProjectFetchingLoading extends StatelessWidget {
+  const ProjectFetchingLoading({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(left: 0, right: 0),
+      child: const SpinKitPouringHourGlassRefined(
+        color: Colors.grey,
+        size: 70,
+      ),
+    );
+  }
+}
+
 class WeatherDataLoading extends StatelessWidget {
   const WeatherDataLoading({Key? key}) : super(key: key);
 

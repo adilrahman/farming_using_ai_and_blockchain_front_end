@@ -1,10 +1,13 @@
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/functions/crowdfunding_investors_functions.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/settings/settings_screen.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'investors_detailed_screen.dart';
+import 'package:provider/provider.dart';
 
 class InvestorsScreen extends StatelessWidget {
   const InvestorsScreen({Key? key}) : super(key: key);
@@ -19,78 +22,61 @@ class InvestorsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        padding: EdgeInsets.only(top: 40),
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                colors: [AppColor.gradientFirst, AppColor.gradientSecond])),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // username and settings button
-            _UserNameSection(username: _username),
-            const SizedBox(
-              height: 10,
-            ),
-            //search bar
-            //project views
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Column(
-                children: [
-                  Text(
-                    "farming projects",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w300,
-                        color: AppColor.homePageContainerTextBig),
-                  ),
-                  Divider(
-                    color: AppColor.homePageTitle,
-                  ),
-                ],
+    return ChangeNotifierProvider(
+      create: (context) => InvesorsProjectListModel(),
+      child: Scaffold(
+        body: Container(
+          padding: EdgeInsets.only(top: 40),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [AppColor.gradientFirst, AppColor.gradientSecond])),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // username and settings button
+              _UserNameSection(username: _username),
+              const SizedBox(
+                height: 10,
               ),
-            ),
+              //search bar
+              //project views
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Column(
+                  children: [
+                    Text(
+                      "farming projects (${10})",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          color: AppColor.homePageContainerTextBig),
+                    ),
+                    Divider(
+                      color: AppColor.homePageTitle,
+                    ),
+                  ],
+                ),
+              ),
 
-            //farming projects
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  print("object");
-                  Get.snackbar("title", "message");
-                },
-                child: Container(
-                    decoration: BoxDecoration(
-                        color: AppColor.homePageBackground,
-                        borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(70),
-                            topLeft: Radius.circular(70))),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                    child: OverflowBox(
-                      child: ListView.builder(
-                        // itemCount: 20,
-                        itemBuilder: (context, index) => FarmingProjectListView(
-                            projectname: _projectname,
-                            postedDate: _postedDate,
-                            description: _description,
-                            totalAmount: _totalAmount,
-                            percentageOfCompletion: _percentageOfCompletion,
-                            percentageOfCompletionInText:
-                                _percentageOfCompletionInText),
-                      ),
-                    )),
-              ),
-            ),
-          ],
+              //farming projects
+
+              InvestorsProjectsListView(
+                  projectname: _projectname,
+                  postedDate: _postedDate,
+                  description: _description,
+                  totalAmount: _totalAmount,
+                  percentageOfCompletion: _percentageOfCompletion,
+                  percentageOfCompletionInText: _percentageOfCompletionInText),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class FarmingProjectListView extends StatelessWidget {
-  const FarmingProjectListView({
+class InvestorsProjectsListView extends StatelessWidget {
+  const InvestorsProjectsListView({
     Key? key,
     required String projectname,
     required String postedDate,
@@ -115,10 +101,88 @@ class FarmingProjectListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var _projectModel = Provider.of<InvesorsProjectListModel>(context);
+
+    return Container(
+      child: Expanded(
+        child: RefreshIndicator(
+          onRefresh: () async {
+            print("object");
+            Get.snackbar("${_projectModel.myProjects.length}", "message");
+            _projectModel.getAllCurrentProject();
+          },
+          child: Container(
+              decoration: BoxDecoration(
+                  color: AppColor.homePageBackground,
+                  borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(70),
+                      topLeft: Radius.circular(70))),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+              child: _projectModel.isLoading
+                  ? Center(child: ProjectFetchingLoading())
+                  : OverflowBox(
+                      child: ListView.builder(
+                        itemCount: _projectModel.myProjects.length,
+                        itemBuilder: (context, index) => FarmingProjectListView(
+                            projectModel: _projectModel,
+                            projectIndex: index,
+                            projectname:
+                                _projectModel.myProjects[index].projectName,
+                            postedDate: _projectModel.myProjects[index].raiseBy,
+                            description: _projectModel
+                                .myProjects[index].projectDescription,
+                            totalAmount:
+                                _projectModel.myProjects[index].goalAmount,
+                            percentageOfCompletion: _percentageOfCompletion,
+                            percentageOfCompletionInText:
+                                _percentageOfCompletionInText),
+                      ),
+                    )),
+        ),
+      ),
+    );
+  }
+}
+
+class FarmingProjectListView extends StatelessWidget {
+  const FarmingProjectListView({
+    Key? key,
+    required int projectIndex,
+    required projectModel,
+    required String projectname,
+    required String postedDate,
+    required String description,
+    required String totalAmount,
+    required double percentageOfCompletion,
+    required String percentageOfCompletionInText,
+  })  : _projectIndex = projectIndex,
+        _projectModel = projectModel,
+        _projectname = projectname,
+        _postedDate = postedDate,
+        _description = description,
+        _totalAmount = totalAmount,
+        _percentageOfCompletion = percentageOfCompletion,
+        _percentageOfCompletionInText = percentageOfCompletionInText,
+        super(key: key);
+
+  final String _projectname;
+  final String _postedDate;
+  final String _description;
+  final String _totalAmount;
+  final double _percentageOfCompletion;
+  final String _percentageOfCompletionInText;
+  final int _projectIndex;
+  final _projectModel;
+
+  @override
+  Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(InvestorDetailedScreen(),
-            transition: Transition.downToUp, duration: Duration(seconds: 1));
+        Get.to(
+            InvestorDetailedScreen(
+                projectIndex: _projectIndex, projectModel: _projectModel),
+            transition: Transition.downToUp,
+            duration: Duration(seconds: 1));
       },
       child: Container(
         decoration: BoxDecoration(

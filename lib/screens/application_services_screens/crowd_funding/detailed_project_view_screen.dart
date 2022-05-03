@@ -2,6 +2,7 @@ import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/functions/crowdfunding_functions.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/project_data_model.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/palatte.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/widgets/crowd_funding_user_screen_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -240,72 +241,6 @@ class DetailedProjectView extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class DetailTileRight extends StatelessWidget {
-  const DetailTileRight({
-    Key? key,
-    required String data,
-    required String heading,
-  })  : _data = data,
-        _heading = heading,
-        super(key: key);
-
-  final String _data;
-  final String _heading;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          _data,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-        Text(
-          _heading,
-          style: TextStyle(fontWeight: FontWeight.w200, fontSize: 12),
-        ),
-      ],
-    );
-  }
-}
-
-class SingleDetailChildRight extends StatelessWidget {
-  const SingleDetailChildRight({
-    Key? key,
-    required String heading,
-    required String data,
-  })  : _heading = heading,
-        _data = data,
-        super(key: key);
-
-  final String _heading;
-  final String _data;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Row(
-            children: [
-              SizedBox(width: 20),
-              Text(
-                _heading,
-                style: TextStyle(fontWeight: FontWeight.w300),
-              ),
-            ],
-          ),
-          Divider(),
-          Text(
-            _data,
-            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
           ),
         ],
       ),
