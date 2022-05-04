@@ -74,9 +74,10 @@ class currentProjectsStatusScreen extends StatelessWidget {
                         percentageOfCompletion: _percentageOfCompletion,
                         percentageOfCompletionInText:
                             _percentageOfCompletionInText,
-                        projectState: _projectModel.PROJECT_STATE[
+                        projectState: ProjectListModel.PROJECT_STATE[
+                            // coz the PROJECT_STATE  is a static varibale
                             _projectModel.myProjects[index].state][0],
-                        stateColor: _projectModel.PROJECT_STATE[
+                        stateColor: ProjectListModel.PROJECT_STATE[
                             _projectModel.myProjects[index].state][1],
                       ),
                     ),

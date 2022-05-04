@@ -42,7 +42,7 @@ class ProjectListModel extends ChangeNotifier {
   var _returnAllWithDrawDetails;
   var _getSummary;
 
-  final List<List> PROJECT_STATE = [
+  static const List<List> PROJECT_STATE = [
     ["Fundraising", Colors.green],
     ["Expired", Colors.red],
     ["Successful", Colors.grey],
@@ -185,7 +185,7 @@ class ProjectListModel extends ChangeNotifier {
       myProjects.add(_tmpProject);
 
       print(PROJECT_STATE[_tmpProject.state]);
-      myProjects = new List.from(myProjects.reversed);
+      myProjects = List.from(myProjects.reversed);
       notifyListeners();
     }
   }
@@ -205,8 +205,8 @@ class ProjectListModel extends ChangeNotifier {
     var _credentials = credDetails[0];
     var _ownAddress = credDetails[1];
 
-    var totalProjectCount = await _client!.call(
-        contract: _contractOfFactory, function: _returnAllProjects, params: []);
+    // var totalProjectCount = await _client!.call(
+    //     contract: _contractOfFactory, function: _returnAllProjects, params: []);
     //  print("==================>>>>>>>>> ${totalProjectCount[0]}");
     await _client!.sendTransaction(
         _credentials,
