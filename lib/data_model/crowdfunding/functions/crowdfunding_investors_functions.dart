@@ -9,7 +9,8 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 
 class InvesorsProjectListModel extends ChangeNotifier {
-  List<Project> myProjects = []; // used to store fethced projects
+  List<Project> allProjects = []; // used to store all fethced projects
+  List<Project> myProjects = []; // used to store only invested projects
   final String _rpcUrl = "http://192.168.43.135:7545";
   final String _wsUrl = "ws://192.168.43.135:7545";
   final String _privateKey =
@@ -30,6 +31,7 @@ class InvesorsProjectListModel extends ChangeNotifier {
   var _countOfProjects; //function returns total number of projects created so far
   var _returnAllProjects; //function return all projects addresses as Project[]
   var _getMyprojects; // return my project only
+  var _getMyContributedProjects;
 
   //Project contract functions
   var _contibute;
@@ -64,6 +66,7 @@ class InvesorsProjectListModel extends ChangeNotifier {
     await getAbi();
     await getDeployedContract();
     await getAllCurrentProject();
+
     isLoading = false;
   }
 
@@ -93,6 +96,7 @@ class InvesorsProjectListModel extends ChangeNotifier {
   }
 
   getDeployedContract() async {
+    print("==================>>>>>>>>> ${10000}");
     // print("==============================>>>>>>>>> ");
     _contractOfFactory = DeployedContract(
         ContractAbi.fromJson(_abiOfFactory!, "Crowdfunding"),
@@ -103,7 +107,10 @@ class InvesorsProjectListModel extends ChangeNotifier {
     _countOfProjects = _contractOfFactory.function("numberOfProjects");
     _returnAllProjects = _contractOfFactory.function("returnAllProjects");
     _getMyprojects = _contractOfFactory.function("getMyprojects");
-
+    print("==============================>>>>>>>>> 1");
+    _getMyContributedProjects =
+        _contractOfFactory.function("getMyContributedProjects");
+    print("==================>>>>>>>>> ${0000}");
     var totalProjectCount = await _client!.call(
         contract: _contractOfFactory, function: _countOfProjects, params: []);
     print("==================>>>>>>>>> ${totalProjectCount}");
@@ -113,6 +120,77 @@ class InvesorsProjectListModel extends ChangeNotifier {
     isLoading = true;
     var myProjectsAddress = await _client!.call(
         contract: _contractOfFactory, function: _returnAllProjects, params: []);
+
+    myProjectsAddress =
+        myProjectsAddress[0]; // coz it return a 2d array initially
+
+    allProjects.clear();
+    for (int i = 0; i < myProjectsAddress.length; i++) {
+      var _tmpContract = DeployedContract(
+          ContractAbi.fromJson(_abiOfProject!, "Project"),
+          myProjectsAddress[i]);
+
+      _getSummary = _tmpContract.function("getSummary");
+
+      var _projectSummary = await _client!
+          .call(contract: _tmpContract, function: _getSummary, params: []);
+
+      Project _tmpProject = Project(
+          contractAddress: myProjectsAddress[i],
+          creator: _projectSummary[0].toString(),
+          creatorName: _projectSummary[1].toString(),
+          phoneNumber: _projectSummary[2].toString(),
+          raiseBy: _projectSummary[3].toString(),
+          projectName: _projectSummary[4].toString(),
+          projectDescription: _projectSummary[5].toString(),
+          goalAmount: _projectSummary[6].toString(),
+          currentBalance: _projectSummary[7].toString(),
+          minimunContribution: _projectSummary[8].toString(),
+          state: int.parse(_projectSummary[9].toString()),
+          numberOfContributors: int.parse(_projectSummary[10].toString()));
+
+      allProjects.add(_tmpProject);
+
+      print(PROJECT_STATE[_tmpProject.state]);
+      isLoading = false;
+      allProjects = new List.from(allProjects.reversed);
+      notifyListeners();
+    }
+  }
+
+  invest(_projectContractAddress) async {
+    List<dynamic> credDetails = await getCredentials(_privateKey);
+    var _credentials = credDetails[0];
+    var _ownAddress = credDetails[1];
+
+    var _tmpContract = DeployedContract(
+        ContractAbi.fromJson(_abiOfProject!, "Project"),
+        _projectContractAddress);
+
+    _contibute = _tmpContract.function("contibute");
+
+    await _client!.sendTransaction(
+        _credentials,
+        Transaction.callContract(
+            contract: _tmpContract,
+            function: _contibute,
+            value:
+                await EtherAmount.fromUnitAndValue(EtherUnit.wei, 1000000000),
+            from: EthereumAddress.fromHex(_ownAddress.toString()),
+            parameters: []));
+    await getAllCurrentProject();
+    await getMyContributedProjects();
+  }
+
+  getMyContributedProjects() async {
+    List<dynamic> credDetails = await getCredentials(_privateKey);
+    var _credentials = credDetails[0];
+    var _ownAddress = credDetails[1];
+    var myProjectsAddress = await _client!.call(
+        sender: _ownAddress,
+        contract: _contractOfFactory,
+        function: _getMyContributedProjects,
+        params: []);
 
     myProjectsAddress =
         myProjectsAddress[0]; // coz it return a 2d array initially
@@ -145,32 +223,8 @@ class InvesorsProjectListModel extends ChangeNotifier {
       myProjects.add(_tmpProject);
 
       print(PROJECT_STATE[_tmpProject.state]);
-      isLoading = false;
-      myProjects = new List.from(myProjects.reversed);
+      myProjects = List.from(myProjects.reversed);
       notifyListeners();
     }
-  }
-
-  invest(_projectContractAddress) async {
-    List<dynamic> credDetails = await getCredentials(_privateKey);
-    var _credentials = credDetails[0];
-    var _ownAddress = credDetails[1];
-
-    var _tmpContract = DeployedContract(
-        ContractAbi.fromJson(_abiOfProject!, "Project"),
-        _projectContractAddress);
-
-    _contibute = _tmpContract.function("contibute");
-
-    await _client!.sendTransaction(
-        _credentials,
-        Transaction.callContract(
-            contract: _tmpContract,
-            function: _contibute,
-            value:
-                await EtherAmount.fromUnitAndValue(EtherUnit.wei, 1000000000),
-            from: EthereumAddress.fromHex(_ownAddress.toString()),
-            parameters: []));
-    await getAllCurrentProject();
   }
 }

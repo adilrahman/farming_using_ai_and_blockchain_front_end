@@ -42,7 +42,7 @@ class ProjectListModel extends ChangeNotifier {
   var _returnAllWithDrawDetails;
   var _getSummary;
 
-  static const List<List> PROJECT_STATE = [
+  final List<List> PROJECT_STATE = [
     ["Fundraising", Colors.green],
     ["Expired", Colors.red],
     ["Successful", Colors.grey],
