@@ -1,5 +1,6 @@
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/functions/crowdfunding_investors_functions.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/project_data_model.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/investors_screen/investors_detailed_screen.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/settings/settings_screen.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/loading.dart';
@@ -189,6 +190,23 @@ class FarmingProjectListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Project project = _projectModel.allProjects[_projectIndex];
+    final String _projectname = project.projectName;
+    final String _postedDate = project.raiseBy;
+    final String _description = project.projectDescription;
+    final String _totalAmount = project.goalAmount;
+    final double _percentage = double.parse(project.currentBalance) /
+                double.parse(project.goalAmount) >
+            1
+        ? 1
+        : double.parse(project.currentBalance) /
+            double.parse(project.goalAmount);
+
+    print(
+        "_percentage_percentage_percentage_percentage_percentage_percentage_percentage => ${_percentage}");
+    final double _percentageOfCompletion = _percentage;
+    final String _percentageOfCompletionInText =
+        (_percentage * 100).toString() + " %";
     return InkWell(
       onTap: () {
         Get.to(

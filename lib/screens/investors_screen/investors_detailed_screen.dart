@@ -29,11 +29,23 @@ class InvestorDetailedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // var _projectModel = Provider.of<InvesorsProjectListModel>(context);
 
+    final Project project = _projectModel.allProjects[_projectIndex];
+    final double _percentage = double.parse(project.currentBalance) /
+                double.parse(project.goalAmount) >
+            1
+        ? 1
+        : double.parse(project.currentBalance) /
+            double.parse(project.goalAmount);
+
+    final String _percentageOfCompletionInText =
+        (_percentage * 100).toString() + "%";
+
     final _heading = "User name";
     final _data = "Adil rahman";
     final String _dummyDetails =
         "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
 
+    TextEditingController _enteredAmountController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.gradientSecond,
@@ -112,7 +124,8 @@ class InvestorDetailedScreen extends StatelessWidget {
                                   child: Column(
                                 children: [
                                   DetailTileRight(
-                                      data: "79%", heading: "Funded"),
+                                      data: _percentageOfCompletionInText,
+                                      heading: "Funded"),
                                   const SizedBox(
                                     height: 30,
                                   ),
@@ -278,6 +291,7 @@ class InvestorDetailedScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     TextField(
+                      controller: _enteredAmountController,
                       style: TextStyle(),
                       decoration: const InputDecoration(
                           labelStyle: TextStyle(color: Colors.black),
@@ -296,7 +310,9 @@ class InvestorDetailedScreen extends StatelessWidget {
               ),
               onConfirm: () {
                 EthereumAddress adr = project.contractAddress;
-                _projectModel.invest(adr);
+                double _amount = double.parse(_enteredAmountController.text);
+                _projectModel.invest(
+                    projectContractAddress: adr, amount: _amount);
               },
               textConfirm: "invest",
               onCancel: () {},

@@ -5,6 +5,8 @@ import 'package:http/http.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:web_socket_channel/io.dart';
 import 'dart:convert';
+import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 
 import 'package:flutter/widgets.dart';
 
@@ -168,17 +170,39 @@ class ProjectListModel extends ChangeNotifier {
       var _projectSummary = await _client!
           .call(contract: _tmpContract, function: _getSummary, params: []);
 
+      String _goalAmount_tmp =
+          convertionWeiToEth(false, double.parse(_projectSummary[6].toString()))
+              .toString();
+
+      String _minimunContribution_tmp =
+          convertionWeiToEth(false, double.parse(_projectSummary[8].toString()))
+              .toString();
+
+      var _currentBalance =
+          convertionWeiToEth(false, double.parse(_projectSummary[7].toString()))
+              .toString();
+
+      var millis = int.parse(_projectSummary[3].toString());
+      var dt = DateTime.fromMillisecondsSinceEpoch(millis * 1000);
+
+// 12 Hour format:
+      var d12 =
+          DateFormat('MM/dd/yyyy, hh:mm a').format(dt); // 12/31/2000, 10:00 PM
+
+// 24 Hour format:
+      var d24 = DateFormat('dd/MM/yyyy, HH:mm').format(dt); // 31/12/2000, 22:00
+
       Project _tmpProject = Project(
           contractAddress: myProjectsAddress[i],
           creator: _projectSummary[0].toString(),
           creatorName: _projectSummary[1].toString(),
           phoneNumber: _projectSummary[2].toString(),
-          raiseBy: _projectSummary[3].toString(),
+          raiseBy: d12.toString(),
           projectName: _projectSummary[4].toString(),
           projectDescription: _projectSummary[5].toString(),
-          goalAmount: _projectSummary[6].toString(),
-          currentBalance: _projectSummary[7].toString(),
-          minimunContribution: _projectSummary[8].toString(),
+          goalAmount: _goalAmount_tmp,
+          currentBalance: _currentBalance,
+          minimunContribution: _minimunContribution_tmp,
           state: int.parse(_projectSummary[9].toString()),
           numberOfContributors: int.parse(_projectSummary[10].toString()));
 
@@ -190,12 +214,22 @@ class ProjectListModel extends ChangeNotifier {
     }
   }
 
+  double convertionWeiToEth(bool isAmountEth, double _amount) {
+    const double one_eth_in_wei = 1000000000000000000;
+
+    if (isAmountEth) {
+      return _amount * one_eth_in_wei;
+    }
+
+    return _amount / one_eth_in_wei;
+  }
+
   createNewProject(NewProjectModel _newProject) async {
     List<dynamic> credDetails = await getCredentials(_privateKey);
     String _projectName = _newProject.projectName;
     String _projectDescription = _newProject.projectDescription;
-    int _goalAmount = int.parse(_newProject.goalAmount);
-    int _minimunContribution = int.parse(_newProject.minimumContribution);
+    double _goalAmount = double.parse(_newProject.goalAmount);
+    double _minimunContribution = double.parse(_newProject.minimumContribution);
 
     int _durationInDays = int.parse(_newProject.duration);
 
@@ -216,8 +250,8 @@ class ProjectListModel extends ChangeNotifier {
             parameters: [
               _projectName,
               _projectDescription,
-              BigInt.from(_goalAmount),
-              BigInt.from(_minimunContribution),
+              BigInt.from(convertionWeiToEth(true, _goalAmount)),
+              BigInt.from(convertionWeiToEth(true, _minimunContribution)),
               BigInt.from(_durationInDays),
               _creatorName,
               _phoneNumber

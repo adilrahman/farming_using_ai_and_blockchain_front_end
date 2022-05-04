@@ -2,6 +2,7 @@ import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfundin
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:web_socket_channel/io.dart';
 import 'dart:convert';
@@ -66,6 +67,7 @@ class InvesorsProjectListModel extends ChangeNotifier {
     await getAbi();
     await getDeployedContract();
     await getAllCurrentProject();
+    await getMyContributedProjects();
 
     isLoading = false;
   }
@@ -135,17 +137,39 @@ class InvesorsProjectListModel extends ChangeNotifier {
       var _projectSummary = await _client!
           .call(contract: _tmpContract, function: _getSummary, params: []);
 
+      String _goalAmount_tmp =
+          convertionWeiToEth(false, double.parse(_projectSummary[6].toString()))
+              .toString();
+
+      String _minimunContribution_tmp =
+          convertionWeiToEth(false, double.parse(_projectSummary[8].toString()))
+              .toString();
+
+      var _currentBalance =
+          convertionWeiToEth(false, double.parse(_projectSummary[7].toString()))
+              .toString();
+
+      var millis = int.parse(_projectSummary[3].toString());
+      var dt = DateTime.fromMillisecondsSinceEpoch(millis * 1000);
+
+// 12 Hour format:
+      var d12 =
+          DateFormat('MM/dd/yyyy, hh:mm a').format(dt); // 12/31/2000, 10:00 PM
+
+// 24 Hour format:
+      var d24 = DateFormat('dd/MM/yyyy, HH:mm').format(dt); // 31/12/2000, 22:00
+
       Project _tmpProject = Project(
           contractAddress: myProjectsAddress[i],
           creator: _projectSummary[0].toString(),
           creatorName: _projectSummary[1].toString(),
           phoneNumber: _projectSummary[2].toString(),
-          raiseBy: _projectSummary[3].toString(),
+          raiseBy: d12.toString(),
           projectName: _projectSummary[4].toString(),
           projectDescription: _projectSummary[5].toString(),
-          goalAmount: _projectSummary[6].toString(),
-          currentBalance: _projectSummary[7].toString(),
-          minimunContribution: _projectSummary[8].toString(),
+          goalAmount: _goalAmount_tmp,
+          currentBalance: _currentBalance,
+          minimunContribution: _minimunContribution_tmp,
           state: int.parse(_projectSummary[9].toString()),
           numberOfContributors: int.parse(_projectSummary[10].toString()));
 
@@ -158,24 +182,36 @@ class InvesorsProjectListModel extends ChangeNotifier {
     }
   }
 
-  invest(_projectContractAddress) async {
+  double convertionWeiToEth(bool isAmountEth, double _amount) {
+    const double one_eth_in_wei = 1000000000000000000;
+
+    if (isAmountEth) {
+      return _amount * one_eth_in_wei;
+    }
+
+    return _amount / one_eth_in_wei;
+  }
+
+  invest({required projectContractAddress, required double amount}) async {
     List<dynamic> credDetails = await getCredentials(_privateKey);
     var _credentials = credDetails[0];
     var _ownAddress = credDetails[1];
 
     var _tmpContract = DeployedContract(
         ContractAbi.fromJson(_abiOfProject!, "Project"),
-        _projectContractAddress);
+        projectContractAddress);
 
     _contibute = _tmpContract.function("contibute");
+
+    amount = convertionWeiToEth(true, amount);
 
     await _client!.sendTransaction(
         _credentials,
         Transaction.callContract(
             contract: _tmpContract,
             function: _contibute,
-            value:
-                await EtherAmount.fromUnitAndValue(EtherUnit.wei, 1000000000),
+            value: await EtherAmount.fromUnitAndValue(
+                EtherUnit.wei, amount.toInt().toString()),
             from: EthereumAddress.fromHex(_ownAddress.toString()),
             parameters: []));
     await getAllCurrentProject();
@@ -206,17 +242,39 @@ class InvesorsProjectListModel extends ChangeNotifier {
       var _projectSummary = await _client!
           .call(contract: _tmpContract, function: _getSummary, params: []);
 
+      String _goalAmount_tmp =
+          convertionWeiToEth(false, double.parse(_projectSummary[6].toString()))
+              .toString();
+
+      String _minimunContribution_tmp =
+          convertionWeiToEth(false, double.parse(_projectSummary[8].toString()))
+              .toString();
+
+      var _currentBalance =
+          convertionWeiToEth(false, double.parse(_projectSummary[7].toString()))
+              .toString();
+
+      var millis = int.parse(_projectSummary[3].toString());
+      var dt = DateTime.fromMillisecondsSinceEpoch(millis * 1000);
+
+// 12 Hour format:
+      var d12 =
+          DateFormat('MM/dd/yyyy, hh:mm a').format(dt); // 12/31/2000, 10:00 PM
+
+// 24 Hour format:
+      var d24 = DateFormat('dd/MM/yyyy, HH:mm').format(dt); // 31/12/2000, 22:00
+
       Project _tmpProject = Project(
           contractAddress: myProjectsAddress[i],
           creator: _projectSummary[0].toString(),
           creatorName: _projectSummary[1].toString(),
           phoneNumber: _projectSummary[2].toString(),
-          raiseBy: _projectSummary[3].toString(),
+          raiseBy: d12.toString(),
           projectName: _projectSummary[4].toString(),
           projectDescription: _projectSummary[5].toString(),
-          goalAmount: _projectSummary[6].toString(),
-          currentBalance: _projectSummary[7].toString(),
-          minimunContribution: _projectSummary[8].toString(),
+          goalAmount: _goalAmount_tmp,
+          currentBalance: _currentBalance,
+          minimunContribution: _minimunContribution_tmp,
           state: int.parse(_projectSummary[9].toString()),
           numberOfContributors: int.parse(_projectSummary[10].toString()));
 

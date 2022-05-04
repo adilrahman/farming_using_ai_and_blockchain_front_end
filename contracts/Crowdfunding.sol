@@ -153,7 +153,13 @@ contract Project {
 
         contributions[msg.sender] = contributions[msg.sender] + msg.value;
         currentBalance += msg.value;
-        numberOfContributors++;
+
+        if (
+            contributions[msg.sender] == 0
+        ) // if they already contributed then no need to increase the count
+        {
+            numberOfContributors++;
+        }
 
         // adding the contribution details into parent contract mapping
         _crowdFundingParentContract.createAnewContribution(msg.sender, this);
