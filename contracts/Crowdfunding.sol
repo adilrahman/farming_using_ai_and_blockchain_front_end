@@ -7,6 +7,20 @@ contract Crowdfunding {
     Project[] private projects;
     mapping(address => Project[]) public userProjectList;
 
+    //stroing details about the investors contributed project and their contribution amount
+
+    // first address -> user address, second -> project address , uint256 -> contribution
+    mapping(address => mapping(address => bool))
+        internal investorContributionsMAP; // it used only for checking purpose if this record already exist or not
+    mapping(address => address[]) internal investorContributions;
+
+    function createAnewContribution(address _user, Project _address) public {
+        if (!investorContributionsMAP[_user][address(_address)]) {
+            investorContributionsMAP[_user][address(_address)] = true;
+            investorContributions[_user].push(address(_address));
+        }
+    }
+
     function startProject(
         string calldata _ProjectName,
         string calldata _ProjectDescription,
@@ -25,6 +39,7 @@ contract Crowdfunding {
             raiseUntil,
             msg.sender
         );
+        newProject.setParentContract(address(this));
         projects.push(newProject);
 
         newProject.setOwnerDetails(_creatorName, _phoneNumber);
@@ -42,6 +57,10 @@ contract Crowdfunding {
 
     function getMyprojects() public view returns (Project[] memory) {
         return userProjectList[msg.sender];
+    }
+
+    function getMyContributedProjects() public view returns (address[] memory) {
+        return investorContributions[msg.sender];
     }
 }
 
@@ -62,6 +81,9 @@ contract Project {
     }
 
     withDrawDetail[] public withDrawDetailList;
+
+    //parent contract address
+    Crowdfunding public _crowdFundingParentContract;
 
     // State variables
 
@@ -107,6 +129,10 @@ contract Project {
         require(msg.sender == creator);
     }
 
+    function setParentContract(address _address) public {
+        _crowdFundingParentContract = Crowdfunding(_address);
+    }
+
     function setOwnerDetails(
         string memory _creatorName,
         string memory _phoneNumber
@@ -116,6 +142,8 @@ contract Project {
     }
 
     function contibute() public payable {
+        // checking this project is expired or not on each contribution
+        // checkIfFundingCompleteOrExpired();
         require(state == State.Fundraising, "Not recv any new contributions");
         require(
             msg.value > minimunContribution,
@@ -126,6 +154,10 @@ contract Project {
         contributions[msg.sender] = contributions[msg.sender] + msg.value;
         currentBalance += msg.value;
         numberOfContributors++;
+
+        // adding the contribution details into parent contract mapping
+        _crowdFundingParentContract.createAnewContribution(msg.sender, this);
+        // checking this project is expired or not on each contribution
         checkIfFundingCompleteOrExpired();
     }
 
@@ -187,8 +219,9 @@ contract Project {
     }
 
     function getRefund() public returns (bool) {
-        // require(state == State.Expired);
         require(contributions[msg.sender] > 0, "you didn't contributed yet");
+        require(state != State.Fundraising); // won't get refund until the project expired or cancelled
+        require(state != State.Successful);
 
         uint256 amountToRefund = contributions[msg.sender];
         contributions[msg.sender] = 0;
@@ -207,6 +240,7 @@ contract Project {
         public
         returns (bool)
     {
+        // withdraw amount for a specific use case
         require(msg.sender == creator, "your not the creator");
         require(state == State.Successful);
         if (creator.send(_amount)) {
