@@ -2,6 +2,7 @@ import 'package:farming_using_ai_and_blockchain_front_end/controllers/weather_an
 import 'application_services_screens/application_services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'application_services_screens/crop_recommentation_screens/crop_recommendation.dart';
 import 'application_services_screens/plant_disease_detection.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/palatte.dart';
@@ -44,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "Plant Disease Detection",
       PlantDiseaseDetectionScreen()
     ],
-    const [
+    [
       "assets/images/bg_crop_recommendation.jpeg",
       "Crop Recommendation",
       CropRecommendationScreen()
