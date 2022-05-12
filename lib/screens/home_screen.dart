@@ -3,7 +3,7 @@ import 'application_services_screens/application_services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'application_services_screens/crop_recommentation_screens/crop_recommendation.dart';
-import 'application_services_screens/plant_disease_detection.dart';
+import 'application_services_screens/plant_disease_detection_screen/plant_disease_detection.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/palatte.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/home_screen/settings_button.dart';

@@ -1,4 +1,4 @@
-import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/plant_disease_detection.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/plant_disease_detection_screen/plant_disease_detection.dart';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
