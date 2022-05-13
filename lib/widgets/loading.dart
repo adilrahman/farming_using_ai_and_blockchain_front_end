@@ -62,3 +62,18 @@ class LocationDataLoading extends StatelessWidget {
     );
   }
 }
+
+class APILoading extends StatelessWidget {
+  const APILoading({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(left: 0, right: 10),
+      child: const SpinKitWave(
+        color: Colors.blue,
+        size: 30,
+      ),
+    );
+  }
+}

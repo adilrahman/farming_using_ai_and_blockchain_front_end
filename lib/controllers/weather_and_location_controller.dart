@@ -33,6 +33,11 @@ class WeatherAndLocationController extends GetxController {
     isLocationDataLoading.value = false;
   }
 
+  getCurrentLocation() async {
+    await getLocation();
+    return [_latitude, _longitude];
+  }
+
   getCurrentWeatherData() async {
     isWeatherDataLoading.value = true;
     await getLocation();
@@ -48,6 +53,7 @@ class WeatherAndLocationController extends GetxController {
     humidity(result["main"]["humidity"].toString() + "%");
     temp("$tempInCelsius\u2103");
     windSpeed(result["wind"]["speed"].toString() + "m/s");
+    print(result);
     rainFall(result["clouds"]["all"].toString() + "%");
     isWeatherDataLoading.value = false;
   }

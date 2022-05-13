@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "Fertilizer Recommendation",
       FertilizerRecommendationScreen()
     ],
-    const [
+    [
       "assets/images/bg_time_to_fertilize.jpg",
       "Time to Fertilize",
       RightTimeToFertilize()
