@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:farming_using_ai_and_blockchain_front_end/controllers/weather_and_location_controller.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/data_model/back_end/models/fertilizer_recommendation_model.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/back_end/models/right_time_to_fertilizer_model.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -22,6 +23,9 @@ class RestApiInteraction extends GetxController {
 
   final RIGHT_TIME_TO_FERTILIZE_API =
       "http://192.168.43.135:8080/rightTimeToFertilize";
+
+  final FERTILIZER_RECOMMENDATION_API =
+      "http://192.168.43.135:8080/fertilizer_recommend";
 
   cropRecommentation(CropRecommendationModel _cropRecommendationModel) async {
     // http.Response response = await http.get(Uri.parse(CROP_RECOMMENDATION_API));
@@ -97,6 +101,29 @@ class RestApiInteraction extends GetxController {
 
     print(res.body + "sm999");
     isLoading.value = false;
+    return json.decode(res.body);
+  }
+
+  fertilizerRecommentation(
+      FertilizerRecommendationModel _fertilizerRecommendationModel) async {
+    // http.Response response = await http.get(Uri.parse(CROP_RECOMMENDATION_API));
+    // var result = jsonDecode(response.body);
+    // print(" RESPONSE : ${result}");
+
+    var jsonInput = jsonEncode(_fertilizerRecommendationModel.toJson());
+    print(jsonInput);
+    print("some some some some some some some some soem");
+    final res = await http.post(
+      Uri.parse(
+        FERTILIZER_RECOMMENDATION_API,
+      ),
+      headers: {
+        "accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: jsonInput,
+    );
+    print(res);
     return json.decode(res.body);
   }
 }

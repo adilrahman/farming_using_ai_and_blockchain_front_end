@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/plant_disease_detection_screen/view_response_page.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/plant_disease_detection_screens/view_response_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
