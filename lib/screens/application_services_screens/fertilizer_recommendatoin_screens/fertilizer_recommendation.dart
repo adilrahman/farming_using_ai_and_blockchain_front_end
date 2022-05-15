@@ -45,6 +45,7 @@ class FertilizerRecommendationScreen extends StatelessWidget {
                   singleTextField(
                       titleEditingController: _potassiumRatioEditingController,
                       hintText: "Potassium (K) ratio content in soil"),
+                  const SizedBox(height: 10),
                   singleTextField(
                       titleEditingController: _cropEditingController,
                       hintText: "crop"),
