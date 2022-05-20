@@ -248,10 +248,13 @@ class FarmingProjectListView extends StatelessWidget {
                   Expanded(
                     child: Row(
                       children: [
-                        Text(
-                          _projectname,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 27),
+                        Container(
+                          width: 140,
+                          child: Text(
+                            _projectname,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 27),
+                          ),
                         ),
                         Expanded(child: Container()),
                         const Icon(

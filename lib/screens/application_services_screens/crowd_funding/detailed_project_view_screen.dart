@@ -2,6 +2,7 @@ import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/functions/crowdfunding_functions.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/project_data_model.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/palatte.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/contributors_list_view_screen.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/widgets/crowd_funding_user_screen_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -142,10 +143,17 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                                   const SizedBox(
                                     height: 30,
                                   ),
-                                  DetailTileRight(
-                                      data: project.numberOfContributors
-                                          .toString(),
-                                      heading: "Contributors"),
+                                  InkWell(
+                                    onLongPress: () {
+                                      Get.to(ContributorsListViewScreen(
+                                          projectContractAddress:
+                                              project.contractAddress));
+                                    },
+                                    child: DetailTileRight(
+                                        data: project.numberOfContributors
+                                            .toString(),
+                                        heading: "Contributors"),
+                                  ),
                                 ],
                               ))),
                           Expanded(
