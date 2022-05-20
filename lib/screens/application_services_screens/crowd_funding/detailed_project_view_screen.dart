@@ -186,8 +186,8 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                     Container(
                       //
                       color: Colors.grey[700],
-                      padding: EdgeInsets.all(20.0),
-                      child: SingleDetailChildRight(
+                      padding: const EdgeInsets.all(20.0),
+                      child: const SingleDetailChildRight(
                           heading: "land location",
                           data:
                               "pothukattil (house) angadipuram (po) malappuram (dt) kerala (st) - 679321"),
@@ -197,7 +197,7 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                     ),
                     Container(
                       color: Colors.grey[700],
-                      padding: EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(20.0),
                       child: SingleDetailChildRight(
                           heading: "project details",
                           data: project.projectDescription),
@@ -216,7 +216,7 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                             children: [
                               Row(
                                 children: [
-                                  Expanded(
+                                  const Expanded(
                                     child: SingleDetailChildRight(
                                         heading: "withdrawDetails", data: ""),
                                   ),
@@ -228,18 +228,19 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                                         });
                                       },
                                       icon: !showWithDrawDetails
-                                          ? Icon(Icons.arrow_circle_down_sharp)
-                                          : Icon(Icons.arrow_circle_up))
+                                          ? const Icon(
+                                              Icons.arrow_circle_down_sharp)
+                                          : const Icon(Icons.arrow_circle_up))
                                 ],
                               ),
                               !showWithDrawDetails
                                   ? Container(
-                                      child: Text("...."),
+                                      child: const Text("...."),
                                     )
                                   : Column(
                                       children: [
                                         Row(
-                                          children: [
+                                          children: const [
                                             Expanded(
                                                 flex: 2,
                                                 child: Text(
@@ -269,7 +270,7 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                                                 )),
                                           ],
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 20,
                                         ),
                                         ListView.separated(
@@ -278,7 +279,7 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                                               return Container(
                                                 child: Column(
                                                   children: [
-                                                    SizedBox(
+                                                    const SizedBox(
                                                       height: 15,
                                                     ),
                                                     Container(
@@ -289,7 +290,7 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                                                               index]["details"]
                                                           .toString()),
                                                     ),
-                                                    Divider(),
+                                                    const Divider(),
                                                     Container(
                                                       child: Row(
                                                         children: [
@@ -306,7 +307,7 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                                                         ],
                                                       ),
                                                     ),
-                                                    SizedBox(
+                                                    const SizedBox(
                                                       height: 15,
                                                     )
                                                   ],
@@ -314,7 +315,8 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                                               );
                                             },
                                             separatorBuilder:
-                                                (context, index) => Divider(
+                                                (context, index) =>
+                                                    const Divider(
                                                       color: Colors.white,
                                                       thickness: 1.5,
                                                     ),
@@ -376,11 +378,12 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                                     onPressed: () {
                                       Get.back();
                                     },
-                                    child: Text("cancel"),
+                                    child: const Text("cancel"),
                                   ));
                             },
                             child: Container(
-                              child: Center(child: Text("WITHDRAW AMOUNT")),
+                              child:
+                                  const Center(child: Text("WITHDRAW AMOUNT")),
                               width: double.infinity,
                               height: 50,
                             ),
@@ -411,17 +414,18 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                                     onPressed: () {
                                       Get.back();
                                     },
-                                    child: Text("cancel"),
+                                    child: const Text("cancel"),
                                   ));
                             },
                             child: Container(
-                              child: Center(child: Text("WITHDRAW ALL AMOUNT")),
+                              child: const Center(
+                                  child: Text("WITHDRAW ALL AMOUNT")),
                               width: double.infinity,
                               height: 50,
                             ),
                           )
                         : Container(),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     project.state == 3
                         ? Container()
                         : ElevatedButton(
@@ -429,9 +433,9 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                               Get.defaultDialog(
                                   barrierDismissible: false,
                                   title: "Private Key",
-                                  titlePadding: EdgeInsets.only(
+                                  titlePadding: const EdgeInsets.only(
                                       top: 15, left: 10, right: 10, bottom: 10),
-                                  contentPadding: EdgeInsets.only(
+                                  contentPadding: const EdgeInsets.only(
                                       top: 15, left: 10, right: 10, bottom: 10),
                                   content: Container(
                                     child: TextField(),
@@ -446,11 +450,11 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                                     onPressed: () {
                                       Get.back();
                                     },
-                                    child: Text("cancel"),
+                                    child: const Text("cancel"),
                                   ));
                             },
                             child: Container(
-                              child: Center(child: Text("CANCEL")),
+                              child: const Center(child: Text("CANCEL")),
                               width: double.infinity,
                               height: 50,
                             ),

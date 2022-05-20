@@ -215,15 +215,15 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                     ),
                     Container(
                         color: Colors.grey[700],
-                        padding: EdgeInsets.all(20.0),
+                        padding: const EdgeInsets.all(20.0),
                         child: Container(
                           child: Column(
                             children: [
                               Row(
                                 children: [
-                                  Expanded(
+                                  const Expanded(
                                     child: SingleDetailChildRight(
-                                        heading: "withdrawDetails", data: ""),
+                                        heading: "withdraw details", data: ""),
                                   ),
                                   IconButton(
                                       onPressed: () {
@@ -236,18 +236,19 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                                         print(withdrawDetails.length);
                                       },
                                       icon: !showWithDrawDetails
-                                          ? Icon(Icons.arrow_circle_down_sharp)
-                                          : Icon(Icons.arrow_circle_up))
+                                          ? const Icon(
+                                              Icons.arrow_circle_down_sharp)
+                                          : const Icon(Icons.arrow_circle_up))
                                 ],
                               ),
                               !showWithDrawDetails
                                   ? Container(
-                                      child: Text("...."),
+                                      child: const Text("...."),
                                     )
                                   : Column(
                                       children: [
                                         Row(
-                                          children: [
+                                          children: const [
                                             Expanded(
                                                 flex: 2,
                                                 child: Text(
@@ -277,7 +278,7 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                                                 )),
                                           ],
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 20,
                                         ),
                                         ListView.separated(
@@ -286,7 +287,7 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                                               return Container(
                                                 child: Column(
                                                   children: [
-                                                    SizedBox(
+                                                    const SizedBox(
                                                       height: 15,
                                                     ),
                                                     Container(
@@ -297,7 +298,7 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                                                               index]["details"]
                                                           .toString()),
                                                     ),
-                                                    Divider(),
+                                                    const Divider(),
                                                     Container(
                                                       child: Row(
                                                         children: [
@@ -314,7 +315,7 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                                                         ],
                                                       ),
                                                     ),
-                                                    SizedBox(
+                                                    const SizedBox(
                                                       height: 15,
                                                     )
                                                   ],
@@ -322,7 +323,8 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                                               );
                                             },
                                             separatorBuilder:
-                                                (context, index) => Divider(
+                                                (context, index) =>
+                                                    const Divider(
                                                       color: Colors.white,
                                                       thickness: 1.5,
                                                     ),
@@ -344,9 +346,9 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                               Get.defaultDialog(
                                   barrierDismissible: false,
                                   title: "Private Key",
-                                  titlePadding: EdgeInsets.only(
+                                  titlePadding: const EdgeInsets.only(
                                       top: 15, left: 10, right: 10, bottom: 10),
-                                  contentPadding: EdgeInsets.only(
+                                  contentPadding: const EdgeInsets.only(
                                       top: 15, left: 10, right: 10, bottom: 10),
                                   content: Container(
                                     child: TextField(),
@@ -367,40 +369,7 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                             ),
                           )
                         : Container(),
-                    SizedBox(height: 10),
-                    // project.state == 3
-                    //     ? Container()
-                    //     : ElevatedButton(
-                    //         onPressed: () {
-                    //           Get.defaultDialog(
-                    //               barrierDismissible: false,
-                    //               title: "Private Key",
-                    //               titlePadding: EdgeInsets.only(
-                    //                   top: 15, left: 10, right: 10, bottom: 10),
-                    //               contentPadding: EdgeInsets.only(
-                    //                   top: 15, left: 10, right: 10, bottom: 10),
-                    //               content: Container(
-                    //                 child: TextField(),
-                    //               ),
-                    //               confirm: TextButton(
-                    //                   onPressed: () {
-                    //                     _projectModel.cancelMyProject(
-                    //                         project.contractAddress);
-                    //                   },
-                    //                   child: Text("confirm")),
-                    //               cancel: TextButton(
-                    //                 onPressed: () {
-                    //                   Get.back();
-                    //                 },
-                    //                 child: Text("cancel"),
-                    //               ));
-                    //         },
-                    //         child: Container(
-                    //           child: Center(child: Text("CANCEL")),
-                    //           width: double.infinity,
-                    //           height: 50,
-                    //         ),
-                    //       )
+                    const SizedBox(height: 10),
                   ],
                 ),
               ),
@@ -430,7 +399,7 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                           border: OutlineInputBorder(),
                           hintText: "Private Key"),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextField(
                       controller: _enteredAmountController,
                       style: TextStyle(),
@@ -445,7 +414,7 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                           border: OutlineInputBorder(),
                           hintText: "Amount (min ${10} ETH)"),
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),
@@ -459,9 +428,9 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
               onCancel: () {},
               textCancel: "cancel");
         },
-        label: Text("INVEST"),
+        label: const Text("INVEST"),
         foregroundColor: Colors.white,
-        icon: Icon(FontAwesomeIcons.ethereum),
+        icon: const Icon(FontAwesomeIcons.ethereum),
         backgroundColor: Colors.blue,
         splashColor: AppColor.gradientSecond,
         elevation: 12,
