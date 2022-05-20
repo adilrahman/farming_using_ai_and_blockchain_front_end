@@ -65,3 +65,30 @@ class SingleDetailChildRight extends StatelessWidget {
     );
   }
 }
+
+class DialogeTextField extends StatelessWidget {
+  const DialogeTextField({
+    Key? key,
+    required TextEditingController textController,
+    required String hintText,
+  })  : _textController = textController,
+        _hintText = hintText,
+        super(key: key);
+
+  final TextEditingController _textController;
+  final String _hintText;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+        controller: _textController,
+        decoration: InputDecoration(
+            labelStyle: TextStyle(color: Colors.black),
+            hintStyle: TextStyle(fontSize: 15.0, color: Colors.grey),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey, width: 1.0),
+            ),
+            border: OutlineInputBorder(),
+            hintText: _hintText));
+  }
+}

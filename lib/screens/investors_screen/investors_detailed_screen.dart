@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:web3dart/credentials.dart';
 
-class InvestorDetailedScreen extends StatelessWidget {
+class InvestorDetailedScreen extends StatefulWidget {
   InvestorDetailedScreen(
       {Key? key,
       required projectIndex,
@@ -26,10 +26,25 @@ class InvestorDetailedScreen extends StatelessWidget {
   final project;
 
   @override
+  State<InvestorDetailedScreen> createState() => _InvestorDetailedScreenState();
+}
+
+class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
+  bool showWithDrawDetails = false;
+
+  @override
   Widget build(BuildContext context) {
     // var _projectModel = Provider.of<InvesorsProjectListModel>(context);
 
-    final Project project = _projectModel.allProjects[_projectIndex];
+    final Project project =
+        widget._projectModel.allProjects[widget._projectIndex];
+
+    // to get the withdraw details of the specific project
+    widget._projectModel
+        .getWithdrawDetails(projectAddress: project.contractAddress);
+
+    var withdrawDetails;
+
     final double _percentage = double.parse(project.currentBalance) /
                 double.parse(project.goalAmount) >
             1
@@ -71,10 +86,11 @@ class InvestorDetailedScreen extends StatelessWidget {
                     width: 150,
                     height: 35,
                     decoration: BoxDecoration(
-                        color: _projectModel.PROJECT_STATE[project.state][1]),
+                        color: widget._projectModel.PROJECT_STATE[project.state]
+                            [1]),
                     child: Center(
                       child: Text(
-                        _projectModel.PROJECT_STATE[project.state]
+                        widget._projectModel.PROJECT_STATE[project.state]
                             [0], //PROJECT STATE
                         style: TextStyle(
                             fontWeight: FontWeight.w400, fontSize: 20),
@@ -197,6 +213,131 @@ class InvestorDetailedScreen extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
+                    Container(
+                        color: Colors.grey[700],
+                        padding: EdgeInsets.all(20.0),
+                        child: Container(
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: SingleDetailChildRight(
+                                        heading: "withdrawDetails", data: ""),
+                                  ),
+                                  IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          showWithDrawDetails =
+                                              !showWithDrawDetails;
+                                          withdrawDetails = widget._projectModel
+                                              .currentProjectWithdrawDetails;
+                                        });
+                                        print(withdrawDetails.length);
+                                      },
+                                      icon: !showWithDrawDetails
+                                          ? Icon(Icons.arrow_circle_down_sharp)
+                                          : Icon(Icons.arrow_circle_up))
+                                ],
+                              ),
+                              !showWithDrawDetails
+                                  ? Container(
+                                      child: Text("...."),
+                                    )
+                                  : Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  "DATE",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 13),
+                                                )),
+                                            Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  "DETAILS",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 13),
+                                                )),
+                                            Expanded(
+                                                flex: 1,
+                                                child: Text(
+                                                  "AMOUNT",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 13),
+                                                )),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        ListView.separated(
+                                            shrinkWrap: true,
+                                            itemBuilder: (context, index) {
+                                              return Container(
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    Container(
+                                                      // details
+                                                      child: Text(widget
+                                                          ._projectModel
+                                                          .currentProjectWithdrawDetails[
+                                                              index]["details"]
+                                                          .toString()),
+                                                    ),
+                                                    Divider(),
+                                                    Container(
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                              //date
+                                                              child: Text(widget
+                                                                  ._projectModel
+                                                                  .currentProjectWithdrawDetails[
+                                                                      index]
+                                                                      ["date"]
+                                                                  .toString())),
+                                                          Text(
+                                                              "${widget._projectModel.currentProjectWithdrawDetails[index]["amount"].toString()} ETH")
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 15,
+                                                    )
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                            separatorBuilder:
+                                                (context, index) => Divider(
+                                                      color: Colors.white,
+                                                      thickness: 1.5,
+                                                    ),
+                                            itemCount: widget
+                                                ._projectModel
+                                                .currentProjectWithdrawDetails
+                                                .length)
+                                      ],
+                                    ),
+                            ],
+                          ),
+                        )),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     project.state == 2
                         ? ElevatedButton(
                             onPressed: () {
@@ -276,9 +417,9 @@ class InvestorDetailedScreen extends StatelessWidget {
               content: Container(
                 child: Column(
                   children: [
-                    TextField(
+                    const TextField(
                       style: TextStyle(),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                           labelStyle: TextStyle(color: Colors.black),
                           hintStyle:
                               TextStyle(fontSize: 15.0, color: Colors.grey),
@@ -311,8 +452,8 @@ class InvestorDetailedScreen extends StatelessWidget {
               onConfirm: () {
                 EthereumAddress adr = project.contractAddress;
                 double _amount = double.parse(_enteredAmountController.text);
-                _projectModel.invest(
-                    projectContractAddress: adr, amount: _amount);
+                widget._projectModel
+                    .invest(projectContractAddress: adr, amount: _amount);
               },
               textConfirm: "invest",
               onCancel: () {},
@@ -329,3 +470,31 @@ class InvestorDetailedScreen extends StatelessWidget {
     );
   }
 }
+
+// Row(
+//                                       children: [
+//                                         Expanded(
+//                                             flex: 2,
+//                                             child: Padding(
+//                                               padding:
+//                                                   const EdgeInsets.all(10.0),
+//                                               child: Text(
+//                                                 "plant wind mill plant mill plant millplant wind mill plant mill plant mill",
+//                                                 style: TextStyle(fontSize: 14),
+//                                               ),
+//                                             )),
+//                                         Expanded(
+//                                             flex: 2,
+//                                             child: Text(
+//                                               "12/2/2000",
+//                                               style: TextStyle(fontSize: 14),
+//                                             )),
+//                                         Expanded(
+//                                             flex: 1,
+//                                             child: Padding(
+//                                               padding:
+//                                                   const EdgeInsets.all(10.0),
+//                                               child: Text("1 ETH"),
+//                                             )),
+//                                       ],
+//                                     );

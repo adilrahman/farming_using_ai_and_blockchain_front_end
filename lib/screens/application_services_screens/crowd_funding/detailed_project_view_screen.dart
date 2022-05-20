@@ -7,7 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class DetailedProjectView extends StatelessWidget {
+final TextEditingController _privateKeyTextController = TextEditingController();
+final TextEditingController _amountTextController = TextEditingController();
+final TextEditingController _withdrawDetailsTextController =
+    TextEditingController();
+
+class DetailedProjectView extends StatefulWidget {
   DetailedProjectView({Key? key, required projectIndex, required projectModel})
       : _projectIndex = projectIndex,
         _projectModel = projectModel,
@@ -17,13 +22,27 @@ class DetailedProjectView extends StatelessWidget {
   final _projectModel;
 
   @override
+  State<DetailedProjectView> createState() => _DetailedProjectViewState();
+}
+
+bool showWithDrawDetails = false;
+
+class _DetailedProjectViewState extends State<DetailedProjectView> {
+  @override
   Widget build(BuildContext context) {
+    String _hintText = "private Key";
     final _heading = "User name";
     final _data = "Adil rahman";
     final String _dummyDetails =
         "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
 
-    final Project project = _projectModel.myProjects[_projectIndex];
+    final Project project =
+        widget._projectModel.myProjects[widget._projectIndex];
+
+    // to get the withdraw details of the specific project
+    widget._projectModel
+        .getWithdrawDetails(projectAddress: project.contractAddress);
+
     final double _percentage = double.parse(project.currentBalance) /
                 double.parse(project.goalAmount) >
             1
@@ -46,24 +65,26 @@ class DetailedProjectView extends StatelessWidget {
               children: [
                 Text(
                   project.projectName, //project name
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
                 Container(
-                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
                   child: Center(
                       child: Container(
                     width: 150,
                     height: 35,
                     decoration: BoxDecoration(
-                        color: _projectModel.PROJECT_STATE[project.state][1]),
+                        color: widget._projectModel.PROJECT_STATE[project.state]
+                            [1]),
                     child: Center(
                       child: Text(
-                        _projectModel.PROJECT_STATE[project.state]
+                        widget._projectModel.PROJECT_STATE[project.state]
                             [0], //PROJECT STATE
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.w400, fontSize: 20),
                       ),
                     ),
@@ -83,26 +104,26 @@ class DetailedProjectView extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          Divider(
+          const Divider(
             color: Colors.black,
           ),
-          Text(
+          const Text(
             "Details",
             style: TextStyle(color: Colors.black),
           ),
-          Divider(
+          const Divider(
             color: Colors.black,
           ),
           Expanded(
             child: SingleChildScrollView(
               child: Container(
-                padding: EdgeInsets.only(bottom: 30, left: 10, right: 10),
+                padding: const EdgeInsets.only(bottom: 30, left: 10, right: 10),
                 child: Column(
                   children: [
                     Container(
                       // margin: EdgeInsets.symmetric(horizontal: 10),
                       color: Colors.grey[700],
-                      padding: EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(20.0),
                       child: Row(
                         children: [
                           Expanded(
@@ -184,21 +205,173 @@ class DetailedProjectView extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                        color: Colors.grey[700],
+                        padding: EdgeInsets.all(20.0),
+                        child: Container(
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: SingleDetailChildRight(
+                                        heading: "withdrawDetails", data: ""),
+                                  ),
+                                  IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          showWithDrawDetails =
+                                              !showWithDrawDetails;
+                                        });
+                                      },
+                                      icon: !showWithDrawDetails
+                                          ? Icon(Icons.arrow_circle_down_sharp)
+                                          : Icon(Icons.arrow_circle_up))
+                                ],
+                              ),
+                              !showWithDrawDetails
+                                  ? Container(
+                                      child: Text("...."),
+                                    )
+                                  : Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  "DATE",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 13),
+                                                )),
+                                            Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  "DETAILS",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 13),
+                                                )),
+                                            Expanded(
+                                                flex: 1,
+                                                child: Text(
+                                                  "AMOUNT",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 13),
+                                                )),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        ListView.separated(
+                                            shrinkWrap: true,
+                                            itemBuilder: (context, index) {
+                                              return Container(
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    Container(
+                                                      // details
+                                                      child: Text(widget
+                                                          ._projectModel
+                                                          .currentProjectWithdrawDetails[
+                                                              index]["details"]
+                                                          .toString()),
+                                                    ),
+                                                    Divider(),
+                                                    Container(
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                              //date
+                                                              child: Text(widget
+                                                                  ._projectModel
+                                                                  .currentProjectWithdrawDetails[
+                                                                      index]
+                                                                      ["date"]
+                                                                  .toString())),
+                                                          Text(
+                                                              "${widget._projectModel.currentProjectWithdrawDetails[index]["amount"].toString()} ETH")
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 15,
+                                                    )
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                            separatorBuilder:
+                                                (context, index) => Divider(
+                                                      color: Colors.white,
+                                                      thickness: 1.5,
+                                                    ),
+                                            itemCount: widget
+                                                ._projectModel
+                                                .currentProjectWithdrawDetails
+                                                .length)
+                                      ],
+                                    ),
+                            ],
+                          ),
+                        )),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    // withdraw amount with withdraw details button
                     project.state == 2
                         ? ElevatedButton(
                             onPressed: () {
                               Get.defaultDialog(
                                   barrierDismissible: false,
-                                  title: "Private Key",
-                                  titlePadding: EdgeInsets.only(
+                                  title: "Withdraw",
+                                  titlePadding: const EdgeInsets.only(
                                       top: 15, left: 10, right: 10, bottom: 10),
-                                  contentPadding: EdgeInsets.only(
+                                  contentPadding: const EdgeInsets.only(
                                       top: 15, left: 10, right: 10, bottom: 10),
                                   content: Container(
-                                    child: TextField(),
+                                    child: Column(
+                                      children: [
+                                        DialogeTextField(
+                                            textController:
+                                                _privateKeyTextController,
+                                            hintText: "private key"),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        DialogeTextField(
+                                            textController:
+                                                _amountTextController,
+                                            hintText: "amount"),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        DialogeTextField(
+                                            textController:
+                                                _withdrawDetailsTextController,
+                                            hintText: "withdraw deatils"),
+                                      ],
+                                    ),
                                   ),
                                   confirm: TextButton(
-                                      onPressed: () {}, child: Text("confirm")),
+                                      onPressed: () {
+                                        withdrawWithDetails(
+                                            projectAddress:
+                                                project.contractAddress);
+                                      },
+                                      child: const Text("confirm")),
                                   cancel: TextButton(
                                     onPressed: () {
                                       Get.back();
@@ -207,7 +380,42 @@ class DetailedProjectView extends StatelessWidget {
                                   ));
                             },
                             child: Container(
-                              child: Center(child: Text("WITHDRAW")),
+                              child: Center(child: Text("WITHDRAW AMOUNT")),
+                              width: double.infinity,
+                              height: 50,
+                            ),
+                          )
+                        : Container(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    project.state == 2
+                        // withdraw all amount
+                        ? ElevatedButton(
+                            onPressed: () {
+                              Get.defaultDialog(
+                                  barrierDismissible: false,
+                                  title: "Private Key",
+                                  titlePadding: const EdgeInsets.only(
+                                      top: 15, left: 10, right: 10, bottom: 10),
+                                  contentPadding: const EdgeInsets.only(
+                                      top: 15, left: 10, right: 10, bottom: 10),
+                                  content: Container(
+                                    child: const TextField(),
+                                  ),
+                                  confirm: TextButton(
+                                    onPressed: () {},
+                                    child: const Text("confirm"),
+                                  ),
+                                  cancel: TextButton(
+                                    onPressed: () {
+                                      Get.back();
+                                    },
+                                    child: Text("cancel"),
+                                  ));
+                            },
+                            child: Container(
+                              child: Center(child: Text("WITHDRAW ALL AMOUNT")),
                               width: double.infinity,
                               height: 50,
                             ),
@@ -230,7 +438,7 @@ class DetailedProjectView extends StatelessWidget {
                                   ),
                                   confirm: TextButton(
                                       onPressed: () {
-                                        _projectModel.cancelMyProject(
+                                        widget._projectModel.cancelMyProject(
                                             project.contractAddress);
                                       },
                                       child: Text("confirm")),
@@ -254,6 +462,18 @@ class DetailedProjectView extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  withdrawWithDetails({required projectAddress}) {
+    final _privateKey = _privateKeyTextController.text;
+    final _amount = _amountTextController.text;
+    final _details = _withdrawDetailsTextController.text;
+    widget._projectModel.withAmountdrawWithDetails(
+      projectAddress: projectAddress,
+      privateKey: _privateKey,
+      amount: _amount,
+      details: _details,
     );
   }
 }

@@ -12,10 +12,11 @@ import 'package:flutter/widgets.dart';
 class InvesorsProjectListModel extends ChangeNotifier {
   List<Project> allProjects = []; // used to store all fethced projects
   List<Project> myProjects = []; // used to store only invested projects
+  List<dynamic> currentProjectWithdrawDetails = [];
   final String _rpcUrl = "http://192.168.43.135:7545";
   final String _wsUrl = "ws://192.168.43.135:7545";
   final String _privateKey =
-      "a2e3be7520c7fcc66922cab1baae192a809a4e2ae085ac50dfb3dc3d94d5e0c8";
+      "0856c09520195c34cb55d25171f813d6401eedfdd7950f4446a0aeadf7718710";
 
   Web3Client? _client;
   String? _abiOfFactory;
@@ -216,6 +217,42 @@ class InvesorsProjectListModel extends ChangeNotifier {
             parameters: []));
     await getAllCurrentProject();
     await getMyContributedProjects();
+  }
+
+  getWithdrawDetails({required projectAddress}) async {
+    print(
+        "WithDraw details WithDraw details WithDraw details WithDraw details WithDraw detailYYYYsWithDraw details");
+
+    var _tmpContract = DeployedContract(
+        ContractAbi.fromJson(_abiOfProject!, "Project"),
+        EthereumAddress.fromHex(projectAddress.toString()));
+
+    _returnAllWithDrawDetails =
+        _tmpContract.function("returnAllWithDrawDetails");
+
+    var withdrawDetails = await _client!.call(
+        contract: _tmpContract,
+        function: _returnAllWithDrawDetails,
+        params: []);
+
+    currentProjectWithdrawDetails.clear();
+    for (var item in withdrawDetails[0]) {
+      item[0] = convertionWeiToEth(false, double.parse(item[0].toString()));
+      item[2] = int.parse(item[2].toString());
+
+      item[2] = unixEpochToReadableText(item[2]);
+
+      currentProjectWithdrawDetails
+          .add({"date": item[2], "details": item[1], "amount": item[0]});
+    }
+    print(currentProjectWithdrawDetails);
+  }
+
+  String unixEpochToReadableText(int epoch) {
+    var millis = epoch;
+    var dt = DateTime.fromMillisecondsSinceEpoch(millis * 1000);
+    var d12 = DateFormat('MM/dd/yyyy, hh:mm a').format(dt);
+    return d12.toString();
   }
 
   getMyContributedProjects() async {

@@ -12,10 +12,11 @@ import 'package:flutter/widgets.dart';
 
 class ProjectListModel extends ChangeNotifier {
   List<Project> myProjects = []; // used to store fethced projects
+  List<dynamic> currentProjectWithdrawDetails = [];
   final String _rpcUrl = "http://192.168.43.135:7545";
   final String _wsUrl = "ws://192.168.43.135:7545";
   final String _privateKey =
-      "a2e3be7520c7fcc66922cab1baae192a809a4e2ae085ac50dfb3dc3d94d5e0c8";
+      "d383106d282b65415940baa3680a54aca0db3005d8d759fbf871a56699959eac";
 
   Web3Client? _client;
   String? _abiOfFactory;
@@ -281,5 +282,70 @@ class ProjectListModel extends ChangeNotifier {
         ));
     getMyCurrentProject();
     notifyListeners();
+  }
+
+  withAmountdrawWithDetails({
+    required projectAddress,
+    required privateKey,
+    required amount,
+    required details,
+  }) async {
+    List<dynamic> credDetails = await getCredentials(_privateKey);
+    var _credentials = credDetails[0];
+    var _ownAddress = credDetails[1];
+
+    var _tmpContract = DeployedContract(
+        ContractAbi.fromJson(_abiOfProject!, "Project"), projectAddress);
+
+    _withDraw = _tmpContract.function("withDraw");
+
+    amount = double.parse(amount);
+    amount = convertionWeiToEth(true, amount); // converted to wei
+    amount = BigInt.from(amount);
+
+    await _client!.sendTransaction(
+        _credentials,
+        Transaction.callContract(
+          contract: _tmpContract,
+          function: _withDraw,
+          parameters: [amount, details.toString()],
+          from: EthereumAddress.fromHex(_ownAddress.toString()),
+        ));
+  }
+
+  getWithdrawDetails({required projectAddress}) async {
+    print(
+        "WithDraw details WithDraw details WithDraw details WithDraw details WithDraw detailYYYYsWithDraw details");
+
+    var _tmpContract = DeployedContract(
+        ContractAbi.fromJson(_abiOfProject!, "Project"),
+        EthereumAddress.fromHex(projectAddress.toString()));
+
+    _returnAllWithDrawDetails =
+        _tmpContract.function("returnAllWithDrawDetails");
+
+    var withdrawDetails = await _client!.call(
+        contract: _tmpContract,
+        function: _returnAllWithDrawDetails,
+        params: []);
+
+    currentProjectWithdrawDetails.clear();
+    for (var item in withdrawDetails[0]) {
+      item[0] = convertionWeiToEth(false, double.parse(item[0].toString()));
+      item[2] = int.parse(item[2].toString());
+
+      item[2] = unixEpochToReadableText(item[2]);
+
+      currentProjectWithdrawDetails
+          .add({"date": item[2], "details": item[1], "amount": item[0]});
+    }
+    print(currentProjectWithdrawDetails);
+  }
+
+  String unixEpochToReadableText(int epoch) {
+    var millis = epoch;
+    var dt = DateTime.fromMillisecondsSinceEpoch(millis * 1000);
+    var d12 = DateFormat('MM/dd/yyyy, hh:mm a').format(dt);
+    return d12.toString();
   }
 }
