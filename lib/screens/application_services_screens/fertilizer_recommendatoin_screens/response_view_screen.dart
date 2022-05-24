@@ -10,58 +10,96 @@ class ResponseViewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: AppColor.gradientSecond,
+        title: const Text("recommendation"),
+      ),
       body: Container(
-        padding: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 20),
+        padding: const EdgeInsets.only(top: 10, bottom: 20),
         child: ListView.separated(
-            separatorBuilder: (context, index) => Divider(
-                  thickness: 3,
-                  color: Colors.white60,
+            separatorBuilder: (context, index) => Container(
+                  margin: const EdgeInsets.symmetric(vertical: 15),
+                  child: const Divider(
+                    thickness: 0.9,
+                    color: Colors.black,
+                  ),
                 ),
             itemCount: _response.length, //total project count
             itemBuilder: (context, index) => Container(
                   child: Column(
                     children: [
-                      Text(
-                        _response[index].keys.first.toString(),
-                        style: TextStyle(
-                            color: AppColor.gradientSecond,
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold),
+                      Container(
+                        width: double.infinity,
+                        color: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Center(
+                          child: Text(
+                            _response[index].keys.first.toString(),
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
+                      const Divider(
+                        color: Colors.black,
+                      ),
+                      const Text(
+                        "remedies",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      const Divider(
+                        color: Colors.black,
+                      ),
                       ListView.separated(
-                          separatorBuilder: (context, index) => Divider(),
+                          physics: const NeverScrollableScrollPhysics(),
+                          separatorBuilder: (context, index) => const Divider(),
                           shrinkWrap: true,
                           itemCount: _response[index].values.first.length,
                           itemBuilder: (context, s_index) {
-                            return Column(
-                              children: [
-                                Center(
-                                    child: Text(
-                                  _response[index]
-                                      .values
-                                      .first[s_index]
-                                      .keys
-                                      .first
-                                      .toString(),
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                )),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Center(
-                                    child: Text(_response[index]
+                            return Container(
+                              margin:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              padding: const EdgeInsets.all(15),
+                              color: Colors.grey,
+                              child: Column(
+                                children: [
+                                  Center(
+                                      child: Text(
+                                    _response[index]
+                                        .values
+                                        .first[s_index]
+                                        .keys
+                                        .first
+                                        .toString(),
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                                  const Divider(
+                                    thickness: 0.9,
+                                    color: Colors.white,
+                                  ),
+                                  Center(
+                                      child: Text(
+                                    _response[index]
                                         .values
                                         .first[s_index]
                                         .values
                                         .first
-                                        .toString())),
-                              ],
+                                        .toString(),
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400),
+                                  )),
+                                ],
+                              ),
                             );
                           }),
                     ],
@@ -71,11 +109,3 @@ class ResponseViewScreen extends StatelessWidget {
     );
   }
 }
-
-// Text(
-                    // _response[index].toString(),
-                    // style: TextStyle(fontSize: 12),
-                  // )
-// 
-
-// child: Text(_response[index].values.first.toString()),

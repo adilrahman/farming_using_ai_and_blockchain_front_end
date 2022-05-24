@@ -6,24 +6,57 @@ import 'package:farming_using_ai_and_blockchain_front_end/screens/application_se
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class FertilizerRecommendationScreen extends StatelessWidget {
+class FertilizerRecommendationScreen extends StatefulWidget {
   FertilizerRecommendationScreen({Key? key}) : super(key: key);
 
+  @override
+  State<FertilizerRecommendationScreen> createState() =>
+      _FertilizerRecommendationScreenState();
+}
+
+class _FertilizerRecommendationScreenState
+    extends State<FertilizerRecommendationScreen> {
   final RestApiInteraction backendInterFace =
       Get.put(RestApiInteraction(), tag: "backend");
 
   final TextEditingController _nitrogenRatioEditingController =
       TextEditingController();
+
   final TextEditingController _phosphorusRatioEditingController =
       TextEditingController();
+
   final TextEditingController _potassiumRatioEditingController =
       TextEditingController();
+
   final TextEditingController _cropEditingController = TextEditingController();
+
+  String _value1 = "";
+  String _value2 = "";
+
+  final List<String> nameList = <String>[
+    "Name1",
+    "Name2",
+    "Name3",
+    "Name4",
+    "Name5",
+    "Name6",
+    "Name7",
+    "Name8"
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _value1 = nameList[0];
+    _value2 = nameList[3];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.gradientSecond,
+        title: Text("fertilizer recommendation"),
       ),
       body: Scaffold(
         backgroundColor: AppColor.homePageBackground,
@@ -49,6 +82,22 @@ class FertilizerRecommendationScreen extends StatelessWidget {
                   singleTextField(
                       titleEditingController: _cropEditingController,
                       hintText: "crop"),
+                  // DropdownButton(
+                  //   value: _value1,
+                  //   onChanged: (var value) {
+                  //     setState(() {
+                  //       _value1 = value.toString();
+                  //     });
+                  //   },
+                  //   items: nameList.map(
+                  //     (item) {
+                  //       return DropdownMenuItem(
+                  //         value: item,
+                  //         child: new Text(item),
+                  //       );
+                  //     },
+                  //   ).toList(),
+                  // ),
                   const SizedBox(height: 10),
                   const SizedBox(height: 20),
                   ElevatedButton(
