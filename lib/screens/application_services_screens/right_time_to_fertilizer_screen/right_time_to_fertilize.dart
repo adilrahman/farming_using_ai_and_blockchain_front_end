@@ -20,7 +20,7 @@ class RightTimeToFertilize extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColor.homePageBackground,
       appBar: AppBar(
-        title: Text("Time to fertilize"),
+        title: const Text("Time to fertilize"),
         centerTitle: true,
         backgroundColor: AppColor.gradientSecond,
       ),
@@ -56,8 +56,8 @@ class RightTimeToFertilize extends StatelessWidget {
                                       textStyle: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.w500)),
-                                  icon: Icon(Icons.check),
-                                  label: Text("Check")),
+                                  icon: const Icon(Icons.check),
+                                  label: const Text("Check")),
                             ),
                     ),
                   ],
