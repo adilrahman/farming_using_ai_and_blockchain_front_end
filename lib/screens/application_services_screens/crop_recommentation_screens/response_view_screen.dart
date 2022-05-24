@@ -10,15 +10,56 @@ class ResponseViewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: AppColor.gradientSecond,
+        title: const Text(
+          "Recommendation",
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+      ),
       body: Container(
+        margin: const EdgeInsets.only(top: 10),
         child: ListView.separated(
-            separatorBuilder: (context, index) => Divider(),
+            separatorBuilder: (context, index) => const Divider(
+                  color: Colors.black,
+                  thickness: 0.5,
+                ),
             itemCount: _response.length, //total project count
             itemBuilder: (context, index) => Center(
-                  child: Text(
-                    _response[index].toString(),
-                    style: TextStyle(fontSize: 30),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            _response[index]["crop"].toString(),
+                            style: TextStyle(
+                              fontSize: 25,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(child: Container()),
+                          Text(
+                            "percentage : ${_response[index]["support"] * 100}%",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          )
+                        ],
+                      ),
+                    ],
                   ),
                 )),
       ),
