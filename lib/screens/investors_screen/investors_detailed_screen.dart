@@ -3,6 +3,7 @@ import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfundin
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/functions/crowdfunding_investors_functions.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/project_data_model.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/palatte.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/contributors_list_view_screen.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/widgets/crowd_funding_user_screen_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -18,12 +19,12 @@ class InvestorDetailedScreen extends StatefulWidget {
       required Project project})
       : _projectIndex = projectIndex,
         _projectModel = projectModel,
-        project = project,
+        _project = project,
         super(key: key);
 
   final int _projectIndex;
   final _projectModel;
-  final project;
+  final _project;
 
   @override
   State<InvestorDetailedScreen> createState() => _InvestorDetailedScreenState();
@@ -31,13 +32,17 @@ class InvestorDetailedScreen extends StatefulWidget {
 
 class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
   bool showWithDrawDetails = false;
+  double totalWithdraw = 0.0;
 
   @override
   Widget build(BuildContext context) {
-    // var _projectModel = Provider.of<InvesorsProjectListModel>(context);
+    //project total collected amount
+    print(
+        "ENNNNNNNNNNNNNNNNNNNNNNNNNTTTTTTTTTTTTTTTTTTTTTTTTERRRRRRRRRRRRRRRRRRRRRRRRRRRRR00054 => ${widget._projectModel.allProjects}");
+    double projetContractBalance = double.parse(
+        widget._projectModel.allProjects[widget._projectIndex].currentBalance);
 
-    final Project project =
-        widget._projectModel.allProjects[widget._projectIndex];
+    final Project project = widget._project;
 
     // to get the withdraw details of the specific project
     widget._projectModel
@@ -54,11 +59,6 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
 
     final String _percentageOfCompletionInText =
         (_percentage * 100).toString() + "%";
-
-    final _heading = "User name";
-    final _data = "Adil rahman";
-    final String _dummyDetails =
-        "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
 
     TextEditingController _enteredAmountController = TextEditingController();
     return Scaffold(
@@ -146,14 +146,28 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                                     height: 30,
                                   ),
                                   DetailTileRight(
-                                      data: "21", heading: "Days to go"),
+                                      data: project.expiredAtInDays.toString(),
+                                      heading: "Days to go"),
                                   const SizedBox(
                                     height: 30,
                                   ),
-                                  DetailTileRight(
-                                      data: project.numberOfContributors
-                                          .toString(),
-                                      heading: "Contributors"),
+                                  InkWell(
+                                    onLongPress: () async {
+                                      print(
+                                          "object obbjhhhhhhhhhhhhhhhhhhhhhhhlllllllllllletc");
+                                      await widget._projectModel
+                                          .getProjectContributorsList(
+                                              projectAddress:
+                                                  project.contractAddress);
+                                      Get.to(ContributorsListViewScreen(
+                                          details: widget._projectModel
+                                              .contributorsListOfProject));
+                                    },
+                                    child: DetailTileRight(
+                                        data: project.numberOfContributors
+                                            .toString(),
+                                        heading: "Contributors"),
+                                  ),
                                 ],
                               ))),
                           Expanded(
@@ -196,9 +210,7 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                       color: Colors.grey[700],
                       padding: EdgeInsets.all(20.0),
                       child: SingleDetailChildRight(
-                          heading: "land location",
-                          data:
-                              "pothukattil (house) angadipuram (po) malappuram (dt) kerala (st) - 679321"),
+                          heading: "land location", data: project.landLocation),
                     ),
                     const SizedBox(
                       height: 20,
@@ -221,7 +233,7 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                             children: [
                               Row(
                                 children: [
-                                  const Expanded(
+                                  Expanded(
                                     child: SingleDetailChildRight(
                                         heading: "withdraw details", data: ""),
                                   ),
@@ -230,10 +242,21 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                                         setState(() {
                                           showWithDrawDetails =
                                               !showWithDrawDetails;
-                                          withdrawDetails = widget._projectModel
-                                              .currentProjectWithdrawDetails;
+
+                                          // it calculate the total withdraw amount
+                                          totalWithdraw = 0;
+                                          int n = widget
+                                              ._projectModel
+                                              .currentProjectWithdrawDetails
+                                              .length;
+
+                                          for (int i = 0; i < n; i++) {
+                                            totalWithdraw += widget
+                                                    ._projectModel
+                                                    .currentProjectWithdrawDetails[
+                                                i]["amount"];
+                                          }
                                         });
-                                        print(withdrawDetails.length);
                                       },
                                       icon: !showWithDrawDetails
                                           ? const Icon(
@@ -311,7 +334,7 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                                                                       ["date"]
                                                                   .toString())),
                                                           Text(
-                                                              "${widget._projectModel.currentProjectWithdrawDetails[index]["amount"].toString()} ETH")
+                                                              "  ${widget._projectModel.currentProjectWithdrawDetails[index]["amount"].toString()} ETH")
                                                         ],
                                                       ),
                                                     ),
@@ -331,7 +354,35 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                                             itemCount: widget
                                                 ._projectModel
                                                 .currentProjectWithdrawDetails
-                                                .length)
+                                                .length),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        const Divider(
+                                          color: Colors.blue,
+                                          thickness: 1.5,
+                                        ),
+                                        Row(
+                                          children: [
+                                            const Text(
+                                              "BALANCE",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 17),
+                                            ),
+                                            Expanded(child: Container()),
+                                            Text(
+                                              " = ${(projetContractBalance - totalWithdraw).toString()}",
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 17),
+                                            ),
+                                            const Icon(
+                                              FontAwesomeIcons.ethereum,
+                                              size: 16,
+                                            )
+                                          ],
+                                        ),
                                       ],
                                     ),
                             ],
@@ -340,35 +391,6 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                     const SizedBox(
                       height: 20,
                     ),
-                    project.state == 2
-                        ? ElevatedButton(
-                            onPressed: () {
-                              Get.defaultDialog(
-                                  barrierDismissible: false,
-                                  title: "Private Key",
-                                  titlePadding: const EdgeInsets.only(
-                                      top: 15, left: 10, right: 10, bottom: 10),
-                                  contentPadding: const EdgeInsets.only(
-                                      top: 15, left: 10, right: 10, bottom: 10),
-                                  content: Container(
-                                    child: TextField(),
-                                  ),
-                                  confirm: TextButton(
-                                      onPressed: () {}, child: Text("confirm")),
-                                  cancel: TextButton(
-                                    onPressed: () {
-                                      Get.back();
-                                    },
-                                    child: Text("cancel"),
-                                  ));
-                            },
-                            child: Container(
-                              child: Center(child: Text("WITHDRAW")),
-                              width: double.infinity,
-                              height: 50,
-                            ),
-                          )
-                        : Container(),
                     const SizedBox(height: 10),
                   ],
                 ),

@@ -1,6 +1,7 @@
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/functions/crowdfunding_investors_functions.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/project_data_model.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/detailed_project_view_screen.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/investors_screen/investors_detailed_screen.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/settings/settings_screen.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/loading.dart';
@@ -209,6 +210,9 @@ class FarmingProjectListView extends StatelessWidget {
         (_percentage * 100).toString() + " %";
     return InkWell(
       onTap: () {
+        print(
+            " 00999999999999999999999 adil rahman dil rahmandil rahman dil rahmandil rahmandil rahmandil rahmandil rahmandil rahmandil rahman ${_projectModel.allProjects[_projectIndex]}");
+
         Get.to(
             InvestorDetailedScreen(
               projectIndex: _projectIndex,

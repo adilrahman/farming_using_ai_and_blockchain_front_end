@@ -21,15 +21,17 @@ contract Crowdfunding {
         }
     }
 
+    //rice,nothing,10,1,4,adil,8090,new location
     function startProject(
-        string calldata _ProjectName,
-        string calldata _ProjectDescription,
+        string memory _ProjectName,
+        string memory _ProjectDescription,
         uint256 _GoalAmount,
         uint256 _minimunContribution,
         uint256 durationInDays,
-        string calldata _creatorName,
-        string calldata _phoneNumber
-    ) external {
+        string memory _creatorName,
+        string memory _phoneNumber,
+        string memory _landLocation
+    ) public {
         uint256 raiseUntil = now + durationInDays * 1 days;
         Project newProject = new Project(
             _ProjectName,
@@ -37,7 +39,8 @@ contract Crowdfunding {
             _GoalAmount,
             _minimunContribution,
             raiseUntil,
-            msg.sender
+            msg.sender,
+            _landLocation
         );
         newProject.setParentContract(address(this));
         projects.push(newProject);
@@ -97,13 +100,14 @@ contract Project {
     //project details
     string public ProjectName;
     string public ProjectDescription;
+    string public landLocation;
     uint256 public GoalAmount; // required to reach at least this much, else everyone gets refund
     uint256 public currentBalance; // update on each contribution
     uint256 public minimunContribution;
     State public state; // state of the project (fundraising/expired/successful)
 
     mapping(address => uint256) public contributions;
-    address payable[] contributersAddress;
+    address payable[] public contributersAddress;
     uint256 public numberOfContributors;
 
     constructor(
@@ -112,7 +116,8 @@ contract Project {
         uint256 _GoalAmount,
         uint256 _minimunContribution,
         uint256 _fundRaisingDeadline,
-        address payable _creator
+        address payable _creator,
+        string memory _landLocation
     ) public {
         ProjectName = _ProjectName;
         ProjectDescription = _ProjectDescription;
@@ -123,6 +128,7 @@ contract Project {
         state = State.Fundraising;
         creator = _creator; // set to who calling this
         numberOfContributors = 0;
+        landLocation = _landLocation;
     }
 
     function initialFund() external payable {
@@ -151,15 +157,12 @@ contract Project {
         );
         // require((msg.value + currentBalance) <= (GoalAmount + 3000000),"should be lessthan Goalamount");
 
-        contributions[msg.sender] = contributions[msg.sender] + msg.value;
-        currentBalance += msg.value;
-
-        if (
-            contributions[msg.sender] == 0
-        ) // if they already contributed then no need to increase the count
-        {
+        if (contributions[msg.sender] == 0) {
+            contributersAddress.push(msg.sender);
             numberOfContributors++;
         }
+        contributions[msg.sender] = contributions[msg.sender] + msg.value;
+        currentBalance += msg.value;
 
         // adding the contribution details into parent contract mapping
         _crowdFundingParentContract.createAnewContribution(msg.sender, this);
@@ -224,6 +227,10 @@ contract Project {
         return true;
     }
 
+    function getContributor(uint256 id) public view returns (address) {
+        return contributersAddress[id];
+    }
+
     function getRefund() public returns (bool) {
         require(contributions[msg.sender] > 0, "you didn't contributed yet");
         require(state != State.Fundraising); // won't get refund until the project expired or cancelled
@@ -270,6 +277,20 @@ contract Project {
         return address(this).balance;
     }
 
+    function getContributorsList()
+        public
+        view
+        returns (address[] memory, uint256[] memory)
+    {
+        address[] memory _addresses = new address[](contributersAddress.length);
+        uint256[] memory _amounts = new uint256[](contributersAddress.length);
+        for (uint256 i = 0; i < contributersAddress.length; i++) {
+            _addresses[i] = contributersAddress[i];
+            _amounts[i] = contributions[contributersAddress[i]];
+        }
+        return (_addresses, _amounts);
+    }
+
     // get details about the project
     function getSummary()
         public
@@ -285,7 +306,8 @@ contract Project {
             uint256,
             uint256,
             State,
-            uint256
+            uint256,
+            string memory
         )
     {
         return (
@@ -299,7 +321,8 @@ contract Project {
             currentBalance,
             minimunContribution,
             state,
-            numberOfContributors
+            numberOfContributors,
+            landLocation
         );
     }
 }

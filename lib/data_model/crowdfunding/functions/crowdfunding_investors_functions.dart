@@ -12,11 +12,12 @@ import 'package:flutter/widgets.dart';
 class InvesorsProjectListModel extends ChangeNotifier {
   List<Project> allProjects = []; // used to store all fethced projects
   List<Project> myProjects = []; // used to store only invested projects
+  List<dynamic> contributorsListOfProject = [];
   List<dynamic> currentProjectWithdrawDetails = [];
   final String _rpcUrl = "http://192.168.43.135:7545";
   final String _wsUrl = "ws://192.168.43.135:7545";
   final String _privateKey =
-      "0856c09520195c34cb55d25171f813d6401eedfdd7950f4446a0aeadf7718710";
+      "71df7b8ce21c390690533fd31a27403f77a4529cb9da37c2b8bd957a7d87c927";
 
   Web3Client? _client;
   String? _abiOfFactory;
@@ -160,19 +161,31 @@ class InvesorsProjectListModel extends ChangeNotifier {
 // 24 Hour format:
       var d24 = DateFormat('dd/MM/yyyy, HH:mm').format(dt); // 31/12/2000, 22:00
 
+      dynamic expired = DateFormat('yyyy/MM/dd').format(dt);
+      final rightNow = DateTime.now();
+      var dateDate = expired.split(r"/");
+
+      expired = DateTime(int.parse(dateDate[0]), int.parse(dateDate[1]),
+          int.parse(dateDate[2]));
+
+      final difference = expired.difference(rightNow).inDays;
+
       Project _tmpProject = Project(
-          contractAddress: myProjectsAddress[i],
-          creator: _projectSummary[0].toString(),
-          creatorName: _projectSummary[1].toString(),
-          phoneNumber: _projectSummary[2].toString(),
-          raiseBy: d12.toString(),
-          projectName: _projectSummary[4].toString(),
-          projectDescription: _projectSummary[5].toString(),
-          goalAmount: _goalAmount_tmp,
-          currentBalance: _currentBalance,
-          minimunContribution: _minimunContribution_tmp,
-          state: int.parse(_projectSummary[9].toString()),
-          numberOfContributors: int.parse(_projectSummary[10].toString()));
+        contractAddress: myProjectsAddress[i],
+        creator: _projectSummary[0].toString(),
+        creatorName: _projectSummary[1].toString(),
+        phoneNumber: _projectSummary[2].toString(),
+        raiseBy: d12.toString(),
+        projectName: _projectSummary[4].toString(),
+        projectDescription: _projectSummary[5].toString(),
+        goalAmount: _goalAmount_tmp,
+        currentBalance: _currentBalance,
+        minimunContribution: _minimunContribution_tmp,
+        state: int.parse(_projectSummary[9].toString()),
+        numberOfContributors: int.parse(_projectSummary[10].toString()),
+        expiredAtInDays: difference.toString(),
+        landLocation: _projectSummary[11].toString(),
+      );
 
       allProjects.add(_tmpProject);
 
@@ -180,6 +193,8 @@ class InvesorsProjectListModel extends ChangeNotifier {
       isLoading = false;
       allProjects = new List.from(allProjects.reversed);
       notifyListeners();
+      print(
+          "=====================================================least day= ddd===========sd==================================================== ${allProjects.length}");
     }
   }
 
@@ -255,6 +270,33 @@ class InvesorsProjectListModel extends ChangeNotifier {
     return d12.toString();
   }
 
+  getProjectContributorsList({required projectAddress}) async {
+    contributorsListOfProject.clear();
+
+    var _tmpContract = DeployedContract(
+        ContractAbi.fromJson(_abiOfProject!, "Project"),
+        EthereumAddress.fromHex(projectAddress.toString()));
+
+    var _getContributorsList = _tmpContract.function("getContributorsList");
+
+    var contributorsList = await _client!.call(
+      contract: _tmpContract,
+      function: _getContributorsList,
+      params: [],
+    );
+
+    for (int i = 0; i < contributorsList[1].length; i++) {
+      contributorsList[1][i] = convertionWeiToEth(
+          false, double.parse(contributorsList[1][i].toString()));
+      contributorsListOfProject.add({
+        "address": contributorsList[0][i],
+        "amount": contributorsList[1][i]
+      });
+    }
+    print(
+        "1111111111111111 11111111111111111111111111 contributorsList contributorsList contributorsList contributorsList contributorsList ${contributorsListOfProject}");
+  }
+
   getMyContributedProjects() async {
     List<dynamic> credDetails = await getCredentials(_privateKey);
     var _credentials = credDetails[0];
@@ -301,6 +343,18 @@ class InvesorsProjectListModel extends ChangeNotifier {
 // 24 Hour format:
       var d24 = DateFormat('dd/MM/yyyy, HH:mm').format(dt); // 31/12/2000, 22:00
 
+      dynamic expired = DateFormat('yyyy/MM/dd').format(dt);
+      final rightNow = DateTime.now();
+      var dateDate = expired.split(r"/");
+
+      expired = DateTime(int.parse(dateDate[0]), int.parse(dateDate[1]),
+          int.parse(dateDate[2]));
+
+      final difference = expired.difference(rightNow).inDays;
+
+      print(
+          "=====================================================least day========xvccxv========================================================");
+      print(difference);
       Project _tmpProject = Project(
           contractAddress: myProjectsAddress[i],
           creator: _projectSummary[0].toString(),
@@ -313,7 +367,9 @@ class InvesorsProjectListModel extends ChangeNotifier {
           currentBalance: _currentBalance,
           minimunContribution: _minimunContribution_tmp,
           state: int.parse(_projectSummary[9].toString()),
-          numberOfContributors: int.parse(_projectSummary[10].toString()));
+          numberOfContributors: int.parse(_projectSummary[10].toString()),
+          expiredAtInDays: difference.toString(),
+          landLocation: _projectSummary[11].toString());
 
       myProjects.add(_tmpProject);
 

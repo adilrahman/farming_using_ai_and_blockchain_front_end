@@ -6,6 +6,7 @@ class Project {
   String creatorName;
   String phoneNumber;
   String raiseBy;
+  String expiredAtInDays;
   String projectName;
   String projectDescription;
   String goalAmount;
@@ -13,6 +14,7 @@ class Project {
   String minimunContribution;
   int state;
   int numberOfContributors;
+  String landLocation;
 
   Project(
       {required this.contractAddress,
@@ -26,7 +28,9 @@ class Project {
       required this.currentBalance,
       required this.minimunContribution,
       required this.state,
-      required this.numberOfContributors});
+      required this.numberOfContributors,
+      required this.expiredAtInDays,
+      required this.landLocation});
 }
 
 class NewProjectModel {

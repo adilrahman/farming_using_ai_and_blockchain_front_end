@@ -72,8 +72,10 @@ class _InvestorsScreenState extends State<InvestorsScreen> {
               },
               items: const [
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.add_box_outlined), label: "Add"),
-                BottomNavigationBarItem(icon: Icon(Icons.list), label: "List")
+                    icon: Icon(Icons.add_box_outlined),
+                    label: "Invested projects"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.list), label: "All projects")
               ])),
     );
   }

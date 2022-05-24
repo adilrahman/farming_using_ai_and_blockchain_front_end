@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ContributorsListViewScreen extends StatelessWidget {
-  const ContributorsListViewScreen({Key? key, this.projectContractAddress})
-      : super(key: key);
-  final projectContractAddress;
+  const ContributorsListViewScreen({Key? key, this.details}) : super(key: key);
+  final details;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Contributors List"),
+        title: const Text("Contributors List"),
       ),
       body: Container(
         padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
@@ -18,14 +17,14 @@ class ContributorsListViewScreen extends StatelessWidget {
                 children: [
                   Container(
                       width: 200,
-                      child: Text("0xabccnjsnjnsjdjnjsndnsdniasgidhajk")),
+                      child: Text(details[index]["address"].toString())),
                   Expanded(child: Container()),
-                  Text("0.4 ETH")
+                  Text(details[index]['amount'].toString() + " ETH")
                 ],
               );
             },
             separatorBuilder: (context, index) => Divider(),
-            itemCount: 5),
+            itemCount: details.length),
       ),
     );
   }

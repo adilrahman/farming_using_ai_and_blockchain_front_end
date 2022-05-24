@@ -5,6 +5,7 @@ import 'package:farming_using_ai_and_blockchain_front_end/palatte.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/contributors_list_view_screen.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/widgets/crowd_funding_user_screen_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
@@ -26,19 +27,23 @@ class DetailedProjectView extends StatefulWidget {
   State<DetailedProjectView> createState() => _DetailedProjectViewState();
 }
 
+// withdraw box toggile flag
 bool showWithDrawDetails = false;
+double totalWithdraw = 0.0;
 
 class _DetailedProjectViewState extends State<DetailedProjectView> {
   @override
   Widget build(BuildContext context) {
-    String _hintText = "private Key";
-    final _heading = "User name";
-    final _data = "Adil rahman";
-    final String _dummyDetails =
-        "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+    print(
+        "ENNNNNNNNNNNNNNNNNNNNNNNNNTTTTTTTTTTTTTTTTTTTTTTTTERRRRRRRRRRRRRRRRRRRRRRRRRRRRR4444902 => ${widget._projectModel.myProjects.length}");
+    //project total collected amount
+    double projetContractBalance = double.parse(
+        widget._projectModel.myProjects[widget._projectIndex].currentBalance);
 
     final Project project =
         widget._projectModel.myProjects[widget._projectIndex];
+
+    // project current contract balance
 
     // to get the withdraw details of the specific project
     widget._projectModel
@@ -53,6 +58,7 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
 
     final String _percentageOfCompletionInText =
         (_percentage * 100).toString() + "%";
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.gradientSecond,
@@ -139,15 +145,17 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                                     height: 30,
                                   ),
                                   DetailTileRight(
-                                      data: "21", heading: "Days to go"),
+                                      data: project.expiredAtInDays.toString(),
+                                      heading: "Days to go"),
                                   const SizedBox(
                                     height: 30,
                                   ),
+
+                                  // contribution side box with onpress event
                                   InkWell(
-                                    onLongPress: () {
-                                      Get.to(ContributorsListViewScreen(
-                                          projectContractAddress:
-                                              project.contractAddress));
+                                    onLongPress: () async {
+                                      await contributionBoxOnpress(
+                                          project: project);
                                     },
                                     child: DetailTileRight(
                                         data: project.numberOfContributors
@@ -188,21 +196,25 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                         ],
                       ),
                     ),
+
                     const SizedBox(
                       height: 20,
                     ),
+
+                    // land location box
                     Container(
                       //
                       color: Colors.grey[700],
                       padding: const EdgeInsets.all(20.0),
-                      child: const SingleDetailChildRight(
-                          heading: "land location",
-                          data:
-                              "pothukattil (house) angadipuram (po) malappuram (dt) kerala (st) - 679321"),
+                      child: SingleDetailChildRight(
+                          heading: "land location", data: project.landLocation),
                     ),
+
                     const SizedBox(
                       height: 20,
                     ),
+
+                    // project details box
                     Container(
                       color: Colors.grey[700],
                       padding: const EdgeInsets.all(20.0),
@@ -210,12 +222,12 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                           heading: "project details",
                           data: project.projectDescription),
                     ),
+
                     const SizedBox(
                       height: 20,
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+
+                    // withdraw details box
                     Container(
                         color: Colors.grey[700],
                         padding: EdgeInsets.all(20.0),
@@ -224,15 +236,33 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                             children: [
                               Row(
                                 children: [
-                                  const Expanded(
+                                  Expanded(
                                     child: SingleDetailChildRight(
-                                        heading: "withdrawDetails", data: ""),
+                                      heading: "withdrawDetails ",
+                                      data: "",
+                                    ),
                                   ),
+
+                                  // withdraw details toggle button
                                   IconButton(
                                       onPressed: () {
                                         setState(() {
                                           showWithDrawDetails =
                                               !showWithDrawDetails;
+
+                                          // it calculate the total withdraw amount
+                                          totalWithdraw = 0;
+                                          int n = widget
+                                              ._projectModel
+                                              .currentProjectWithdrawDetails
+                                              .length;
+
+                                          for (int i = 0; i < n; i++) {
+                                            totalWithdraw += widget
+                                                    ._projectModel
+                                                    .currentProjectWithdrawDetails[
+                                                i]["amount"];
+                                          }
                                         });
                                       },
                                       icon: !showWithDrawDetails
@@ -331,17 +361,47 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                                             itemCount: widget
                                                 ._projectModel
                                                 .currentProjectWithdrawDetails
-                                                .length)
+                                                .length),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        const Divider(
+                                          color: Colors.blue,
+                                          thickness: 1.5,
+                                        ),
+                                        Row(
+                                          children: [
+                                            const Text(
+                                              "BALANCE",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 17),
+                                            ),
+                                            Expanded(child: Container()),
+                                            Text(
+                                              " = ${(projetContractBalance - totalWithdraw).toString()}",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 17),
+                                            ),
+                                            const Icon(
+                                              FontAwesomeIcons.ethereum,
+                                              size: 16,
+                                            )
+                                          ],
+                                        ),
                                       ],
                                     ),
                             ],
                           ),
                         )),
+
                     const SizedBox(
                       height: 20,
                     ),
+
                     // withdraw amount with withdraw details button
-                    project.state == 2
+                    project.state == 2 // state 2 -> successful
                         ? ElevatedButton(
                             onPressed: () {
                               Get.defaultDialog(
@@ -397,44 +457,13 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                             ),
                           )
                         : Container(),
+
                     const SizedBox(
                       height: 20,
                     ),
-                    project.state == 2
-                        // withdraw all amount
-                        ? ElevatedButton(
-                            onPressed: () {
-                              Get.defaultDialog(
-                                  barrierDismissible: false,
-                                  title: "Private Key",
-                                  titlePadding: const EdgeInsets.only(
-                                      top: 15, left: 10, right: 10, bottom: 10),
-                                  contentPadding: const EdgeInsets.only(
-                                      top: 15, left: 10, right: 10, bottom: 10),
-                                  content: Container(
-                                    child: const TextField(),
-                                  ),
-                                  confirm: TextButton(
-                                    onPressed: () {},
-                                    child: const Text("confirm"),
-                                  ),
-                                  cancel: TextButton(
-                                    onPressed: () {
-                                      Get.back();
-                                    },
-                                    child: const Text("cancel"),
-                                  ));
-                            },
-                            child: Container(
-                              child: const Center(
-                                  child: Text("WITHDRAW ALL AMOUNT")),
-                              width: double.infinity,
-                              height: 50,
-                            ),
-                          )
-                        : Container(),
-                    const SizedBox(height: 10),
-                    project.state == 3
+
+                    //cancel project button
+                    project.state == 3 // state 3 -> cancelled state
                         ? Container()
                         : ElevatedButton(
                             onPressed: () {
@@ -477,6 +506,7 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
     );
   }
 
+// withdraw amount with use case text button onpress method
   withdrawWithDetails({required projectAddress}) {
     final _privateKey = _privateKeyTextController.text;
     final _amount = _amountTextController.text;
@@ -487,5 +517,13 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
       amount: _amount,
       details: _details,
     );
+  }
+
+  //contribution onpress button for showing details of investors
+  contributionBoxOnpress({required project}) async {
+    await widget._projectModel
+        .getProjectContributorsList(projectAddress: project.contractAddress);
+    Get.to(ContributorsListViewScreen(
+        details: widget._projectModel.contributorsListOfProject));
   }
 }

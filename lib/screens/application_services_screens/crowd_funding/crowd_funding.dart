@@ -46,8 +46,10 @@ class _CrowdFundingScreenState extends State<CrowdFundingScreen> {
             },
             items: const [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.add_box_outlined), label: "Add"),
-              BottomNavigationBarItem(icon: Icon(Icons.list), label: "List")
+                  icon: Icon(Icons.add_box_outlined),
+                  label: "create new project"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.list), label: "my projects")
             ]),
       ),
     );

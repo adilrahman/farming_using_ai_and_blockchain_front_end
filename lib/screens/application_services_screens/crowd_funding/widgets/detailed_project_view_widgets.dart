@@ -30,7 +30,7 @@ class DetailTileRight extends StatelessWidget {
 }
 
 class SingleDetailChildRight extends StatelessWidget {
-  const SingleDetailChildRight({
+  SingleDetailChildRight({
     Key? key,
     required String heading,
     required String data,

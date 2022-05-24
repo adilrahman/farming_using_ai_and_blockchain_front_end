@@ -13,6 +13,7 @@ import 'package:flutter/widgets.dart';
 class ProjectListModel extends ChangeNotifier {
   List<Project> myProjects = []; // used to store fethced projects
   List<dynamic> currentProjectWithdrawDetails = [];
+  List<dynamic> contributorsListOfProject = [];
   final String _rpcUrl = "http://192.168.43.135:7545";
   final String _wsUrl = "ws://192.168.43.135:7545";
   final String _privateKey =
@@ -108,44 +109,44 @@ class ProjectListModel extends ChangeNotifier {
     print("==================>>>>>>>>> ${totalProjectCount}");
   }
 
-  getAllCurrentProject() async {
-    var myProjectsAddress = await _client!.call(
-        contract: _contractOfFactory, function: _returnAllProjects, params: []);
+  // getAllCurrentProject() async {
+  //   var myProjectsAddress = await _client!.call(
+  //       contract: _contractOfFactory, function: _returnAllProjects, params: []);
 
-    myProjectsAddress =
-        myProjectsAddress[0]; // coz it return a 2d array initially
+  //   myProjectsAddress =
+  //       myProjectsAddress[0]; // coz it return a 2d array initially
 
-    myProjects.clear();
-    for (int i = 0; i < myProjectsAddress.length; i++) {
-      var _tmpContract = DeployedContract(
-          ContractAbi.fromJson(_abiOfProject!, "Project"),
-          myProjectsAddress[i]);
+  //   myProjects.clear();
+  //   for (int i = 0; i < myProjectsAddress.length; i++) {
+  //     var _tmpContract = DeployedContract(
+  //         ContractAbi.fromJson(_abiOfProject!, "Project"),
+  //         myProjectsAddress[i]);
 
-      _getSummary = _tmpContract.function("getSummary");
+  //     _getSummary = _tmpContract.function("getSummary");
 
-      var _projectSummary = await _client!
-          .call(contract: _tmpContract, function: _getSummary, params: []);
+  //     var _projectSummary = await _client!
+  //         .call(contract: _tmpContract, function: _getSummary, params: []);
 
-      Project _tmpProject = Project(
-          contractAddress: myProjectsAddress[i],
-          creator: _projectSummary[0].toString(),
-          creatorName: _projectSummary[1].toString(),
-          phoneNumber: _projectSummary[2].toString(),
-          raiseBy: _projectSummary[3].toString(),
-          projectName: _projectSummary[4].toString(),
-          projectDescription: _projectSummary[5].toString(),
-          goalAmount: _projectSummary[6].toString(),
-          currentBalance: _projectSummary[7].toString(),
-          minimunContribution: _projectSummary[8].toString(),
-          state: int.parse(_projectSummary[9].toString()),
-          numberOfContributors: int.parse(_projectSummary[10].toString()));
+  //     Project _tmpProject = Project(
+  //         contractAddress: myProjectsAddress[i],
+  //         creator: _projectSummary[0].toString(),
+  //         creatorName: _projectSummary[1].toString(),
+  //         phoneNumber: _projectSummary[2].toString(),
+  //         raiseBy: _projectSummary[3].toString(),
+  //         projectName: _projectSummary[4].toString(),
+  //         projectDescription: _projectSummary[5].toString(),
+  //         goalAmount: _projectSummary[6].toString(),
+  //         currentBalance: _projectSummary[7].toString(),
+  //         minimunContribution: _projectSummary[8].toString(),
+  //         state: int.parse(_projectSummary[9].toString()),
+  //         numberOfContributors: int.parse(_projectSummary[10].toString()));
 
-      myProjects.add(_tmpProject);
+  //     myProjects.add(_tmpProject);
 
-      print(PROJECT_STATE[_tmpProject.state]);
-      notifyListeners();
-    }
-  }
+  //     print(PROJECT_STATE[_tmpProject.state]);
+  //     notifyListeners();
+  //   }
+  // }
 
   getMyCurrentProject() async {
     List<dynamic> credDetails = await getCredentials(_privateKey);
@@ -193,6 +194,18 @@ class ProjectListModel extends ChangeNotifier {
 // 24 Hour format:
       var d24 = DateFormat('dd/MM/yyyy, HH:mm').format(dt); // 31/12/2000, 22:00
 
+      dynamic expired = DateFormat('yyyy/MM/dd').format(dt);
+      final rightNow = DateTime.now();
+      var dateDate = expired.split(r"/");
+
+      expired = DateTime(int.parse(dateDate[0]), int.parse(dateDate[1]),
+          int.parse(dateDate[2]));
+
+      final difference = expired.difference(rightNow).inDays;
+
+      print(
+          "=====================================================least day================================================================");
+      print(difference);
       Project _tmpProject = Project(
           contractAddress: myProjectsAddress[i],
           creator: _projectSummary[0].toString(),
@@ -205,7 +218,9 @@ class ProjectListModel extends ChangeNotifier {
           currentBalance: _currentBalance,
           minimunContribution: _minimunContribution_tmp,
           state: int.parse(_projectSummary[9].toString()),
-          numberOfContributors: int.parse(_projectSummary[10].toString()));
+          numberOfContributors: int.parse(_projectSummary[10].toString()),
+          expiredAtInDays: difference.toString(),
+          landLocation: _projectSummary[11].toString());
 
       myProjects.add(_tmpProject);
 
@@ -231,6 +246,7 @@ class ProjectListModel extends ChangeNotifier {
     String _projectDescription = _newProject.projectDescription;
     double _goalAmount = double.parse(_newProject.goalAmount);
     double _minimunContribution = double.parse(_newProject.minimumContribution);
+    String _landlocation = _newProject.landLocation.toString();
 
     int _durationInDays = int.parse(_newProject.duration);
 
@@ -255,7 +271,8 @@ class ProjectListModel extends ChangeNotifier {
               BigInt.from(convertionWeiToEth(true, _minimunContribution)),
               BigInt.from(_durationInDays),
               _creatorName,
-              _phoneNumber
+              _phoneNumber,
+              _landlocation
             ]));
     await getMyCurrentProject();
   }
@@ -347,5 +364,32 @@ class ProjectListModel extends ChangeNotifier {
     var dt = DateTime.fromMillisecondsSinceEpoch(millis * 1000);
     var d12 = DateFormat('MM/dd/yyyy, hh:mm a').format(dt);
     return d12.toString();
+  }
+
+  getProjectContributorsList({required projectAddress}) async {
+    contributorsListOfProject.clear();
+
+    var _tmpContract = DeployedContract(
+        ContractAbi.fromJson(_abiOfProject!, "Project"),
+        EthereumAddress.fromHex(projectAddress.toString()));
+
+    var _getContributorsList = _tmpContract.function("getContributorsList");
+
+    var contributorsList = await _client!.call(
+      contract: _tmpContract,
+      function: _getContributorsList,
+      params: [],
+    );
+
+    for (int i = 0; i < contributorsList[1].length; i++) {
+      contributorsList[1][i] = convertionWeiToEth(
+          false, double.parse(contributorsList[1][i].toString()));
+      contributorsListOfProject.add({
+        "address": contributorsList[0][i],
+        "amount": contributorsList[1][i]
+      });
+    }
+    print(
+        "1111111111111111 11111111111111111111111111 contributorsList contributorsList contributorsList contributorsList contributorsList ${contributorsListOfProject}");
   }
 }

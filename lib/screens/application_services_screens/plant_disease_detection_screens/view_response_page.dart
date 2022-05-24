@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/back_end/functions/rest_api_interaction.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/application_services.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -10,16 +12,31 @@ import 'package:get/get.dart';
 final RestApiInteraction backendInterFace =
     Get.put(RestApiInteraction(), tag: "backend");
 
-class ViewResponsePage extends StatelessWidget {
+class ViewResponsePage extends StatefulWidget {
   ViewResponsePage({required imageFile, Key? key})
       : _imageFile = imageFile,
         super(key: key);
 
   final File _imageFile;
+
+  @override
+  State<ViewResponsePage> createState() => _ViewResponsePageState();
+}
+
+class _ViewResponsePageState extends State<ViewResponsePage> {
   var _color = Colors.green;
+
   var _isFound = "FOUND : ";
+
   var _disease = "desease";
+
   var _isPositive = false;
+
+  bool _isLoading = false;
+
+  bool _onPressed = false;
+  String plantName = "not found";
+  String disease = "not found";
 
   @override
   Widget build(BuildContext context) {
@@ -32,68 +49,161 @@ class ViewResponsePage extends StatelessWidget {
         children: [
           Center(
             child: Container(
-              padding: EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.only(top: 20),
               height: 350,
               width: 250,
               child: Image.file(
-                _imageFile,
+                widget._imageFile,
                 fit: BoxFit.contain,
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
+            height: 5,
+          ),
+          _onPressed
+              ? Result(
+                  isHealthy: _isPositive,
+                  plantName: plantName,
+                  disease: disease)
+              : Container(),
+          const SizedBox(
             height: 20,
           ),
-          _isPositive
-              ? Result(color: _color, isFound: _isFound, disease: _disease)
-              : Result(color: Colors.red, isFound: "NOT FOUND", disease: ""),
-          SizedBox(
-            height: 20,
-          ),
-          SingleButton(
-              icon: FontAwesomeIcons.search,
-              text: Text("TEST"),
-              method: uploadImage)
+          _isLoading
+              ? MainLoading()
+              : SingleButton(
+                  icon: FontAwesomeIcons.search,
+                  text: const Text("TEST"),
+                  method: uploadImage)
         ],
       ),
     );
   }
 
-  uploadImage() {
-    backendInterFace.cropDiseasePrediction(_imageFile);
+  uploadImage() async {
+    setState(() {
+      _isLoading = true;
+    });
+    var response =
+        await backendInterFace.cropDiseasePrediction(widget._imageFile);
+    response = jsonDecode(response);
+    setState(() {
+      _isLoading = false;
+      _onPressed = true;
+      _isPositive = response["healthy"];
+      plantName = response["plant name"].toString();
+      disease = response["disease"].toString();
+    });
+    print(plantName);
+    // if(response.toString())
   }
 }
 
 class Result extends StatelessWidget {
   const Result({
     Key? key,
-    required MaterialColor color,
-    required String isFound,
+    required bool isHealthy,
+    required String plantName,
     required String disease,
-  })  : _color = color,
-        _isFound = isFound,
+  })  : _isHealthy = isHealthy,
+        _plantName = plantName,
         _disease = disease,
         super(key: key);
 
-  final MaterialColor _color;
-  final String _isFound;
+  final String _plantName;
   final String _disease;
+  final bool _isHealthy;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 15),
-      color: _color,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            _isFound,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          Text(_disease, style: TextStyle(fontSize: 20)),
-        ],
-      ),
-    );
+    return _isHealthy
+        ? Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+            color: Colors.green,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    const Text(
+                      "plant name : ",
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                    Text("${_plantName.toString()}",
+                        style: TextStyle(
+                          fontSize: 20,
+                        )),
+                  ],
+                ),
+                Divider(),
+                Row(
+                  children: [
+                    const Text(
+                      "Condition : ",
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "${_disease.toString()}",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          )
+        : Container(
+            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+            color: Colors.red,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    const Text(
+                      "plant name : ",
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                    Text("${_plantName.toString()}",
+                        style: TextStyle(
+                          fontSize: 20,
+                        )),
+                  ],
+                ),
+                Divider(),
+                Row(
+                  children: const [
+                    Text(
+                      "Condition : ",
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "Not healthy",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Divider(),
+                Row(
+                  children: [
+                    const Text(
+                      "Disease : ",
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                    Text("${_disease.toString()}",
+                        style: TextStyle(
+                          fontSize: 20,
+                        )),
+                  ],
+                ),
+              ],
+            ),
+          );
   }
 }

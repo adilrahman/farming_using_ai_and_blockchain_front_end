@@ -74,7 +74,7 @@ class RestApiInteraction extends GetxController {
     );
 
     final response = await http.Response.fromStream(await req.send());
-    print(response.body);
+    return response.body;
   }
 
   rightTimeToFertilize() async {
