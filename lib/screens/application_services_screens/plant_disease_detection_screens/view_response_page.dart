@@ -71,7 +71,7 @@ class _ViewResponsePageState extends State<ViewResponsePage> {
             height: 20,
           ),
           _isLoading
-              ? MainLoading()
+              ? APILoading()
               : SingleButton(
                   icon: FontAwesomeIcons.search,
                   text: const Text("TEST"),

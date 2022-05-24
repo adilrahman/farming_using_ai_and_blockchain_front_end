@@ -15,7 +15,7 @@ class PlantDiseaseDetectionScreen extends StatelessWidget {
     return Scaffold(
         backgroundColor: AppColor.homePageBackground,
         appBar: AppBar(
-          title: Text("Plant Disease Detection"),
+          title: const Text("Plant Disease Detection"),
           centerTitle: true,
           backgroundColor: AppColor.gradientSecond,
         ),
@@ -31,7 +31,7 @@ class PlantDiseaseDetectionScreen extends StatelessWidget {
                     _getFromCamera();
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 SingleButton(
@@ -92,15 +92,19 @@ class SingleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-        onPressed: () {
-          _method();
-        },
-        style: ElevatedButton.styleFrom(
-            primary: AppColor.gradientFirst,
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            textStyle: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-        icon: Icon(_icon),
-        label: _text);
+    return Container(
+      width: 350,
+      child: ElevatedButton.icon(
+          onPressed: () {
+            _method();
+          },
+          style: ElevatedButton.styleFrom(
+              primary: Colors.grey[600],
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              textStyle:
+                  const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+          icon: Icon(_icon),
+          label: _text),
+    );
   }
 }
