@@ -3,6 +3,7 @@ import 'package:farming_using_ai_and_blockchain_front_end/controllers/weather_an
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/back_end/functions/rest_api_interaction.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/back_end/models/right_time_to_fertilizer_model.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/right_time_to_fertilizer_screen/widgets/custom_dialog_box.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/widgets/home_screen/weather_banner.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,8 @@ class RightTimeToFertilize extends StatelessWidget {
       Get.put(RestApiInteraction(), tag: "backend");
   @override
   Widget build(BuildContext context) {
+    final WeatherAndLocationController locationController =
+        Get.put(WeatherAndLocationController(), tag: "location");
     return Scaffold(
       backgroundColor: AppColor.homePageBackground,
       appBar: AppBar(
@@ -22,19 +25,43 @@ class RightTimeToFertilize extends StatelessWidget {
         backgroundColor: AppColor.gradientSecond,
       ),
       body: Container(
-        child: Obx(() => Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+        padding: const EdgeInsets.only(bottom: 60),
+        width: double.infinity,
+        child: Obx(() => Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Center(
-                  child: backendInterFace.isLoading.value
-                      ? APILoading()
-                      : ElevatedButton(
-                          onPressed: () async {
-                            predict(context);
-                          },
-                          child: Text("Predict")),
-                )
+                WeatherBanner(
+                    temp: locationController.temp,
+                    humidity: locationController.humidity,
+                    rain_fall: locationController.rainFall,
+                    windSpeed: locationController.windSpeed),
+                Expanded(child: Container()),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: backendInterFace.isLoading.value
+                          ? const APILoading()
+                          : Container(
+                              width: 350,
+                              child: ElevatedButton.icon(
+                                  onPressed: () async {
+                                    predict(context);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      primary: AppColor.gradientSecond,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 15),
+                                      textStyle: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500)),
+                                  icon: Icon(Icons.check),
+                                  label: Text("Check")),
+                            ),
+                    ),
+                  ],
+                ),
               ],
             )),
       ),
