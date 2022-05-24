@@ -21,47 +21,62 @@ class ResponseViewScreen extends StatelessWidget {
       ),
       body: Container(
         margin: const EdgeInsets.only(top: 10),
-        child: ListView.separated(
-            separatorBuilder: (context, index) => const Divider(
-                  color: Colors.black,
-                  thickness: 0.5,
-                ),
-            itemCount: _response.length, //total project count
-            itemBuilder: (context, index) => Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+        child: Column(
+          children: [
+            const Divider(
+              color: Colors.black,
+            ),
+            const Text(
+              "Crops with confidence",
+              style: TextStyle(color: Colors.black),
+            ),
+            const Divider(
+              color: Colors.black,
+            ),
+            ListView.separated(
+                shrinkWrap: true,
+                separatorBuilder: (context, index) => const Divider(
+                      color: Colors.black,
+                      thickness: 0.5,
+                    ),
+                itemCount: _response.length, //total project count
+                itemBuilder: (context, index) => Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(
-                            width: 10,
+                          Row(
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                _response[index]["crop"].toString(),
+                                style: const TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            _response[index]["crop"].toString(),
-                            style: const TextStyle(
-                              fontSize: 25,
-                              color: Colors.black,
-                            ),
+                          Row(
+                            children: [
+                              Expanded(child: Container()),
+                              Text(
+                                "${_response[index]["support"] * 100}%",
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              )
+                            ],
                           ),
                         ],
                       ),
-                      Row(
-                        children: [
-                          Expanded(child: Container()),
-                          Text(
-                            "percentage : ${_response[index]["support"] * 100}%",
-                            style: const TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                )),
+                    )),
+          ],
+        ),
       ),
     );
   }

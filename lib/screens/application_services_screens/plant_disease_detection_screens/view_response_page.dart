@@ -120,7 +120,7 @@ class Result extends StatelessWidget {
     return _isHealthy
         ? Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
             color: Colors.green,
             child: Column(
               children: [
@@ -132,7 +132,7 @@ class Result extends StatelessWidget {
                           TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
                     Text("${_plantName.toString()}",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 20,
                         )),
                   ],
@@ -147,8 +147,8 @@ class Result extends StatelessWidget {
                     ),
                     Text(
                       "${_disease.toString()}",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -156,7 +156,7 @@ class Result extends StatelessWidget {
             ),
           )
         : Container(
-            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
             color: Colors.red,
             child: Column(
               children: [
@@ -168,12 +168,12 @@ class Result extends StatelessWidget {
                           TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
                     Text("${_plantName.toString()}",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 20,
                         )),
                   ],
                 ),
-                Divider(),
+                const Divider(),
                 Row(
                   children: const [
                     Text(
@@ -188,7 +188,7 @@ class Result extends StatelessWidget {
                     ),
                   ],
                 ),
-                Divider(),
+                const Divider(),
                 Row(
                   children: [
                     const Text(
@@ -197,7 +197,7 @@ class Result extends StatelessWidget {
                           TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
                     Text("${_disease.toString()}",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 20,
                         )),
                   ],
