@@ -7,16 +7,19 @@ class TextFieldWithSuffix extends StatelessWidget {
     required String suffixText,
     required IconData icon,
     required String hintText,
+    required currentValue,
   })  : _titleEditingController = titleEditingController,
         _suffixText = suffixText,
         _icon = icon,
         _hintText = hintText,
+        _currentValue = currentValue,
         super(key: key);
 
   final TextEditingController _titleEditingController;
   final String _suffixText;
   final IconData _icon;
   final String _hintText;
+  final _currentValue;
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +28,14 @@ class TextFieldWithSuffix extends StatelessWidget {
       controller: _titleEditingController,
       decoration: InputDecoration(
         suffixText: _suffixText,
-        suffixIcon: Icon(
-          _icon,
-          color: Colors.black87,
+        suffixIcon: IconButton(
+          onPressed: () {
+            _titleEditingController.text = _currentValue.toString();
+          },
+          icon: Icon(
+            _icon,
+            color: Colors.black87,
+          ),
         ),
         labelStyle: const TextStyle(color: Colors.black),
         hintStyle: const TextStyle(fontSize: 15.0, color: Colors.grey),

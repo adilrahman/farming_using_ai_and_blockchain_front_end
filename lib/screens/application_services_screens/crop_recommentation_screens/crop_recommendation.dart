@@ -1,4 +1,5 @@
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/controllers/weather_and_location_controller.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/back_end/functions/rest_api_interaction.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/back_end/models/crop_recommendation_model.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crop_recommentation_screens/response_view_screen.dart';
@@ -9,6 +10,9 @@ import 'package:get/get.dart';
 
 final RestApiInteraction backendInterFace =
     Get.put(RestApiInteraction(), tag: "backend");
+
+final WeatherAndLocationController locationController =
+    Get.put(WeatherAndLocationController(), tag: "location");
 
 class CropRecommendationScreen extends StatelessWidget {
   CropRecommendationScreen({Key? key}) : super(key: key);
@@ -60,22 +64,28 @@ class CropRecommendationScreen extends StatelessWidget {
                       hintText: "pH value of the soil"),
                   const SizedBox(height: 10),
                   TextFieldWithSuffix(
-                      titleEditingController: _temperatureEditingController,
-                      suffixText: "C",
-                      icon: Icons.gps_fixed_rounded,
-                      hintText: "temperature in degree Celsius"),
+                    titleEditingController: _temperatureEditingController,
+                    suffixText: "C",
+                    icon: Icons.gps_fixed_rounded,
+                    hintText: "temperature in degree Celsius",
+                    currentValue: locationController.temp,
+                  ),
                   const SizedBox(height: 10),
                   TextFieldWithSuffix(
-                      titleEditingController: _humidityEditingController,
-                      suffixText: "C",
-                      icon: Icons.gps_fixed_rounded,
-                      hintText: "humidity in %"),
+                    titleEditingController: _humidityEditingController,
+                    suffixText: "%",
+                    icon: Icons.gps_fixed_rounded,
+                    hintText: "humidity in %",
+                    currentValue: locationController.humidity,
+                  ),
                   const SizedBox(height: 10),
                   TextFieldWithSuffix(
-                      titleEditingController: _rainfallEditingController,
-                      suffixText: "mm",
-                      icon: Icons.gps_fixed_rounded,
-                      hintText: "rainfall in mm"),
+                    titleEditingController: _rainfallEditingController,
+                    suffixText: "mm",
+                    icon: Icons.gps_fixed_rounded,
+                    hintText: "rainfall in mm",
+                    currentValue: 202,
+                  ),
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () async {

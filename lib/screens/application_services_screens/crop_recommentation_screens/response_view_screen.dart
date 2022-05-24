@@ -38,7 +38,7 @@ class ResponseViewScreen extends StatelessWidget {
                           ),
                           Text(
                             _response[index]["crop"].toString(),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 25,
                               color: Colors.black,
                             ),
@@ -50,7 +50,7 @@ class ResponseViewScreen extends StatelessWidget {
                           Expanded(child: Container()),
                           Text(
                             "percentage : ${_response[index]["support"] * 100}%",
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black,
                             ),
                           ),
