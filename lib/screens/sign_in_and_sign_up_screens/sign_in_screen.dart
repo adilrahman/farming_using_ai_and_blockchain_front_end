@@ -1,12 +1,15 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/data_model/registration/user_model.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/palatte.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/screens.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInScreen extends StatelessWidget {
   SignInScreen({Key? key}) : super(key: key);
@@ -89,14 +92,31 @@ class SignInScreen extends StatelessWidget {
   void signIn({required String email, required String password}) async {
     log(email);
     log(password);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var _username;
+    var _ethAddress;
+
+    User? user = await FirebaseAuth.instance.currentUser;
+    var usermodel;
 
     await _auth
         .signInWithEmailAndPassword(email: email, password: password)
         .then((uid) => {
-              Get.snackbar("Login", "Successfull"),
-              Get.to(HomeScreen(),
-                  transition: Transition.cupertinoDialog,
-                  duration: const Duration(milliseconds: 1200))
+              FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(user!.uid)
+                  .get()
+                  .then((value) {
+                usermodel = UserModel.fromMap(value.data());
+                prefs.setBool('userLogged', true);
+                prefs.setString('username', usermodel.userName);
+                prefs.setString('ethAddress', usermodel.ethAddress);
+
+                Get.snackbar("Login", "Successfull");
+                Get.off(HomeScreen(),
+                    transition: Transition.cupertinoDialog,
+                    duration: const Duration(milliseconds: 1200));
+              }),
             })
         .catchError((e) {
       Get.snackbar("Error", e.toString());

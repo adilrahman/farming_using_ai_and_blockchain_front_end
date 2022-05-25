@@ -17,7 +17,10 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool? isInvesterLogged = false;
+  bool? isUserLogged = false;
+
   isInvesterLogged = prefs.getBool('investerLogged');
+  isUserLogged = prefs.getBool('userLogged');
   await Firebase.initializeApp();
 
   if (isInvesterLogged == true) {
@@ -33,6 +36,14 @@ void main() async {
         theme:
             ThemeData(brightness: Brightness.dark, primaryColor: Colors.green),
         home: InvestorsScreen(logInfo: loginfo)));
+  } else if (isUserLogged == true) {
+    runApp(GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Agro App',
+        themeMode: ThemeMode.light,
+        theme:
+            ThemeData(brightness: Brightness.dark, primaryColor: Colors.green),
+        home: HomeScreen()));
   } else {
     runApp(MyApp());
   }

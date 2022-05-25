@@ -1,4 +1,5 @@
 import 'package:farming_using_ai_and_blockchain_front_end/controllers/weather_and_location_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'application_services_screens/application_services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -18,7 +19,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -28,12 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final WeatherAndLocationController locationController =
       Get.put(WeatherAndLocationController(), tag: "location");
 
-  var _username = "Adil rahman";
+  var _username = "...";
   static String _location = "not found";
-  final _temp = "67\u00000 C";
-  final _humidity = "61%";
-  final _rain_fall = "0.0mm";
-  final _windSpeed = "3.9m/s";
+  var _ethAddress;
 
   static onTapAction() {
     print("=====================--------=> ${_location}");
@@ -66,6 +64,19 @@ class _HomeScreenState extends State<HomeScreen> {
       CrowdFundingScreen(),
     ],
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    nothing();
+    super.initState();
+  }
+
+  nothing() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _username = prefs.getString("username")!;
+    _ethAddress = prefs.getString("ethAddress")!;
+  }
 
   @override
   Widget build(BuildContext context) {
