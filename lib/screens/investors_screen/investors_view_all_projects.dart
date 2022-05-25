@@ -21,6 +21,7 @@ class InvestorViewAllProjects extends StatelessWidget {
     required String totalAmount,
     required double percentageOfCompletion,
     required String percentageOfCompletionInText,
+    required String ethAddress,
   })  : _username = username,
         _projectname = projectname,
         _postedDate = postedDate,
@@ -28,6 +29,7 @@ class InvestorViewAllProjects extends StatelessWidget {
         _totalAmount = totalAmount,
         _percentageOfCompletion = percentageOfCompletion,
         _percentageOfCompletionInText = percentageOfCompletionInText,
+        _ethAddress = ethAddress,
         super(key: key);
 
   final String _username;
@@ -37,6 +39,7 @@ class InvestorViewAllProjects extends StatelessWidget {
   final String _totalAmount;
   final double _percentageOfCompletion;
   final String _percentageOfCompletionInText;
+  final _ethAddress;
 
   @override
   Widget build(BuildContext context) {

@@ -2,6 +2,7 @@ import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/functions/crowdfunding_investors_functions.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/investors_screen/investors_view_all_projects.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/investors_screen/investors_view_invested_projects.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/screens/screens.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/settings/settings_screen.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -12,53 +13,53 @@ import 'investors_detailed_screen.dart';
 import 'package:provider/provider.dart';
 
 class InvestorsScreen extends StatefulWidget {
-  const InvestorsScreen({Key? key}) : super(key: key);
+  final LogInfo logInfo;
+  InvestorsScreen({Key? key, required this.logInfo}) : super(key: key);
 
   @override
-  State<InvestorsScreen> createState() => _InvestorsScreenState();
+  State<InvestorsScreen> createState() => _InvestorsScreenState(this.logInfo);
+
+  var p = 10;
 }
 
 class _InvestorsScreenState extends State<InvestorsScreen> {
-  final _username = "Username";
+  LogInfo _logInfo = LogInfo(userName: "", etherAddress: "");
+  _InvestorsScreenState(LogInfo logInfo) {
+    this._logInfo = logInfo;
+  }
 
-  final _projectname = "project name";
-
-  final _description =
-      "it is good description though it is good description though it is good description though";
-
-  final _postedDate = "1 day left";
-
-  final _totalAmount = "5";
-
-  final _percentageOfCompletion = 0.6;
-
-  final _percentageOfCompletionInText = "60%";
   int _currentPageIndex = 0;
 
   //TODO : should remove the parameters
-  final _pages = [
-    InvestorViewInvestedProjects(
-        username: "",
-        projectname: "_projectname",
-        postedDate: "_postedDate",
-        description: "_description",
-        totalAmount: "_totalAmount",
-        percentageOfCompletion: 0.6,
-        percentageOfCompletionInText: "60%"),
-    InvestorViewAllProjects(
-        username: "",
-        projectname: "_projectname",
-        postedDate: "_postedDate",
-        description: "_description",
-        totalAmount: "_totalAmount",
-        percentageOfCompletion: 0.6,
-        percentageOfCompletionInText: "60%"),
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final _pages = [
+      InvestorViewInvestedProjects(
+        username: _logInfo.userName.toString(),
+        projectname: "_projectname",
+        postedDate: "_postedDate",
+        description: "_description",
+        totalAmount: "_totalAmount",
+        percentageOfCompletion: 0.6,
+        percentageOfCompletionInText: "60%",
+        ethAddress: _logInfo.etherAddress.toString(),
+      ),
+      InvestorViewAllProjects(
+        username: _logInfo.userName.toString(),
+        projectname: "_projectname",
+        postedDate: "_postedDate",
+        description: "_description",
+        totalAmount: "_totalAmount",
+        percentageOfCompletion: 0.6,
+        percentageOfCompletionInText: "60%",
+        ethAddress: _logInfo.etherAddress.toString(),
+      ),
+    ];
+
     return ChangeNotifierProvider(
-      create: (context) => InvesorsProjectListModel(),
+      create: (context) => InvesorsProjectListModel(
+          ethAddress: _logInfo.etherAddress.toString()),
       child: Scaffold(
           body: _pages[_currentPageIndex],
           bottomNavigationBar: BottomNavigationBar(

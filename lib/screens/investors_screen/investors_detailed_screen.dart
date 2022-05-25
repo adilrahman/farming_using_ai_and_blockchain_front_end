@@ -61,6 +61,7 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
         (_percentage * 100).toString() + "%";
 
     TextEditingController _enteredAmountController = TextEditingController();
+    TextEditingController _privateKeyController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.gradientSecond,
@@ -408,9 +409,9 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
               content: Container(
                 child: Column(
                   children: [
-                    const TextField(
-                      style: TextStyle(),
-                      decoration: InputDecoration(
+                    TextField(
+                      controller: _privateKeyController,
+                      decoration: const InputDecoration(
                           labelStyle: TextStyle(color: Colors.black),
                           hintStyle:
                               TextStyle(fontSize: 15.0, color: Colors.grey),
@@ -443,8 +444,11 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
               onConfirm: () {
                 EthereumAddress adr = project.contractAddress;
                 double _amount = double.parse(_enteredAmountController.text);
-                widget._projectModel
-                    .invest(projectContractAddress: adr, amount: _amount);
+                String _privateKey = _privateKeyController.text.toString();
+                widget._projectModel.invest(
+                    projectContractAddress: adr,
+                    amount: _amount,
+                    privateKey: _privateKey);
               },
               textConfirm: "invest",
               onCancel: () {},

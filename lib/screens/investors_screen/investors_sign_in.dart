@@ -9,6 +9,9 @@ import 'package:get/instance_manager.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import '../../data_model/invsetor/functions/lnvestor_loggin.dart';
+import '../../data_model/invsetor/investor_data_model.dart';
+
 class InvestorsSignInScreen extends StatelessWidget {
   // Investors Sign in Screen
   InvestorsSignInScreen({Key? key}) : super(key: key);
@@ -54,11 +57,7 @@ class InvestorsSignInScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 70, vertical: 15)),
                   onPressed: () {
-                    Get.to(
-                      const InvestorsScreen(),
-                      transition: Transition.circularReveal,
-                      duration: const Duration(seconds: 2),
-                    );
+                    login();
                   },
                   child: const Text("Login"))
             ],
@@ -67,4 +66,30 @@ class InvestorsSignInScreen extends StatelessWidget {
       ),
     );
   }
+
+  login() {
+    final loginfo =
+        LogInfo(userName: _username.text, etherAddress: _userEthAddress.text);
+    Get.to(
+      InvestorsScreen(logInfo: loginfo),
+      transition: Transition.circularReveal,
+      duration: const Duration(seconds: 2),
+    );
+  }
+
+  // isLoggin() async {
+  //   if (await isLoggined()) {
+  //     Get.to(
+  //       const InvestorsScreen(),
+  //       transition: Transition.circularReveal,
+  //       duration: const Duration(seconds: 2),
+  //     );
+  //   }
+  // }
+}
+
+class LogInfo {
+  String etherAddress;
+  String userName;
+  LogInfo({required this.userName, required this.etherAddress});
 }

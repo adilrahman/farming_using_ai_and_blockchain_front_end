@@ -19,6 +19,8 @@ class InvesorsProjectListModel extends ChangeNotifier {
   final String _privateKey =
       "71df7b8ce21c390690533fd31a27403f77a4529cb9da37c2b8bd957a7d87c927";
 
+  final ethAddress;
+
   Web3Client? _client;
   String? _abiOfFactory;
   String? _abiOfProject;
@@ -55,7 +57,7 @@ class InvesorsProjectListModel extends ChangeNotifier {
   ];
 
   bool isLoading = false;
-  InvesorsProjectListModel() {
+  InvesorsProjectListModel({required this.ethAddress}) {
     initiateState();
   }
 
@@ -208,8 +210,12 @@ class InvesorsProjectListModel extends ChangeNotifier {
     return _amount / one_eth_in_wei;
   }
 
-  invest({required projectContractAddress, required double amount}) async {
+  invest(
+      {required projectContractAddress,
+      required double amount,
+      required privateKey}) async {
     List<dynamic> credDetails = await getCredentials(_privateKey);
+
     var _credentials = credDetails[0];
     var _ownAddress = credDetails[1];
 
@@ -300,7 +306,7 @@ class InvesorsProjectListModel extends ChangeNotifier {
   getMyContributedProjects() async {
     List<dynamic> credDetails = await getCredentials(_privateKey);
     var _credentials = credDetails[0];
-    var _ownAddress = credDetails[1];
+    var _ownAddress = EthereumAddress.fromHex(ethAddress);
     var myProjectsAddress = await _client!.call(
         sender: _ownAddress,
         contract: _contractOfFactory,
