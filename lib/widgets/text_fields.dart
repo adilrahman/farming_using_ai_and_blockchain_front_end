@@ -1,11 +1,12 @@
 import 'package:farming_using_ai_and_blockchain_front_end/palatte.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 // it include every customized textFields  as different classess
 
 class GeneralTextField extends StatelessWidget {
-  const GeneralTextField(
+  GeneralTextField(
       {Key? key,
       required TextEditingController textEditingController,
       required String hintText,

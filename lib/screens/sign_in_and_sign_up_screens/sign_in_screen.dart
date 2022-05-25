@@ -1,19 +1,23 @@
+import 'dart:developer';
+
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/palatte.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/screens.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SignInScreen extends StatelessWidget {
-  const SignInScreen({Key? key}) : super(key: key);
+  SignInScreen({Key? key}) : super(key: key);
 
   //only sign in screen
+  final _auth = FirebaseAuth.instance;
+  TextEditingController _emailEditController = TextEditingController();
+  TextEditingController _passwordEditController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _userNameEditController = TextEditingController();
-    TextEditingController _passwordEditController = TextEditingController();
     return Container(
       padding: const EdgeInsets.only(left: 0, right: 0, top: 2, bottom: 15),
       child: SingleChildScrollView(
@@ -45,30 +49,32 @@ class SignInScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GeneralTextField(
-                      textEditingController: _userNameEditController,
-                      hintText: "username",
-                      prefixIcon: Icon(Icons.person_outline)),
+                      textEditingController: _emailEditController,
+                      hintText: "email",
+                      prefixIcon: const Icon(Icons.email_outlined)),
                   const SizedBox(
                     height: 10,
                   ),
                   GeneralTextField(
-                      textEditingController: _passwordEditController,
-                      hintText: "password",
-                      prefixIcon: Icon(Icons.lock_outline)),
+                    textEditingController: _passwordEditController,
+                    hintText: "password",
+                    prefixIcon: const Icon(Icons.lock_outline),
+                    isPassword: true,
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           primary: Colors.green[500],
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 70, vertical: 15)),
                       onPressed: () {
-                        print(_userNameEditController.text);
-                        print(_passwordEditController.text);
-                        Get.to(HomeScreen(),
-                            transition: Transition.cupertinoDialog,
-                            duration: Duration(milliseconds: 1200));
+                        // print(_userNameEditController.text);
+                        // print(_passwordEditController.text);
+                        signIn(
+                            email: _emailEditController.text,
+                            password: _passwordEditController.text);
                       },
                       child: const Text("Login"))
                 ],
@@ -78,5 +84,22 @@ class SignInScreen extends StatelessWidget {
         )),
       ),
     );
+  }
+
+  void signIn({required String email, required String password}) async {
+    log(email);
+    log(password);
+
+    await _auth
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((uid) => {
+              Get.snackbar("Login", "Successfull"),
+              Get.to(HomeScreen(),
+                  transition: Transition.cupertinoDialog,
+                  duration: const Duration(milliseconds: 1200))
+            })
+        .catchError((e) {
+      Get.snackbar("Error", e.toString());
+    });
   }
 }

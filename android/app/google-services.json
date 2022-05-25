@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "491041034020",
+    "project_id": "agro-app-86158",
+    "storage_bucket": "agro-app-86158.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491041034020:android:ca0b7c85de63223cc3edb1",
+        "android_client_info": {
+          "package_name": "com.example.farming_using_ai_and_blockchain_front_end"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "491041034020-snfsfj0too9foa5onukkrhari84bar7d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.farming_using_ai_and_blockchain_front_end",
+            "certificate_hash": "7ebe0a4b81cdf2251ffe4d9776a502b7217c2d13"
+          }
+        },
+        {
+          "client_id": "491041034020-ck8riu88s3ld1uc1eoj4q2m0u6kv1hje.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdTv4TzernkBgG_od7cW8GCGmrRGVJAT4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "491041034020-ck8riu88s3ld1uc1eoj4q2m0u6kv1hje.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

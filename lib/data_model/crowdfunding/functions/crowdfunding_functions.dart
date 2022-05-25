@@ -6,7 +6,6 @@ import 'package:web3dart/web3dart.dart';
 import 'package:web_socket_channel/io.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
-import 'package:intl/intl.dart';
 
 import 'package:flutter/widgets.dart';
 

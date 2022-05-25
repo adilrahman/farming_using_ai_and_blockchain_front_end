@@ -1,6 +1,7 @@
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/main.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/screens.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
@@ -21,7 +22,6 @@ class SettingsScreen extends StatelessWidget {
           children: [
             SettingsGroup(title: "General", children: [
               buildLogout(),
-              buildDeleteAccount(),
             ])
           ],
         )),
@@ -43,21 +43,10 @@ class SettingsScreen extends StatelessWidget {
   );
 
   Widget buildLogout() => SimpleSettingsTile(
-        title: "Logout",
-        subtitle: '',
-        leading: SettingsPageIcon(color: _color, icon: _icon),
-        onTap: () => Get.offAll(SignInOrSignUp(),
-            duration: Duration(seconds: 3), transition: Transition.topLevel),
-      );
-
-  Widget buildDeleteAccount() => SimpleSettingsTile(
-        title: "Delete Account",
-        subtitle: '',
-        leading: SettingsPageIcon(
-          color: Colors.red,
-          icon: Icon(Icons.delete),
-        ),
-      );
+      title: "Logout",
+      subtitle: '',
+      leading: SettingsPageIcon(color: _color, icon: _icon),
+      onTap: () => logout());
 }
 
 class SettingsPageIcon extends StatelessWidget {
@@ -83,4 +72,11 @@ class SettingsPageIcon extends StatelessWidget {
       child: _icon,
     );
   }
+}
+
+logout() async {
+  await FirebaseAuth.instance.signOut();
+
+  Get.offAll(SignInOrSignUp(),
+      duration: Duration(seconds: 3), transition: Transition.topLevel);
 }
