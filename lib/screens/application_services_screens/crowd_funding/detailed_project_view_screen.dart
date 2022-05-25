@@ -475,12 +475,15 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                                   contentPadding: const EdgeInsets.only(
                                       top: 15, left: 10, right: 10, bottom: 10),
                                   content: Container(
-                                    child: TextField(),
+                                    child: TextField(
+                                      controller: _privateKeyTextController,
+                                    ),
                                   ),
                                   confirm: TextButton(
                                       onPressed: () {
                                         widget._projectModel.cancelMyProject(
-                                            project.contractAddress);
+                                            project.contractAddress,
+                                            _privateKeyTextController.text);
                                       },
                                       child: Text("confirm")),
                                   cancel: TextButton(

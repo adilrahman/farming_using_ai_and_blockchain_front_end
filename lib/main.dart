@@ -78,21 +78,19 @@ class MyApp extends StatelessWidget {
         ),
         home: Scaffold(
           // backgroundColor: Colors.black,
-          body: 1 != 1
-              ? CrowdFundingScreen()
-              : Builder(builder: (context) {
-                  return LiquidSwipe(
-                      liquidController: _liquidController,
-                      positionSlideIcon: 0.8,
-                      enableLoop: true,
-                      initialPage: 0,
-                      waveType: WaveType.liquidReveal,
-                      slideIconWidget: const Icon(Icons.arrow_back_ios),
-                      pages: [
-                        SafeArea(child: SignInOrSignUp()),
-                        InvestorsSignInScreen(),
-                      ]);
-                }),
+          body: Builder(builder: (context) {
+            return LiquidSwipe(
+                liquidController: _liquidController,
+                positionSlideIcon: 0.8,
+                enableLoop: true,
+                initialPage: 0,
+                waveType: WaveType.liquidReveal,
+                slideIconWidget: const Icon(Icons.arrow_back_ios),
+                pages: [
+                  SafeArea(child: SignInOrSignUp()),
+                  InvestorsSignInScreen(),
+                ]);
+          }),
         ));
   }
 }

@@ -77,28 +77,32 @@ class addingNewProjectScreen extends StatelessWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  _createNewproject(_projectModel.createNewProject);
-
-                  // Get.defaultDialog(
-                  //     barrierDismissible: false,
-                  //     title: "Private Key",
-                  //     titlePadding: EdgeInsets.only(
-                  //         top: 15, left: 10, right: 10, bottom: 10),
-                  //     contentPadding: EdgeInsets.only(
-                  //         top: 15, left: 10, right: 10, bottom: 10),
-                  //     content: Container(
-                  //       child: TextField(
-                  //         controller: _privateKeyEditingController,
-                  //       ),
-                  //     ),
-                  //     confirm:
-                  //         TextButton(onPressed: () {}, child: Text("confirm")),
-                  //     cancel: TextButton(
-                  //       onPressed: () {
-                  //         Get.back();
-                  //       },
-                  //       child: Text("cancel"),
-                  //     ));
+                  Get.defaultDialog(
+                      barrierDismissible: false,
+                      title: "Private Key",
+                      titlePadding: const EdgeInsets.only(
+                          top: 15, left: 10, right: 10, bottom: 10),
+                      contentPadding: const EdgeInsets.only(
+                          top: 15, left: 10, right: 10, bottom: 10),
+                      content: Container(
+                        child: TextField(
+                          controller: _privateKeyEditingController,
+                        ),
+                      ),
+                      confirm: TextButton(
+                          onPressed: () {
+                            _createNewproject(_projectModel.createNewProject,
+                                _privateKeyEditingController.text);
+                            Get.snackbar("created", "new project created");
+                            Get.back();
+                          },
+                          child: Text("confirm")),
+                      cancel: TextButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: Text("cancel"),
+                      ));
                 },
                 child: Container(
                   child: Center(child: Text("CREATE")),
@@ -113,7 +117,7 @@ class addingNewProjectScreen extends StatelessWidget {
     );
   }
 
-  _createNewproject(createProject) {
+  _createNewproject(createProject, privateKey) async {
     NewProjectModel _newProject = NewProjectModel(
         projectName: _projectNameEditingController.text,
         phoneNumber: _userPhoneNumberEditingController.text,
@@ -123,6 +127,7 @@ class addingNewProjectScreen extends StatelessWidget {
         minimumContribution: _minAmountEditingController.text,
         duration: _durationEditingController.text,
         privateKey: _privateKeyEditingController.text);
-    createProject(_newProject);
+    createProject(_newProject, privateKey);
+    // return true;
   }
 }

@@ -37,49 +37,51 @@ class _HomeScreenState extends State<HomeScreen> {
     print("=====================--------=> ${_location}");
   }
 
-  var options = [
-    const [
-      "assets/images/bg_plant_disease_detection.jpg",
-      "Plant Disease Detection",
-      PlantDiseaseDetectionScreen()
-    ],
-    [
-      "assets/images/bg_crop_recommendation.jpeg",
-      "Crop Recommendation",
-      CropRecommendationScreen()
-    ],
-    [
-      "assets/images/bg_ferilizer_recommendation.jpg",
-      "Fertilizer Recommendation",
-      FertilizerRecommendationScreen()
-    ],
-    [
-      "assets/images/bg_time_to_fertilize.jpg",
-      "Time to Fertilize",
-      RightTimeToFertilize()
-    ],
-    const [
-      "assets/images/bg_crowdfunding.jpeg",
-      "Crowdfunding",
-      CrowdFundingScreen(),
-    ],
-  ];
-
   @override
   void initState() {
     // TODO: implement initState
-    nothing();
+    retriveUserData();
     super.initState();
   }
 
-  nothing() async {
+  retriveUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    _username = prefs.getString("username")!;
-    _ethAddress = prefs.getString("ethAddress")!;
+    setState(() {
+      _username = prefs.getString("username")!;
+      _ethAddress = prefs.getString("ethAddress")!;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    var options = [
+      const [
+        "assets/images/bg_plant_disease_detection.jpg",
+        "Plant Disease Detection",
+        PlantDiseaseDetectionScreen()
+      ],
+      [
+        "assets/images/bg_crop_recommendation.jpeg",
+        "Crop Recommendation",
+        CropRecommendationScreen()
+      ],
+      [
+        "assets/images/bg_ferilizer_recommendation.jpg",
+        "Fertilizer Recommendation",
+        FertilizerRecommendationScreen()
+      ],
+      [
+        "assets/images/bg_time_to_fertilize.jpg",
+        "Time to Fertilize",
+        RightTimeToFertilize()
+      ],
+      [
+        "assets/images/bg_crowdfunding.jpeg",
+        "Crowdfunding",
+        CrowdFundingScreen(username: _username, ethAddress: _ethAddress),
+      ],
+    ];
+
     return Obx(() => Scaffold(
           backgroundColor: AppColor.homePageBackground,
           body: Container(

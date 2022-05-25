@@ -444,7 +444,7 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
               onConfirm: () {
                 EthereumAddress adr = project.contractAddress;
                 double _amount = double.parse(_enteredAmountController.text);
-                String _privateKey = _privateKeyController.text.toString();
+                String _privateKey = _privateKeyController.text;
                 widget._projectModel.invest(
                     projectContractAddress: adr,
                     amount: _amount,

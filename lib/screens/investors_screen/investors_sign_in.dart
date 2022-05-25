@@ -69,6 +69,21 @@ class InvestorsSignInScreen extends StatelessWidget {
   }
 
   login() async {
+    final ethAddressFormat = RegExp(r'^0x[a-fA-F0-9]{40}$');
+    if (_username.text == "" || _userEthAddress.text == "") {
+      Get.snackbar("Error", "username and password must not be null");
+      return;
+    }
+    if (_username.text.length > 4) {
+      Get.snackbar("Error", "username must be greater than 4 characters");
+      return;
+    }
+
+    if (!ethAddressFormat.hasMatch(_userEthAddress.text)) {
+      Get.snackbar("Etherium Address Error", "Not a valid etherium address");
+      return;
+    }
+
     final loginfo =
         LogInfo(userName: _username.text, etherAddress: _userEthAddress.text);
 
@@ -78,7 +93,7 @@ class InvestorsSignInScreen extends StatelessWidget {
 
     prefs.setString('ethAddress', _userEthAddress.text);
 
-    Get.to(
+    Get.off(
       InvestorsScreen(logInfo: loginfo),
       transition: Transition.circularReveal,
       duration: const Duration(seconds: 2),

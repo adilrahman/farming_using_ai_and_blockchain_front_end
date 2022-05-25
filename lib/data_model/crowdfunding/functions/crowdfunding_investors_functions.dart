@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:web_socket_channel/io.dart';
 import 'dart:convert';
@@ -10,6 +11,9 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 
 class InvesorsProjectListModel extends ChangeNotifier {
+  var username;
+  var ethAddress;
+
   List<Project> allProjects = []; // used to store all fethced projects
   List<Project> myProjects = []; // used to store only invested projects
   List<dynamic> contributorsListOfProject = [];
@@ -18,8 +22,6 @@ class InvesorsProjectListModel extends ChangeNotifier {
   final String _wsUrl = "ws://192.168.43.135:7545";
   final String _privateKey =
       "71df7b8ce21c390690533fd31a27403f77a4529cb9da37c2b8bd957a7d87c927";
-
-  final ethAddress;
 
   Web3Client? _client;
   String? _abiOfFactory;
@@ -69,11 +71,18 @@ class InvesorsProjectListModel extends ChangeNotifier {
     );
     isLoading = true;
     await getAbi();
+    await retriveUserData();
     await getDeployedContract();
     await getAllCurrentProject();
     await getMyContributedProjects();
 
     isLoading = false;
+  }
+
+  retriveUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    username = prefs.getString("username")!;
+    ethAddress = prefs.getString("ethAddress")!;
   }
 
   getAbi() async {
@@ -214,7 +223,7 @@ class InvesorsProjectListModel extends ChangeNotifier {
       {required projectContractAddress,
       required double amount,
       required privateKey}) async {
-    List<dynamic> credDetails = await getCredentials(_privateKey);
+    List<dynamic> credDetails = await getCredentials(privateKey);
 
     var _credentials = credDetails[0];
     var _ownAddress = credDetails[1];
@@ -236,8 +245,6 @@ class InvesorsProjectListModel extends ChangeNotifier {
                 EtherUnit.wei, amount.toInt().toString()),
             from: EthereumAddress.fromHex(_ownAddress.toString()),
             parameters: []));
-    await getAllCurrentProject();
-    await getMyContributedProjects();
   }
 
   getWithdrawDetails({required projectAddress}) async {
@@ -304,8 +311,8 @@ class InvesorsProjectListModel extends ChangeNotifier {
   }
 
   getMyContributedProjects() async {
-    List<dynamic> credDetails = await getCredentials(_privateKey);
-    var _credentials = credDetails[0];
+    // List<dynamic> credDetails = await getCredentials(_privateKey);
+    // var _credentials = credDetails[0];
     var _ownAddress = EthereumAddress.fromHex(ethAddress);
     var myProjectsAddress = await _client!.call(
         sender: _ownAddress,

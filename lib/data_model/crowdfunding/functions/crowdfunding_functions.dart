@@ -2,6 +2,7 @@ import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfundin
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:web_socket_channel/io.dart';
 import 'dart:convert';
@@ -10,6 +11,8 @@ import 'package:intl/intl.dart';
 import 'package:flutter/widgets.dart';
 
 class ProjectListModel extends ChangeNotifier {
+  var username;
+  var ethAddress;
   List<Project> myProjects = []; // used to store fethced projects
   List<dynamic> currentProjectWithdrawDetails = [];
   List<dynamic> contributorsListOfProject = [];
@@ -61,9 +64,17 @@ class ProjectListModel extends ChangeNotifier {
       Client(),
       socketConnector: () => IOWebSocketChannel.connect(_wsUrl).cast<String>(),
     );
+
+    await retriveUserData();
     await getAbi();
     await getDeployedContract();
     await getMyCurrentProject();
+  }
+
+  retriveUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    username = prefs.getString("username")!;
+    ethAddress = prefs.getString("ethAddress")!;
   }
 
   getAbi() async {
@@ -150,7 +161,7 @@ class ProjectListModel extends ChangeNotifier {
   getMyCurrentProject() async {
     List<dynamic> credDetails = await getCredentials(_privateKey);
     var _credentials = credDetails[0];
-    var _ownAddress = credDetails[1];
+    var _ownAddress = EthereumAddress.fromHex(ethAddress);
     var myProjectsAddress = await _client!.call(
         sender: _ownAddress,
         contract: _contractOfFactory,
@@ -239,8 +250,8 @@ class ProjectListModel extends ChangeNotifier {
     return _amount / one_eth_in_wei;
   }
 
-  createNewProject(NewProjectModel _newProject) async {
-    List<dynamic> credDetails = await getCredentials(_privateKey);
+  createNewProject(NewProjectModel _newProject, String privateKey) async {
+    List<dynamic> credDetails = await getCredentials(privateKey);
     String _projectName = _newProject.projectName;
     String _projectDescription = _newProject.projectDescription;
     double _goalAmount = double.parse(_newProject.goalAmount);
@@ -276,9 +287,9 @@ class ProjectListModel extends ChangeNotifier {
     await getMyCurrentProject();
   }
 
-  cancelMyProject(_projectContractAddress) async {
+  cancelMyProject(_projectContractAddress, privateKey) async {
     print("canceling canceling canceling canceling canceling canceling");
-    List<dynamic> credDetails = await getCredentials(_privateKey);
+    List<dynamic> credDetails = await getCredentials(privateKey);
 
     var _credentials = credDetails[0];
     var _ownAddress = credDetails[1];
@@ -306,7 +317,7 @@ class ProjectListModel extends ChangeNotifier {
     required amount,
     required details,
   }) async {
-    List<dynamic> credDetails = await getCredentials(_privateKey);
+    List<dynamic> credDetails = await getCredentials(privateKey);
     var _credentials = credDetails[0];
     var _ownAddress = credDetails[1];
 
