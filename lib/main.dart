@@ -1,4 +1,5 @@
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/crowd_funding.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/screens/investors_screen/investors_screen.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/screens.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/settings/settings_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,13 +10,33 @@ import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'screens/application_services_screens/crowd_funding/detailed_project_view_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool? isInvesterLogged = false;
+  isInvesterLogged = prefs.getBool('investerLogged');
   await Firebase.initializeApp();
 
-  runApp(MyApp());
+  if (isInvesterLogged == true) {
+    String _username = prefs.getString('username')!;
+    String _ethAddress = prefs.getString('ethAddress')!;
+
+    final loginfo = LogInfo(userName: _username, etherAddress: _ethAddress);
+
+    runApp(GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Agro App',
+        themeMode: ThemeMode.light,
+        theme:
+            ThemeData(brightness: Brightness.dark, primaryColor: Colors.green),
+        home: InvestorsScreen(logInfo: loginfo)));
+  } else {
+    runApp(MyApp());
+  }
+
   // whenever your initialization is completed, remove the splash screen:
   FlutterNativeSplash.remove();
   // WeatherAndLocationController _locationController = Get.find(tag: "location");
@@ -36,33 +57,31 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return user == null
-        ? GetMaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Agro App',
-            themeMode: ThemeMode.light,
-            theme: ThemeData(
-              brightness: Brightness.dark,
-              primaryColor: Colors.green,
-            ),
-            home: Scaffold(
-              // backgroundColor: Colors.black,
-              body: 1 != 1
-                  ? CrowdFundingScreen()
-                  : Builder(builder: (context) {
-                      return LiquidSwipe(
-                          liquidController: _liquidController,
-                          positionSlideIcon: 0.8,
-                          enableLoop: true,
-                          initialPage: 0,
-                          waveType: WaveType.liquidReveal,
-                          slideIconWidget: const Icon(Icons.arrow_back_ios),
-                          pages: [
-                            SafeArea(child: SignInOrSignUp()),
-                            InvestorsSignInScreen(),
-                          ]);
-                    }),
-            ))
-        : HomeScreen();
+    return GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Agro App',
+        themeMode: ThemeMode.light,
+        theme: ThemeData(
+          brightness: Brightness.dark,
+          primaryColor: Colors.green,
+        ),
+        home: Scaffold(
+          // backgroundColor: Colors.black,
+          body: 1 != 1
+              ? CrowdFundingScreen()
+              : Builder(builder: (context) {
+                  return LiquidSwipe(
+                      liquidController: _liquidController,
+                      positionSlideIcon: 0.8,
+                      enableLoop: true,
+                      initialPage: 0,
+                      waveType: WaveType.liquidReveal,
+                      slideIconWidget: const Icon(Icons.arrow_back_ios),
+                      pages: [
+                        SafeArea(child: SignInOrSignUp()),
+                        InvestorsSignInScreen(),
+                      ]);
+                }),
+        ));
   }
 }

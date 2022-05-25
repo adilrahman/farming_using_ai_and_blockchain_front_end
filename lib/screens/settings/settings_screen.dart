@@ -8,6 +8,7 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatelessWidget {
   SettingsScreen({Key? key}) : super(key: key);
@@ -75,8 +76,17 @@ class SettingsPageIcon extends StatelessWidget {
 }
 
 logout() async {
-  await FirebaseAuth.instance.signOut();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool? isInvesterLogged = prefs.getBool('investerLogged');
 
-  Get.offAll(SignInOrSignUp(),
-      duration: Duration(seconds: 3), transition: Transition.topLevel);
+  if (isInvesterLogged == true) {
+    Get.offAll(InvestorsSignInScreen(),
+        duration: const Duration(seconds: 3), transition: Transition.topLevel);
+  } else {
+    await FirebaseAuth.instance.signOut();
+    Get.offAll(SignInOrSignUp(),
+        duration: const Duration(seconds: 3), transition: Transition.topLevel);
+  }
+
+  await prefs.clear();
 }

@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../data_model/invsetor/functions/lnvestor_loggin.dart';
 import '../../data_model/invsetor/investor_data_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InvestorsSignInScreen extends StatelessWidget {
   // Investors Sign in Screen
@@ -67,9 +68,16 @@ class InvestorsSignInScreen extends StatelessWidget {
     );
   }
 
-  login() {
+  login() async {
     final loginfo =
         LogInfo(userName: _username.text, etherAddress: _userEthAddress.text);
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('investerLogged', true);
+    prefs.setString('username', _username.text);
+
+    prefs.setString('ethAddress', _userEthAddress.text);
+
     Get.to(
       InvestorsScreen(logInfo: loginfo),
       transition: Transition.circularReveal,
