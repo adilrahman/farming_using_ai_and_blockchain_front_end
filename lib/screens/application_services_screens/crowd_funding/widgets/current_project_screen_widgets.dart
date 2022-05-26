@@ -56,8 +56,6 @@ class FarmingProjectListView extends StatelessWidget {
         : double.parse(project.currentBalance) /
             double.parse(project.goalAmount);
 
-    print(
-        "_percentage_percentage_percentage_percentage_percentage_percentage_percentage => ${_percentage}");
     final double _percentageOfCompletion = _percentage;
     final String _percentageOfCompletionInText =
         (_percentage * 100).toString() + " %";
@@ -69,14 +67,14 @@ class FarmingProjectListView extends StatelessWidget {
               projectModel: _projectModel,
             ),
             transition: Transition.downToUp,
-            duration: Duration(seconds: 1));
+            duration: const Duration(seconds: 1));
       },
       child: Container(
         decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
                   blurRadius: 10,
-                  offset: Offset(2, 5),
+                  offset: const Offset(2, 5),
                   color: AppColor.gradientSecond.withOpacity(0.9))
             ],
             borderRadius: const BorderRadius.only(
@@ -158,7 +156,7 @@ class FarmingProjectListView extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
                     child: Center(
                         child: Container(
                       width: 200,
@@ -167,7 +165,7 @@ class FarmingProjectListView extends StatelessWidget {
                       child: Center(
                         child: Text(
                           _projectState,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
                       ),

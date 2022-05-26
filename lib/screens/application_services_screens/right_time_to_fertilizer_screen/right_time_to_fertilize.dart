@@ -1,7 +1,6 @@
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/controllers/weather_and_location_controller.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/back_end/functions/rest_api_interaction.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/data_model/back_end/models/right_time_to_fertilizer_model.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/right_time_to_fertilizer_screen/widgets/custom_dialog_box.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/home_screen/weather_banner.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/loading.dart';

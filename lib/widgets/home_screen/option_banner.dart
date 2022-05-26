@@ -1,9 +1,5 @@
-import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/plant_disease_detection_screens/plant_disease_detection.dart';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 
 class OptionBanner extends StatelessWidget {
@@ -24,15 +20,16 @@ class OptionBanner extends StatelessWidget {
       onTap: () {
         Get.to(goToPage,
             transition: Transition.circularReveal,
-            duration: Duration(milliseconds: 1500));
+            duration: const Duration(milliseconds: 1500));
       },
       child: Container(
-        padding: EdgeInsets.only(left: 14, top: 20, right: 10, bottom: 10),
+        padding:
+            const EdgeInsets.only(left: 14, top: 20, right: 10, bottom: 10),
         decoration: BoxDecoration(
             color: Colors.black,
             image: DecorationImage(
                 colorFilter:
-                    ColorFilter.mode(Colors.black54, BlendMode.colorBurn),
+                    const ColorFilter.mode(Colors.black54, BlendMode.colorBurn),
                 fit: BoxFit.cover,
                 image: AssetImage(bg_source)),
             boxShadow: const [
@@ -42,7 +39,7 @@ class OptionBanner extends StatelessWidget {
                   color: Colors.black87),
             ],
             borderRadius: const BorderRadius.all(Radius.circular(20))),
-        margin: EdgeInsets.only(left: 10, right: 10, bottom: 20),
+        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
         width: MediaQuery.of(context).size.width,
         height: 150,
         child: Row(
@@ -51,7 +48,7 @@ class OptionBanner extends StatelessWidget {
               children: [
                 Text(
                   serviceName,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 22,
                     color: Colors.white70,
                   ),
@@ -61,7 +58,7 @@ class OptionBanner extends StatelessWidget {
             Expanded(
               child: Container(),
             ),
-            Icon(
+            const Icon(
               FontAwesomeIcons.arrowAltCircleRight,
               color: Colors.white54,
             )

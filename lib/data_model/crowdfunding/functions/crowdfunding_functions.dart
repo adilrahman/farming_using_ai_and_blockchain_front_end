@@ -8,8 +8,6 @@ import 'package:web_socket_channel/io.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 
-import 'package:flutter/widgets.dart';
-
 class ProjectListModel extends ChangeNotifier {
   var username;
   var ethAddress;
@@ -80,14 +78,13 @@ class ProjectListModel extends ChangeNotifier {
   getAbi() async {
     String abiStringFile =
         await rootBundle.loadString("src/abis/Crowdfunding.json");
-    // print(abiStringFile);
 
     var jsonAbi = await jsonDecode(abiStringFile);
     _abiOfFactory = await jsonEncode(jsonAbi["abi"]);
-    // print(_abiCode);
+
     _contractAddressOfFactory =
         EthereumAddress.fromHex(jsonAbi["networks"]["5777"]["address"]);
-    // print(_contractAddress);
+
     abiStringFile = await rootBundle.loadString("src/abis/Project.json");
     jsonAbi = await jsonDecode(abiStringFile);
     _abiOfProject = await jsonEncode(jsonAbi["abi"]);
@@ -97,18 +94,15 @@ class ProjectListModel extends ChangeNotifier {
   Future<List<dynamic>> getCredentials(_privateKey) async {
     var _credentials = EthPrivateKey.fromHex(_privateKey);
     var _ownAddress = await _credentials.extractAddress();
-    // print(_credentials);
 
     return [_credentials, _ownAddress];
   }
 
   getDeployedContract() async {
-    // print("==============================>>>>>>>>> ");
     _contractOfFactory = DeployedContract(
         ContractAbi.fromJson(_abiOfFactory!, "Crowdfunding"),
         _contractAddressOfFactory);
 
-    //TODO 1 :- initializing contract functions
     _createNewProject = _contractOfFactory.function("startProject");
     _countOfProjects = _contractOfFactory.function("numberOfProjects");
     _returnAllProjects = _contractOfFactory.function("returnAllProjects");
@@ -116,47 +110,7 @@ class ProjectListModel extends ChangeNotifier {
 
     var totalProjectCount = await _client!.call(
         contract: _contractOfFactory, function: _countOfProjects, params: []);
-    print("==================>>>>>>>>> ${totalProjectCount}");
   }
-
-  // getAllCurrentProject() async {
-  //   var myProjectsAddress = await _client!.call(
-  //       contract: _contractOfFactory, function: _returnAllProjects, params: []);
-
-  //   myProjectsAddress =
-  //       myProjectsAddress[0]; // coz it return a 2d array initially
-
-  //   myProjects.clear();
-  //   for (int i = 0; i < myProjectsAddress.length; i++) {
-  //     var _tmpContract = DeployedContract(
-  //         ContractAbi.fromJson(_abiOfProject!, "Project"),
-  //         myProjectsAddress[i]);
-
-  //     _getSummary = _tmpContract.function("getSummary");
-
-  //     var _projectSummary = await _client!
-  //         .call(contract: _tmpContract, function: _getSummary, params: []);
-
-  //     Project _tmpProject = Project(
-  //         contractAddress: myProjectsAddress[i],
-  //         creator: _projectSummary[0].toString(),
-  //         creatorName: _projectSummary[1].toString(),
-  //         phoneNumber: _projectSummary[2].toString(),
-  //         raiseBy: _projectSummary[3].toString(),
-  //         projectName: _projectSummary[4].toString(),
-  //         projectDescription: _projectSummary[5].toString(),
-  //         goalAmount: _projectSummary[6].toString(),
-  //         currentBalance: _projectSummary[7].toString(),
-  //         minimunContribution: _projectSummary[8].toString(),
-  //         state: int.parse(_projectSummary[9].toString()),
-  //         numberOfContributors: int.parse(_projectSummary[10].toString()));
-
-  //     myProjects.add(_tmpProject);
-
-  //     print(PROJECT_STATE[_tmpProject.state]);
-  //     notifyListeners();
-  //   }
-  // }
 
   getMyCurrentProject() async {
     List<dynamic> credDetails = await getCredentials(_privateKey);
@@ -213,9 +167,6 @@ class ProjectListModel extends ChangeNotifier {
 
       final difference = expired.difference(rightNow).inDays;
 
-      print(
-          "=====================================================least day================================================================");
-      print(difference);
       Project _tmpProject = Project(
           contractAddress: myProjectsAddress[i],
           creator: _projectSummary[0].toString(),
@@ -234,7 +185,6 @@ class ProjectListModel extends ChangeNotifier {
 
       myProjects.add(_tmpProject);
 
-      print(PROJECT_STATE[_tmpProject.state]);
       myProjects = List.from(myProjects.reversed);
       notifyListeners();
     }
@@ -288,7 +238,6 @@ class ProjectListModel extends ChangeNotifier {
   }
 
   cancelMyProject(_projectContractAddress, privateKey) async {
-    print("canceling canceling canceling canceling canceling canceling");
     List<dynamic> credDetails = await getCredentials(privateKey);
 
     var _credentials = credDetails[0];
@@ -341,9 +290,6 @@ class ProjectListModel extends ChangeNotifier {
   }
 
   getWithdrawDetails({required projectAddress}) async {
-    print(
-        "WithDraw details WithDraw details WithDraw details WithDraw details WithDraw detailYYYYsWithDraw details");
-
     var _tmpContract = DeployedContract(
         ContractAbi.fromJson(_abiOfProject!, "Project"),
         EthereumAddress.fromHex(projectAddress.toString()));
@@ -366,7 +312,6 @@ class ProjectListModel extends ChangeNotifier {
       currentProjectWithdrawDetails
           .add({"date": item[2], "details": item[1], "amount": item[0]});
     }
-    print(currentProjectWithdrawDetails);
   }
 
   String unixEpochToReadableText(int epoch) {
@@ -399,7 +344,5 @@ class ProjectListModel extends ChangeNotifier {
         "amount": contributorsList[1][i]
       });
     }
-    print(
-        "1111111111111111 11111111111111111111111111 contributorsList contributorsList contributorsList contributorsList contributorsList ${contributorsListOfProject}");
   }
 }

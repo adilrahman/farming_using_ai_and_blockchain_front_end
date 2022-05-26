@@ -1,5 +1,5 @@
+import 'package:farming_using_ai_and_blockchain_front_end/screens/screens.dart';
 import 'package:flutter/material.dart';
-import '../screens/screens.dart';
 
 // it include the sign and sign up screens with the tab bar
 class SignInAndUp extends StatelessWidget {
@@ -18,7 +18,7 @@ class SignInAndUp extends StatelessWidget {
       child: Column(
         children: [
           TabBar(
-              padding: EdgeInsets.symmetric(horizontal: 55),
+              padding: const EdgeInsets.symmetric(horizontal: 55),
               controller: _tabController,
               indicatorColor: Colors.green,
               unselectedLabelColor: Colors.grey,

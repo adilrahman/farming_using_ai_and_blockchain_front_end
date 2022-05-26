@@ -5,7 +5,6 @@ import 'package:farming_using_ai_and_blockchain_front_end/data_model/back_end/mo
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crop_recommentation_screens/response_view_screen.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crop_recommentation_screens/widgets/text_boxes.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 final RestApiInteraction backendInterFace =
@@ -37,7 +36,7 @@ class CropRecommendationScreen extends StatelessWidget {
         backgroundColor: AppColor.homePageBackground,
         appBar: AppBar(
           backgroundColor: AppColor.gradientSecond,
-          title: Text("Crop Recommendation"),
+          title: const Text("Crop Recommendation"),
           centerTitle: true,
         ),
         body: Container(
@@ -94,7 +93,7 @@ class CropRecommendationScreen extends StatelessWidget {
                       sendRequest();
                     },
                     child: Container(
-                      child: Center(child: Text("Predict")),
+                      child: const Center(child: Text("Predict")),
                       width: double.infinity,
                       height: 50,
                     ),
@@ -155,28 +154,13 @@ class CropRecommendationScreen extends StatelessWidget {
         rainFall: rainfall.toString(),
         temp: temp.toString());
 
-    // var n = 90;
-    // var p = 42;
-    // var k = 43;
-    // var pH = 7;
-    // var humidity = 82;
-    // var temp = 26;
-    // var rainfall = 202;
-    // CropRecommendationModel tmp1 = CropRecommendationModel(
-    //     n: n.toString(),
-    //     p: p.toString(),
-    //     k: k.toString(),
-    //     pH: pH.toString(),
-    //     humidity: humidity.toString(),
-    //     rainFall: rainfall.toString(),
-    //     temp: temp.toString());
     var result = await backendInterFace.cropRecommentation(tmp) as List;
-    print(result);
+
     Get.to(
         ResponseViewScreen(
           response: result,
         ),
         transition: Transition.fadeIn,
-        duration: Duration(seconds: 1));
+        duration: const Duration(seconds: 1));
   }
 }

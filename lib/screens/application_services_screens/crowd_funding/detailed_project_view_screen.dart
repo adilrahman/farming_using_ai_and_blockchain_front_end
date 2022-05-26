@@ -1,13 +1,10 @@
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/functions/crowdfunding_functions.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/project_data_model.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/palatte.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/contributors_list_view_screen.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/widgets/crowd_funding_user_screen_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 final TextEditingController _privateKeyTextController = TextEditingController();
 final TextEditingController _amountTextController = TextEditingController();
@@ -15,7 +12,8 @@ final TextEditingController _withdrawDetailsTextController =
     TextEditingController();
 
 class DetailedProjectView extends StatefulWidget {
-  DetailedProjectView({Key? key, required projectIndex, required projectModel})
+  const DetailedProjectView(
+      {Key? key, required projectIndex, required projectModel})
       : _projectIndex = projectIndex,
         _projectModel = projectModel,
         super(key: key);
@@ -34,8 +32,6 @@ double totalWithdraw = 0.0;
 class _DetailedProjectViewState extends State<DetailedProjectView> {
   @override
   Widget build(BuildContext context) {
-    print(
-        "ENNNNNNNNNNNNNNNNNNNNNNNNNTTTTTTTTTTTTTTTTTTTTTTTTERRRRRRRRRRRRRRRRRRRRRRRRRRRRR4444902 => ${widget._projectModel.myProjects.length}");
     //project total collected amount
     double projetContractBalance = double.parse(
         widget._projectModel.myProjects[widget._projectIndex].currentBalance);
@@ -230,13 +226,13 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                     // withdraw details box
                     Container(
                         color: Colors.grey[700],
-                        padding: EdgeInsets.all(20.0),
+                        padding: const EdgeInsets.all(20.0),
                         child: Container(
                           child: Column(
                             children: [
                               Row(
                                 children: [
-                                  Expanded(
+                                  const Expanded(
                                     child: SingleDetailChildRight(
                                       heading: "withdrawDetails ",
                                       data: "",
@@ -380,7 +376,7 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                                             Expanded(child: Container()),
                                             Text(
                                               " = ${(projetContractBalance - totalWithdraw).toString()}",
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 17),
                                             ),
@@ -485,7 +481,7 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                                             project.contractAddress,
                                             _privateKeyTextController.text);
                                       },
-                                      child: Text("confirm")),
+                                      child: const Text("confirm")),
                                   cancel: TextButton(
                                     onPressed: () {
                                       Get.back();

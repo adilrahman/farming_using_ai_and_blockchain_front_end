@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/registration/user_model.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/text_fields.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -1,10 +1,9 @@
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/controllers/weather_and_location_controller.dart';
+import 'package:farming_using_ai_and_blockchain_front_end/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-
-import '../loading.dart';
 
 class WeatherBanner extends StatelessWidget {
   WeatherBanner({
@@ -66,7 +65,7 @@ class WeatherBanner extends StatelessWidget {
                           Stack(
                             children: [
                               _locationController.isWeatherDataLoading == true
-                                  ? WeatherDataLoading()
+                                  ? const WeatherDataLoading()
                                   : Text(
                                       "${_locationController.temp}\nTemp",
                                       style: const TextStyle(
@@ -93,7 +92,7 @@ class WeatherBanner extends StatelessWidget {
                           Stack(
                             children: [
                               _locationController.isWeatherDataLoading == true
-                                  ? WeatherDataLoading()
+                                  ? const WeatherDataLoading()
                                   : Text(
                                       "${_locationController.humidity}\nHumidity",
                                       style: const TextStyle(
@@ -125,7 +124,7 @@ class WeatherBanner extends StatelessWidget {
                           Stack(
                             children: [
                               _locationController.isWeatherDataLoading == true
-                                  ? WeatherDataLoading()
+                                  ? const WeatherDataLoading()
                                   : Text(
                                       "${_locationController.rainFall}\nclouds",
                                       style: const TextStyle(
@@ -152,7 +151,7 @@ class WeatherBanner extends StatelessWidget {
                           Stack(
                             children: [
                               _locationController.isWeatherDataLoading == true
-                                  ? WeatherDataLoading()
+                                  ? const WeatherDataLoading()
                                   : Text(
                                       "${_locationController.windSpeed}\nWindSpeed",
                                       style: const TextStyle(

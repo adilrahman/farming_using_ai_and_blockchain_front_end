@@ -1,7 +1,5 @@
-import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class SettingsButton extends StatelessWidget {
@@ -18,9 +16,9 @@ class SettingsButton extends StatelessWidget {
           child: IconButton(
               onPressed: () {
                 Get.to(
-                  SettingsScreen(),
+                  const SettingsScreen(),
                   transition: Transition.circularReveal,
-                  duration: Duration(seconds: 2),
+                  duration: const Duration(seconds: 2),
                 );
               },
               icon: const Icon(

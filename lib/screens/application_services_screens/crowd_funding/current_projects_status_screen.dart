@@ -1,25 +1,15 @@
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/functions/crowdfunding_functions.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/detailed_project_view_screen.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/screens/investors_screen/investors_detailed_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/widgets/crowd_funding_user_screen_widgets.dart';
 
 class currentProjectsStatusScreen extends StatelessWidget {
   const currentProjectsStatusScreen({Key? key}) : super(key: key);
 
-  final _projectname = "project name";
-  final _description =
-      "it is good description though it is good description though it is good description though";
-  final _postedDate = "1 day left";
-  final _totalAmount = "5";
   final _percentageOfCompletion = 0.6;
   final _percentageOfCompletionInText = "60%";
-  final _state = "Fundrising";
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +23,7 @@ class currentProjectsStatusScreen extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8.0),
               child: Text(
                 "Current Projects (${_projectModel.myProjects.length})",
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -41,7 +31,7 @@ class currentProjectsStatusScreen extends StatelessWidget {
               ),
             ),
           ),
-          Divider(
+          const Divider(
             color: Colors.grey,
           ),
           Expanded(

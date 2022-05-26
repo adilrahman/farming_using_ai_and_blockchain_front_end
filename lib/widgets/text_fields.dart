@@ -1,12 +1,9 @@
-import 'package:farming_using_ai_and_blockchain_front_end/palatte.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 // it include every customized textFields  as different classess
 
 class GeneralTextField extends StatelessWidget {
-  GeneralTextField(
+  const GeneralTextField(
       {Key? key,
       required TextEditingController textEditingController,
       required String hintText,
@@ -29,8 +26,8 @@ class GeneralTextField extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 25),
-            padding: EdgeInsets.all(0),
+            margin: const EdgeInsets.symmetric(horizontal: 25),
+            padding: const EdgeInsets.all(0),
             decoration: BoxDecoration(
                 color: Colors.grey[600]!.withOpacity(.5),
                 borderRadius: BorderRadius.circular(100)),
@@ -39,12 +36,12 @@ class GeneralTextField extends StatelessWidget {
                 style: const TextStyle(color: Colors.white),
                 obscureText: _isPassword,
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.only(top: 15),
+                  contentPadding: const EdgeInsets.only(top: 15),
                   hintText: _hintText,
-                  hintStyle: TextStyle(color: Colors.white30),
+                  hintStyle: const TextStyle(color: Colors.white30),
                   border: InputBorder.none,
                   prefixIcon: Padding(
-                    padding: EdgeInsets.all(14.0),
+                    padding: const EdgeInsets.all(14.0),
                     child: _prefixIcon,
                   ),
                 )),

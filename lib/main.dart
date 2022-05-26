@@ -1,15 +1,11 @@
-import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/crowd_funding.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/investors_screen/investors_screen.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/screens.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/screens/settings/settings_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
-import 'screens/application_services_screens/crowd_funding/detailed_project_view_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -43,7 +39,7 @@ void main() async {
         themeMode: ThemeMode.light,
         theme:
             ThemeData(brightness: Brightness.dark, primaryColor: Colors.green),
-        home: HomeScreen()));
+        home: const HomeScreen()));
   } else {
     runApp(MyApp());
   }
@@ -60,12 +56,7 @@ class MyApp extends StatelessWidget {
   User? user;
 
   final LiquidController _liquidController = LiquidController();
-  // TODO : for the liquid swipe
-  // final pages = [
-  //   SignInScreen(),
-  //   InvestorsSignInScreen(),
-  // ];
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -77,7 +68,6 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.green,
         ),
         home: Scaffold(
-          // backgroundColor: Colors.black,
           body: Builder(builder: (context) {
             return LiquidSwipe(
                 liquidController: _liquidController,
@@ -87,7 +77,7 @@ class MyApp extends StatelessWidget {
                 waveType: WaveType.liquidReveal,
                 slideIconWidget: const Icon(Icons.arrow_back_ios),
                 pages: [
-                  SafeArea(child: SignInOrSignUp()),
+                  const SafeArea(child: SignInOrSignUp()),
                   InvestorsSignInScreen(),
                 ]);
           }),

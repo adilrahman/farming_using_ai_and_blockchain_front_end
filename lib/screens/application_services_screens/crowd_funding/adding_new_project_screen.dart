@@ -96,16 +96,16 @@ class addingNewProjectScreen extends StatelessWidget {
                             Get.snackbar("created", "new project created");
                             Get.back();
                           },
-                          child: Text("confirm")),
+                          child: const Text("confirm")),
                       cancel: TextButton(
                         onPressed: () {
                           Get.back();
                         },
-                        child: Text("cancel"),
+                        child: const Text("cancel"),
                       ));
                 },
                 child: Container(
-                  child: Center(child: Text("CREATE")),
+                  child: const Center(child: Text("CREATE")),
                   width: double.infinity,
                   height: 50,
                 ),

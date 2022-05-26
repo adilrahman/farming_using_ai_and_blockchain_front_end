@@ -1,16 +1,9 @@
-import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/functions/crowdfunding_investors_functions.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/palatte.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/investors_screen/investors_screen.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/screens/settings/settings_screen.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/instance_manager.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
-
-import '../../data_model/invsetor/functions/lnvestor_loggin.dart';
-import '../../data_model/invsetor/investor_data_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class InvestorsSignInScreen extends StatelessWidget {
@@ -99,16 +92,6 @@ class InvestorsSignInScreen extends StatelessWidget {
       duration: const Duration(seconds: 2),
     );
   }
-
-  // isLoggin() async {
-  //   if (await isLoggined()) {
-  //     Get.to(
-  //       const InvestorsScreen(),
-  //       transition: Transition.circularReveal,
-  //       duration: const Duration(seconds: 2),
-  //     );
-  //   }
-  // }
 }
 
 class LogInfo {

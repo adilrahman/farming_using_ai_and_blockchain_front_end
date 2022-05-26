@@ -45,7 +45,7 @@ class InvestorViewInvestedProjects extends StatelessWidget {
     var _projectModel = Provider.of<InvesorsProjectListModel>(context);
 
     return Container(
-      padding: EdgeInsets.only(top: 40),
+      padding: const EdgeInsets.only(top: 40),
       decoration: BoxDecoration(
           gradient: LinearGradient(
               colors: [AppColor.gradientFirst, AppColor.gradientSecond])),
@@ -123,7 +123,6 @@ class InvestorsProjectsListView extends StatelessWidget {
       child: Expanded(
         child: RefreshIndicator(
           onRefresh: () async {
-            print("object");
             Get.snackbar("${_projectModel.myProjects.length}", "message");
             _projectModel.getMyContributedProjects();
           },
@@ -135,7 +134,7 @@ class InvestorsProjectsListView extends StatelessWidget {
                       topLeft: Radius.circular(70))),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
               child: _projectModel.isLoading
-                  ? Center(child: ProjectFetchingLoading())
+                  ? const Center(child: ProjectFetchingLoading())
                   : OverflowBox(
                       child: ListView.builder(
                         itemCount: _projectModel.myProjects.length,
@@ -204,8 +203,6 @@ class FarmingProjectListView extends StatelessWidget {
         : double.parse(project.currentBalance) /
             double.parse(project.goalAmount);
 
-    print(
-        "_percentage_percentage_percentage_percentage_percentage_percentage_percentage => ${_percentage}");
     final double _percentageOfCompletion = _percentage;
     final String _percentageOfCompletionInText =
         (_percentage * 100).toString() + " %";
@@ -219,14 +216,14 @@ class FarmingProjectListView extends StatelessWidget {
               project: _projectModel.myProjects[_projectIndex],
             ),
             transition: Transition.downToUp,
-            duration: Duration(seconds: 1));
+            duration: const Duration(seconds: 1));
       },
       child: Container(
         decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
                   blurRadius: 10,
-                  offset: Offset(2, 5),
+                  offset: const Offset(2, 5),
                   color: AppColor.gradientSecond.withOpacity(0.9))
             ],
             borderRadius: const BorderRadius.only(
@@ -362,7 +359,7 @@ class _UserNameSection extends StatelessWidget {
           IconButton(
             onPressed: () {
               Get.to(
-                SettingsScreen(),
+                const SettingsScreen(),
                 transition: Transition.circularReveal,
                 duration: const Duration(seconds: 2),
               );

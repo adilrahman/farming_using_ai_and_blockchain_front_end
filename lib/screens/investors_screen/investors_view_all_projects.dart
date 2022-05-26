@@ -1,7 +1,6 @@
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/functions/crowdfunding_investors_functions.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/project_data_model.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/detailed_project_view_screen.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/investors_screen/investors_detailed_screen.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/settings/settings_screen.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/loading.dart';
@@ -46,7 +45,7 @@ class InvestorViewAllProjects extends StatelessWidget {
     var _projectModel = Provider.of<InvesorsProjectListModel>(context);
 
     return Container(
-      padding: EdgeInsets.only(top: 40),
+      padding: const EdgeInsets.only(top: 40),
       decoration: BoxDecoration(
           gradient: LinearGradient(
               colors: [AppColor.gradientFirst, AppColor.gradientSecond])),
@@ -124,7 +123,6 @@ class InvestorsProjectsListView extends StatelessWidget {
       child: Expanded(
         child: RefreshIndicator(
           onRefresh: () async {
-            print("object");
             Get.snackbar("${_projectModel.allProjects.length}", "message");
             _projectModel.getAllCurrentProject();
           },
@@ -136,7 +134,7 @@ class InvestorsProjectsListView extends StatelessWidget {
                       topLeft: Radius.circular(70))),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
               child: _projectModel.isLoading
-                  ? Center(child: ProjectFetchingLoading())
+                  ? const Center(child: ProjectFetchingLoading())
                   : OverflowBox(
                       child: ListView.builder(
                         itemCount: _projectModel.allProjects.length,
@@ -206,16 +204,11 @@ class FarmingProjectListView extends StatelessWidget {
         : double.parse(project.currentBalance) /
             double.parse(project.goalAmount);
 
-    print(
-        "_percentage_percentage_percentage_percentage_percentage_percentage_percentage => ${_percentage}");
     final double _percentageOfCompletion = _percentage;
     final String _percentageOfCompletionInText =
         (_percentage * 100).toString() + " %";
     return InkWell(
       onTap: () {
-        print(
-            " 00999999999999999999999 adil rahman dil rahmandil rahman dil rahmandil rahmandil rahmandil rahmandil rahmandil rahmandil rahman ${_projectModel.allProjects[_projectIndex]}");
-
         Get.to(
             InvestorDetailedScreen(
               projectIndex: _projectIndex,
@@ -223,14 +216,14 @@ class FarmingProjectListView extends StatelessWidget {
               project: _projectModel.allProjects[_projectIndex],
             ),
             transition: Transition.downToUp,
-            duration: Duration(seconds: 1));
+            duration: const Duration(seconds: 1));
       },
       child: Container(
         decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
                   blurRadius: 10,
-                  offset: Offset(2, 5),
+                  offset: const Offset(2, 5),
                   color: AppColor.gradientSecond.withOpacity(0.9))
             ],
             borderRadius: const BorderRadius.only(
@@ -366,7 +359,7 @@ class _UserNameSection extends StatelessWidget {
           IconButton(
             onPressed: () {
               Get.to(
-                SettingsScreen(),
+                const SettingsScreen(),
                 transition: Transition.circularReveal,
                 duration: const Duration(seconds: 2),
               );

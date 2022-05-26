@@ -1,18 +1,14 @@
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/functions/crowdfunding_functions.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/functions/crowdfunding_investors_functions.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/project_data_model.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/palatte.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/contributors_list_view_screen.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/widgets/crowd_funding_user_screen_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:web3dart/credentials.dart';
 
 class InvestorDetailedScreen extends StatefulWidget {
-  InvestorDetailedScreen(
+  const InvestorDetailedScreen(
       {Key? key,
       required projectIndex,
       required projectModel,
@@ -37,8 +33,7 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
   @override
   Widget build(BuildContext context) {
     //project total collected amount
-    print(
-        "ENNNNNNNNNNNNNNNNNNNNNNNNNTTTTTTTTTTTTTTTTTTTTTTTTERRRRRRRRRRRRRRRRRRRRRRRRRRRRR00054 => ${widget._projectModel.allProjects}");
+
     double projetContractBalance = double.parse(
         widget._projectModel.allProjects[widget._projectIndex].currentBalance);
 
@@ -75,13 +70,14 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
               children: [
                 Text(
                   project.projectName, //project name
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
                 Container(
-                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
                   child: Center(
                       child: Container(
                     width: 150,
@@ -93,7 +89,7 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                       child: Text(
                         widget._projectModel.PROJECT_STATE[project.state]
                             [0], //PROJECT STATE
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.w400, fontSize: 20),
                       ),
                     ),
@@ -113,26 +109,26 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
           const SizedBox(
             height: 10,
           ),
-          Divider(
+          const Divider(
             color: Colors.black,
           ),
-          Text(
+          const Text(
             "Details",
             style: TextStyle(color: Colors.black),
           ),
-          Divider(
+          const Divider(
             color: Colors.black,
           ),
           Expanded(
             child: SingleChildScrollView(
               child: Container(
-                padding: EdgeInsets.only(bottom: 30, left: 10, right: 10),
+                padding: const EdgeInsets.only(bottom: 30, left: 10, right: 10),
                 child: Column(
                   children: [
                     Container(
                       // margin: EdgeInsets.symmetric(horizontal: 10),
                       color: Colors.grey[700],
-                      padding: EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(20.0),
                       child: Row(
                         children: [
                           Expanded(
@@ -154,8 +150,6 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                                   ),
                                   InkWell(
                                     onLongPress: () async {
-                                      print(
-                                          "object obbjhhhhhhhhhhhhhhhhhhhhhhhlllllllllllletc");
                                       await widget._projectModel
                                           .getProjectContributorsList(
                                               projectAddress:
@@ -209,7 +203,7 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                     Container(
                       //
                       color: Colors.grey[700],
-                      padding: EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(20.0),
                       child: SingleDetailChildRight(
                           heading: "land location", data: project.landLocation),
                     ),
@@ -218,7 +212,7 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                     ),
                     Container(
                       color: Colors.grey[700],
-                      padding: EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(20.0),
                       child: SingleDetailChildRight(
                           heading: "project details",
                           data: project.projectDescription),
@@ -234,7 +228,7 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                             children: [
                               Row(
                                 children: [
-                                  Expanded(
+                                  const Expanded(
                                     child: SingleDetailChildRight(
                                         heading: "withdraw details", data: ""),
                                   ),
@@ -425,7 +419,6 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                     const SizedBox(height: 10),
                     TextField(
                       controller: _enteredAmountController,
-                      style: TextStyle(),
                       decoration: const InputDecoration(
                           labelStyle: TextStyle(color: Colors.black),
                           hintStyle:
@@ -465,31 +458,3 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
     );
   }
 }
-
-// Row(
-//                                       children: [
-//                                         Expanded(
-//                                             flex: 2,
-//                                             child: Padding(
-//                                               padding:
-//                                                   const EdgeInsets.all(10.0),
-//                                               child: Text(
-//                                                 "plant wind mill plant mill plant millplant wind mill plant mill plant mill",
-//                                                 style: TextStyle(fontSize: 14),
-//                                               ),
-//                                             )),
-//                                         Expanded(
-//                                             flex: 2,
-//                                             child: Text(
-//                                               "12/2/2000",
-//                                               style: TextStyle(fontSize: 14),
-//                                             )),
-//                                         Expanded(
-//                                             flex: 1,
-//                                             child: Padding(
-//                                               padding:
-//                                                   const EdgeInsets.all(10.0),
-//                                               child: Text("1 ETH"),
-//                                             )),
-//                                       ],
-//                                     );

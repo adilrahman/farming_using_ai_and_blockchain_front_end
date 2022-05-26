@@ -1,5 +1,3 @@
-import 'package:web3dart/web3dart.dart';
-
 class Project {
   var contractAddress;
   String creator;

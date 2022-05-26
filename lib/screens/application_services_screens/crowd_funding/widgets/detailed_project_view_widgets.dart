@@ -18,11 +18,11 @@ class DetailTileRight extends StatelessWidget {
       children: [
         Text(
           _data,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         Text(
           _heading,
-          style: TextStyle(fontWeight: FontWeight.w200, fontSize: 12),
+          style: const TextStyle(fontWeight: FontWeight.w200, fontSize: 12),
         ),
       ],
     );
@@ -30,7 +30,7 @@ class DetailTileRight extends StatelessWidget {
 }
 
 class SingleDetailChildRight extends StatelessWidget {
-  SingleDetailChildRight({
+  const SingleDetailChildRight({
     Key? key,
     required String heading,
     required String data,
@@ -48,17 +48,17 @@ class SingleDetailChildRight extends StatelessWidget {
         children: [
           Row(
             children: [
-              SizedBox(width: 20),
+              const SizedBox(width: 20),
               Text(
                 _heading,
-                style: TextStyle(fontWeight: FontWeight.w300),
+                style: const TextStyle(fontWeight: FontWeight.w300),
               ),
             ],
           ),
-          Divider(),
+          const Divider(),
           Text(
             _data,
-            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+            style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
           ),
         ],
       ),
@@ -83,12 +83,12 @@ class DialogeTextField extends StatelessWidget {
     return TextField(
         controller: _textController,
         decoration: InputDecoration(
-            labelStyle: TextStyle(color: Colors.black),
-            hintStyle: TextStyle(fontSize: 15.0, color: Colors.grey),
-            enabledBorder: OutlineInputBorder(
+            labelStyle: const TextStyle(color: Colors.black),
+            hintStyle: const TextStyle(fontSize: 15.0, color: Colors.grey),
+            enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey, width: 1.0),
             ),
-            border: OutlineInputBorder(),
+            border: const OutlineInputBorder(),
             hintText: _hintText));
   }
 }

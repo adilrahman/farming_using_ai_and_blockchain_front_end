@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:async';
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/plant_disease_detection_screens/view_response_page.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +58,7 @@ _getFromGallery() async {
       imageFile: imageTemp,
     ));
   } on PlatformException catch (e) {
-    print("Failed to pick Image ${e}");
+    Get.snackbar("Failed to pick Image", e.toString());
   }
 }
 
@@ -74,7 +73,7 @@ _getFromCamera() async {
       imageFile: imageTemp,
     ));
   } on PlatformException catch (e) {
-    print("Failed to pick Image ${e}");
+    Get.snackbar("Failed to pick Image", e.toString());
   }
 }
 

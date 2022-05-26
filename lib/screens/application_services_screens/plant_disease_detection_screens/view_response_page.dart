@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/back_end/functions/rest_api_interaction.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/application_services.dart';
@@ -13,7 +12,7 @@ final RestApiInteraction backendInterFace =
     Get.put(RestApiInteraction(), tag: "backend");
 
 class ViewResponsePage extends StatefulWidget {
-  ViewResponsePage({required imageFile, Key? key})
+  const ViewResponsePage({required imageFile, Key? key})
       : _imageFile = imageFile,
         super(key: key);
 
@@ -71,7 +70,7 @@ class _ViewResponsePageState extends State<ViewResponsePage> {
             height: 20,
           ),
           _isLoading
-              ? APILoading()
+              ? const APILoading()
               : SingleButton(
                   icon: FontAwesomeIcons.search,
                   text: const Text("TEST"),
@@ -95,8 +94,6 @@ class _ViewResponsePageState extends State<ViewResponsePage> {
       plantName = response["plant name"].toString();
       disease = response["disease"].toString();
     });
-    print(plantName);
-    // if(response.toString())
   }
 }
 
@@ -131,13 +128,13 @@ class Result extends StatelessWidget {
                       style:
                           TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
-                    Text("${_plantName.toString()}",
+                    Text(_plantName.toString(),
                         style: const TextStyle(
                           fontSize: 20,
                         )),
                   ],
                 ),
-                Divider(),
+                const Divider(),
                 Row(
                   children: [
                     const Text(
@@ -146,7 +143,7 @@ class Result extends StatelessWidget {
                           TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      "${_disease.toString()}",
+                      _disease.toString(),
                       style: const TextStyle(
                           fontSize: 20, fontWeight: FontWeight.bold),
                     ),
@@ -167,7 +164,7 @@ class Result extends StatelessWidget {
                       style:
                           TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
-                    Text("${_plantName.toString()}",
+                    Text(_plantName.toString(),
                         style: const TextStyle(
                           fontSize: 20,
                         )),
@@ -196,7 +193,7 @@ class Result extends StatelessWidget {
                       style:
                           TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
-                    Text("${_disease.toString()}",
+                    Text(_disease.toString(),
                         style: const TextStyle(
                           fontSize: 20,
                         )),

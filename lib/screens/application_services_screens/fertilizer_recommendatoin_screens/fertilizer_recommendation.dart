@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class FertilizerRecommendationScreen extends StatefulWidget {
-  FertilizerRecommendationScreen({Key? key}) : super(key: key);
+  const FertilizerRecommendationScreen({Key? key}) : super(key: key);
 
   @override
   State<FertilizerRecommendationScreen> createState() =>
@@ -56,7 +56,7 @@ class _FertilizerRecommendationScreenState
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.gradientSecond,
-        title: Text("fertilizer recommendation"),
+        title: const Text("fertilizer recommendation"),
       ),
       body: Scaffold(
         backgroundColor: AppColor.homePageBackground,
@@ -82,32 +82,15 @@ class _FertilizerRecommendationScreenState
                   singleTextField(
                       titleEditingController: _cropEditingController,
                       hintText: "crop"),
-                  // DropdownButton(
-                  //   value: _value1,
-                  //   onChanged: (var value) {
-                  //     setState(() {
-                  //       _value1 = value.toString();
-                  //     });
-                  //   },
-                  //   items: nameList.map(
-                  //     (item) {
-                  //       return DropdownMenuItem(
-                  //         value: item,
-                  //         child: new Text(item),
-                  //       );
-                  //     },
-                  //   ).toList(),
-                  // ),
                   const SizedBox(height: 10),
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () async {
-                      // Get.snackbar("OK",
                       // "rainfall value must be either float or integer");
                       sendRequest();
                     },
                     child: Container(
-                      child: Center(child: Text("Predict")),
+                      child: const Center(child: Text("Predict")),
                       width: double.infinity,
                       height: 50,
                     ),
@@ -151,28 +134,13 @@ class _FertilizerRecommendationScreenState
       crop: crop.toString(),
     );
 
-    // var n = 90;
-    // var p = 42;
-    // var k = 43;
-    // var pH = 7;
-    // var humidity = 82;
-    // var temp = 26;
-    // var rainfall = 202;
-    // CropRecommendationModel tmp1 = CropRecommendationModel(
-    //     n: n.toString(),
-    //     p: p.toString(),
-    //     k: k.toString(),
-    //     pH: pH.toString(),
-    //     humidity: humidity.toString(),
-    //     rainFall: rainfall.toString(),
-    //     temp: temp.toString());
     var result = await backendInterFace.fertilizerRecommentation(tmp) as List;
-    print(result);
+
     Get.to(
         ResponseViewScreen(
           response: result,
         ),
         transition: Transition.fadeIn,
-        duration: Duration(seconds: 1));
+        duration: const Duration(seconds: 1));
   }
 }

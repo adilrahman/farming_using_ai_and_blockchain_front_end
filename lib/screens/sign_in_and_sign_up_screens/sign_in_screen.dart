@@ -1,9 +1,6 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/registration/user_model.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/palatte.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/screens.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,8 +13,8 @@ class SignInScreen extends StatelessWidget {
 
   //only sign in screen
   final _auth = FirebaseAuth.instance;
-  TextEditingController _emailEditController = TextEditingController();
-  TextEditingController _passwordEditController = TextEditingController();
+  final TextEditingController _emailEditController = TextEditingController();
+  final TextEditingController _passwordEditController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -73,8 +70,6 @@ class SignInScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 70, vertical: 15)),
                       onPressed: () {
-                        // print(_userNameEditController.text);
-                        // print(_passwordEditController.text);
                         signIn(
                             email: _emailEditController.text,
                             password: _passwordEditController.text);
@@ -113,7 +108,7 @@ class SignInScreen extends StatelessWidget {
                 prefs.setString('ethAddress', usermodel.ethAddress);
 
                 Get.snackbar("Login", "Successfull");
-                Get.off(HomeScreen(),
+                Get.off(const HomeScreen(),
                     transition: Transition.cupertinoDialog,
                     duration: const Duration(milliseconds: 1200));
               }),

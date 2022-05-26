@@ -3,13 +3,7 @@ import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfundin
 import 'package:farming_using_ai_and_blockchain_front_end/screens/investors_screen/investors_view_all_projects.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/investors_screen/investors_view_invested_projects.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/screens.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/screens/settings/settings_screen.dart';
-import 'package:farming_using_ai_and_blockchain_front_end/widgets/loading.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
-import 'package:percent_indicator/percent_indicator.dart';
-import 'investors_detailed_screen.dart';
 import 'package:provider/provider.dart';
 
 class InvestorsScreen extends StatefulWidget {
@@ -29,8 +23,6 @@ class _InvestorsScreenState extends State<InvestorsScreen> {
   }
 
   int _currentPageIndex = 0;
-
-  //TODO : should remove the parameters
 
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,6 @@ import 'package:farming_using_ai_and_blockchain_front_end/screens/application_se
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/current_projects_status_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -66,7 +66,7 @@ class BackgroundImageOfPlantDiseaseDetection extends StatelessWidget {
       blendMode: BlendMode.darken,
       child: Container(
         decoration: const BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(20)),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
             image: DecorationImage(
                 opacity: 1,
                 fit: BoxFit.cover,

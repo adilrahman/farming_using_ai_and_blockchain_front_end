@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class SignInOrSignUp extends StatefulWidget {
   // login entry point
   // contains the background images and the sign in and sign up widgets in a stack manner
-  SignInOrSignUp({Key? key}) : super(key: key);
+  const SignInOrSignUp({Key? key}) : super(key: key);
 
   @override
   State<SignInOrSignUp> createState() => _SignInOrSignUpState();
@@ -15,7 +15,6 @@ class _SignInOrSignUpState extends State<SignInOrSignUp>
   late TabController _tabController;
   @override
   void initState() {
-    // TODO: implement initState
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
@@ -25,7 +24,7 @@ class _SignInOrSignUpState extends State<SignInOrSignUp>
     return Scaffold(
       body: Stack(
         children: [
-          BackgroundImageOfSign(),
+          const BackgroundImageOfSign(),
           SignInAndUp(tabController: _tabController),
         ],
       ),
