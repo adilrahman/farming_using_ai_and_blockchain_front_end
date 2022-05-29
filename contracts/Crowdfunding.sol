@@ -9,19 +9,22 @@ contract Crowdfunding {
 
     //stroing details about the investors contributed project and their contribution amount
 
+
     // first address -> user address, second -> project address , uint256 -> contribution
-    mapping(address => mapping(address => bool))
-        internal investorContributionsMAP; // it used only for checking purpose if this record already exist or not
+    mapping(address => mapping(address => bool)) internal investorContributionsMAP; // it used only for checking purpose if this record already exist or not
     mapping(address => address[]) internal investorContributions;
 
-    function createAnewContribution(address _user, Project _address) public {
-        if (!investorContributionsMAP[_user][address(_address)]) {
-            investorContributionsMAP[_user][address(_address)] = true;
-            investorContributions[_user].push(address(_address));
-        }
+    function createAnewContribution(address _user,Project _address) public 
+    {
+       if(!investorContributionsMAP[_user][address(_address)])
+       {
+        investorContributionsMAP[_user][address(_address)]  = true;
+        investorContributions[_user].push(address(_address)); 
+       } 
     }
 
-    //rice,nothing,10,1,4,adil,8090,new location
+    
+//rice,nothing,10,1,4,adil,8090,new location
     function startProject(
         string memory _ProjectName,
         string memory _ProjectDescription,
@@ -62,7 +65,11 @@ contract Crowdfunding {
         return userProjectList[msg.sender];
     }
 
-    function getMyContributedProjects() public view returns (address[] memory) {
+    function getMyContributedProjects()
+        public
+        view
+        returns (address[] memory)
+    {
         return investorContributions[msg.sender];
     }
 }
@@ -74,7 +81,9 @@ contract Project {
         Fundraising,
         Expired,
         Successful,
-        Cancelled
+        Cancelled,
+        Completed,
+        Closed
     }
 
     struct withDrawDetail {
@@ -105,9 +114,10 @@ contract Project {
     uint256 public currentBalance; // update on each contribution
     uint256 public minimunContribution;
     State public state; // state of the project (fundraising/expired/successful)
+    bool public projectClosing;
 
     mapping(address => uint256) public contributions;
-    address payable[] public contributersAddress;
+    address payable[] public  contributersAddress;
     uint256 public numberOfContributors;
 
     constructor(
@@ -118,6 +128,7 @@ contract Project {
         uint256 _fundRaisingDeadline,
         address payable _creator,
         string memory _landLocation
+       
     ) public {
         ProjectName = _ProjectName;
         ProjectDescription = _ProjectDescription;
@@ -129,25 +140,31 @@ contract Project {
         creator = _creator; // set to who calling this
         numberOfContributors = 0;
         landLocation = _landLocation;
+        projectClosing = false;
+        
     }
 
     function initialFund() external payable {
         require(msg.sender == creator);
     }
 
-    function setParentContract(address _address) public {
+    function setParentContract(address _address) public
+    {
         _crowdFundingParentContract = Crowdfunding(_address);
     }
 
     function setOwnerDetails(
         string memory _creatorName,
         string memory _phoneNumber
+       
     ) public {
         creatorName = _creatorName;
         phoneNumber = _phoneNumber;
+       
     }
 
     function contibute() public payable {
+
         // checking this project is expired or not on each contribution
         // checkIfFundingCompleteOrExpired();
         require(state == State.Fundraising, "Not recv any new contributions");
@@ -156,16 +173,20 @@ contract Project {
             "should be greaterthan min amount"
         );
         // require((msg.value + currentBalance) <= (GoalAmount + 3000000),"should be lessthan Goalamount");
-
-        if (contributions[msg.sender] == 0) {
+        
+        
+        if(contributions[msg.sender] == 0)
+        {
             contributersAddress.push(msg.sender);
             numberOfContributors++;
         }
         contributions[msg.sender] = contributions[msg.sender] + msg.value;
         currentBalance += msg.value;
+        
+     
 
-        // adding the contribution details into parent contract mapping
-        _crowdFundingParentContract.createAnewContribution(msg.sender, this);
+        // adding the contribution details into parent contract mapping 
+        _crowdFundingParentContract.createAnewContribution(msg.sender,this);
         // checking this project is expired or not on each contribution
         checkIfFundingCompleteOrExpired();
     }
@@ -186,6 +207,7 @@ contract Project {
             state = State.Successful;
         } else if (now > raiseBy) {
             state = State.Expired;
+            refundAll();
         }
     }
 
@@ -207,11 +229,21 @@ contract Project {
     function cancelTheProject() public returns (bool) {
         require(msg.sender == creator, "Your not the creator");
         state = State.Cancelled;
-        if (refundAll() == true) {
+        
+        if(getContractBalance() != currentBalance)
+        {
+          return true;
+        }
+        else{
+            if (refundAll() == true) {
+                   setProjectClosing();
             return true;
+             }
         }
         return false;
     }
+
+ 
 
     function refundAll() public returns (bool) {
         for (uint256 i = 0; i < contributersAddress.length; i++) {
@@ -224,10 +256,12 @@ contract Project {
                 numberOfContributors--;
             }
         }
+
         return true;
     }
 
-    function getContributor(uint256 id) public view returns (address) {
+    function getContributor(uint256 id) public view returns(address)
+    {
         return contributersAddress[id];
     }
 
@@ -276,19 +310,65 @@ contract Project {
     function getContractBalance() public view returns (uint256) {
         return address(this).balance;
     }
-
-    function getContributorsList()
-        public
-        view
-        returns (address[] memory, uint256[] memory)
+    function getContributorsList() public view returns(address[] memory,uint256[] memory)
     {
         address[] memory _addresses = new address[](contributersAddress.length);
         uint256[] memory _amounts = new uint256[](contributersAddress.length);
-        for (uint256 i = 0; i < contributersAddress.length; i++) {
-            _addresses[i] = contributersAddress[i];
+        for(uint256 i = 0;i < contributersAddress.length;i++)
+        {
+            _addresses[i] =  contributersAddress[i];
             _amounts[i] = contributions[contributersAddress[i]];
         }
-        return (_addresses, _amounts);
+        return (_addresses,_amounts);
+    }
+    
+    function setProjectClosing() public 
+    {
+        require(state != State.Closed,"Not yet recv required investment");
+        require(state != State.Fundraising,"Not yet recv required investment");
+        require(msg.sender == creator, "Your not the creator");
+        projectClosing = true;
+        
+        if(state == State.Successful)
+        {
+            state = State.Completed;
+        }
+
+        checkAllcontributorsApproved();
+    }
+
+    function setClose() public
+    {
+        //used by the investors to show their consense in cancelled or completed state when automatically didnt get the money
+        require(state != State.Closed,"Already closed");
+        require(projectClosing != false,"Already closed");
+        require(state != State.Fundraising,"In fundrising state");
+        require(contributions[msg.sender] > 0,"Your not a contributor");
+        require(projectClosing == true,"project closing flag is not yet set");
+        contributions[msg.sender] = 0;
+        checkAllcontributorsApproved();
+    }
+
+    function checkAllcontributorsApproved() internal
+    {
+         for(uint256 i = 0;i < contributersAddress.length;i++)
+        {
+           if(contributions[contributersAddress[i]] != 0)
+           {
+               return;
+           }
+        }
+        state = State.Closed;
+    }
+
+    function isProjectClosing() public view returns(bool)
+    {
+        return projectClosing;
+    }
+
+    function getMyTotalContribution() public view returns(uint256)
+    {
+        return contributions[msg.sender];
     }
 
     // get details about the project
@@ -308,6 +388,7 @@ contract Project {
             State,
             uint256,
             string memory
+            
         )
     {
         return (
@@ -323,6 +404,7 @@ contract Project {
             state,
             numberOfContributors,
             landLocation
+
         );
     }
 }

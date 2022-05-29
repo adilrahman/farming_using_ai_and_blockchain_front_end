@@ -67,7 +67,7 @@ class InvestorsSignInScreen extends StatelessWidget {
       Get.snackbar("Error", "username and password must not be null");
       return;
     }
-    if (_username.text.length > 4) {
+    if (_username.text.length <= 4) {
       Get.snackbar("Error", "username must be greater than 4 characters");
       return;
     }
