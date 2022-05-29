@@ -50,7 +50,9 @@ class ProjectListModel extends ChangeNotifier {
     ["Fundraising", Colors.green],
     ["Expired", Colors.red],
     ["Successful", Colors.grey],
-    ["Cancelled", Colors.yellow]
+    ["Cancelled", Colors.yellow],
+    ["Completed", Colors.orangeAccent],
+    ["Closed", Colors.red]
   ];
 
   ProjectListModel() {
@@ -133,6 +135,14 @@ class ProjectListModel extends ChangeNotifier {
 
       _getSummary = _tmpContract.function("getSummary");
 
+      var _isProjectClosing = _tmpContract.function("isProjectClosing");
+
+      var _isProjectClosingResult = await _client!.call(
+          contract: _tmpContract, function: _isProjectClosing, params: []);
+
+      // print(
+      // "_isProjectClosedResult _isProjectClosedResult_isProjectClosedResult _isProjectClosedResult _isProjectClosedResult _isProjectClosedResult _isProjectClosedResult ${_isProjectClosingResult[0] == true}");
+
       var _projectSummary = await _client!
           .call(contract: _tmpContract, function: _getSummary, params: []);
 
@@ -181,7 +191,8 @@ class ProjectListModel extends ChangeNotifier {
           state: int.parse(_projectSummary[9].toString()),
           numberOfContributors: int.parse(_projectSummary[10].toString()),
           expiredAtInDays: difference.toString(),
-          landLocation: _projectSummary[11].toString());
+          landLocation: _projectSummary[11].toString(),
+          projectClosing: _isProjectClosingResult[0]);
 
       myProjects.add(_tmpProject);
 
@@ -319,6 +330,28 @@ class ProjectListModel extends ChangeNotifier {
     var dt = DateTime.fromMillisecondsSinceEpoch(millis * 1000);
     var d12 = DateFormat('MM/dd/yyyy, hh:mm a').format(dt);
     return d12.toString();
+  }
+
+  makeProjectComplete(projectAddress, privateKey) async {
+    List<dynamic> credDetails = await getCredentials(privateKey);
+
+    var _credentials = credDetails[0];
+    var _ownAddress = credDetails[1];
+
+    var _tmpContract = DeployedContract(
+        ContractAbi.fromJson(_abiOfProject!, "Project"), projectAddress);
+
+    var _makeProjectComplete = _tmpContract.function("setProjectClosing");
+
+    await _client!.sendTransaction(
+        _credentials,
+        Transaction.callContract(
+          contract: _tmpContract,
+          function: _makeProjectComplete,
+          parameters: [],
+        ));
+    getMyCurrentProject();
+    notifyListeners();
   }
 
   getProjectContributorsList({required projectAddress}) async {

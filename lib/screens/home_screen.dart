@@ -77,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     TopBanner(
                         username: _username,
+                        ethAddress: _ethAddress.toString(),
                         location: locationController.location.value),
                     WeatherBanner(
                         temp: locationController.temp,

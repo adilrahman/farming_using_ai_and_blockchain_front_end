@@ -13,11 +13,13 @@ class TopBanner extends StatefulWidget {
     Key? key,
     required String username,
     required String location,
+    required this.ethAddress,
   })  : _username = username,
         _location = location,
         super(key: key);
 
   final String _username;
+  final String ethAddress;
   var _location;
 
   @override
@@ -66,13 +68,24 @@ class _TopBannerState extends State<TopBanner> {
                       FontAwesomeIcons.user,
                       size: 19,
                     ),
-                    Text(
-                      " ${widget._username}",
-                      style: TextStyle(
-                          color: AppColor.homePageContainerTextBig,
-                          fontWeight: FontWeight.w300,
-                          fontSize: 20),
-                    )
+                    Column(
+                      children: [
+                        Text(
+                          " ${widget._username}",
+                          style: TextStyle(
+                              color: AppColor.homePageContainerTextBig,
+                              fontWeight: FontWeight.w300,
+                              fontSize: 20),
+                        ),
+                        Text(
+                          " ${widget.ethAddress.substring(0, 8)}...${widget.ethAddress.substring(widget.ethAddress.length - 8, widget.ethAddress.length)}",
+                          style: TextStyle(
+                              color: AppColor.homePageContainerTextBig,
+                              fontWeight: FontWeight.w300,
+                              fontSize: 10),
+                        )
+                      ],
+                    ),
                   ],
                 ), //Username
               )),

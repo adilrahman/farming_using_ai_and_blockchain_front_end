@@ -459,9 +459,9 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                     ),
 
                     //cancel project button
-                    project.state == 3 // state 3 -> cancelled state
-                        ? Container()
-                        : ElevatedButton(
+                    project.state == 2 ||
+                            project.state == 0 // state 3 -> cancelled state
+                        ? ElevatedButton(
                             onPressed: () {
                               Get.defaultDialog(
                                   barrierDismissible: false,
@@ -495,6 +495,49 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
                               height: 50,
                             ),
                           )
+                        : Container(),
+
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    //make project completed
+                    project.state == 2 //  state 2 -> successful
+                        ? ElevatedButton(
+                            onPressed: () {
+                              Get.defaultDialog(
+                                  barrierDismissible: false,
+                                  title: "Private Key",
+                                  titlePadding: const EdgeInsets.only(
+                                      top: 15, left: 10, right: 10, bottom: 10),
+                                  contentPadding: const EdgeInsets.only(
+                                      top: 15, left: 10, right: 10, bottom: 10),
+                                  content: Container(
+                                    child: TextField(
+                                      controller: _privateKeyTextController,
+                                    ),
+                                  ),
+                                  confirm: TextButton(
+                                      onPressed: () {
+                                        widget._projectModel
+                                            .makeProjectComplete(
+                                                project.contractAddress,
+                                                _privateKeyTextController.text);
+                                      },
+                                      child: const Text("confirm")),
+                                  cancel: TextButton(
+                                    onPressed: () {
+                                      Get.back();
+                                    },
+                                    child: const Text("cancel"),
+                                  ));
+                            },
+                            child: Container(
+                              child: const Center(child: Text("COMPLETED")),
+                              width: double.infinity,
+                              height: 50,
+                            ),
+                          )
+                        : Container(),
                   ],
                 ),
               ),
@@ -523,6 +566,7 @@ class _DetailedProjectViewState extends State<DetailedProjectView> {
     await widget._projectModel
         .getProjectContributorsList(projectAddress: project.contractAddress);
     Get.to(ContributorsListViewScreen(
+        myContribution: 0,
         details: widget._projectModel.contributorsListOfProject));
   }
 }

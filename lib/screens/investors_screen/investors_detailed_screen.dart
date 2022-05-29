@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:farming_using_ai_and_blockchain_front_end/color_constants.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/project_data_model.dart';
 import 'package:farming_using_ai_and_blockchain_front_end/screens/application_services_screens/crowd_funding/contributors_list_view_screen.dart';
@@ -37,6 +39,7 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
     double projetContractBalance = double.parse(
         widget._projectModel.allProjects[widget._projectIndex].currentBalance);
 
+    log(projetContractBalance.toString());
     final Project project = widget._project;
 
     // to get the withdraw details of the specific project
@@ -154,7 +157,12 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                                           .getProjectContributorsList(
                                               projectAddress:
                                                   project.contractAddress);
+                                      await widget._projectModel
+                                          .getMyContributionAmount(
+                                              project.contractAddress);
                                       Get.to(ContributorsListViewScreen(
+                                          myContribution: widget
+                                              ._projectModel.myContribution,
                                           details: widget._projectModel
                                               .contributorsListOfProject));
                                     },
@@ -386,6 +394,44 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
                     const SizedBox(
                       height: 20,
                     ),
+                    // withdraw amount with withdraw details button
+                    (project.state == 3 && project.projectClosing) ||
+                            (project.state == 4) // state 2 -> successful
+                        ? ElevatedButton(
+                            onPressed: () {
+                              Get.defaultDialog(
+                                  barrierDismissible: false,
+                                  title: "Private Key",
+                                  titlePadding: const EdgeInsets.only(
+                                      top: 15, left: 10, right: 10, bottom: 10),
+                                  contentPadding: const EdgeInsets.only(
+                                      top: 15, left: 10, right: 10, bottom: 10),
+                                  content: Container(
+                                    child: TextField(
+                                      controller: _privateKeyController,
+                                    ),
+                                  ),
+                                  confirm: TextButton(
+                                      onPressed: () {
+                                        widget._projectModel.setApproval(
+                                            project.contractAddress,
+                                            _privateKeyController.text);
+                                      },
+                                      child: const Text("confirm")),
+                                  cancel: TextButton(
+                                    onPressed: () {
+                                      Get.back();
+                                    },
+                                    child: const Text("cancel"),
+                                  ));
+                            },
+                            child: Container(
+                              child: const Center(child: Text("Approval")),
+                              width: double.infinity,
+                              height: 50,
+                            ),
+                          )
+                        : Container(),
                     const SizedBox(height: 10),
                   ],
                 ),
@@ -395,66 +441,69 @@ class _InvestorDetailedScreenState extends State<InvestorDetailedScreen> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Get.defaultDialog(
-              barrierDismissible: false,
-              title: "Invest",
-              content: Container(
-                child: Column(
-                  children: [
-                    TextField(
-                      controller: _privateKeyController,
-                      decoration: const InputDecoration(
-                          labelStyle: TextStyle(color: Colors.black),
-                          hintStyle:
-                              TextStyle(fontSize: 15.0, color: Colors.grey),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey, width: 1.0),
+      floatingActionButton: project.state != 0
+          ? null
+          : FloatingActionButton.extended(
+              onPressed: () {
+                Get.defaultDialog(
+                    barrierDismissible: false,
+                    title: "Invest",
+                    content: Container(
+                      child: Column(
+                        children: [
+                          TextField(
+                            controller: _privateKeyController,
+                            decoration: const InputDecoration(
+                                labelStyle: TextStyle(color: Colors.black),
+                                hintStyle: TextStyle(
+                                    fontSize: 15.0, color: Colors.grey),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.grey, width: 1.0),
+                                ),
+                                border: OutlineInputBorder(),
+                                hintText: "Private Key"),
                           ),
-                          border: OutlineInputBorder(),
-                          hintText: "Private Key"),
-                    ),
-                    const SizedBox(height: 10),
-                    TextField(
-                      controller: _enteredAmountController,
-                      decoration: const InputDecoration(
-                          labelStyle: TextStyle(color: Colors.black),
-                          hintStyle:
-                              TextStyle(fontSize: 15.0, color: Colors.grey),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey, width: 1.0),
+                          const SizedBox(height: 10),
+                          TextField(
+                            controller: _enteredAmountController,
+                            decoration: const InputDecoration(
+                                labelStyle: TextStyle(color: Colors.black),
+                                hintStyle: TextStyle(
+                                    fontSize: 15.0, color: Colors.grey),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.grey, width: 1.0),
+                                ),
+                                border: OutlineInputBorder(),
+                                hintText: "Amount (min ${10} ETH)"),
                           ),
-                          border: OutlineInputBorder(),
-                          hintText: "Amount (min ${10} ETH)"),
+                          const SizedBox(height: 30),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 30),
-                  ],
-                ),
-              ),
-              onConfirm: () {
-                EthereumAddress adr = project.contractAddress;
-                double _amount = double.parse(_enteredAmountController.text);
-                String _privateKey = _privateKeyController.text;
-                widget._projectModel.invest(
-                    projectContractAddress: adr,
-                    amount: _amount,
-                    privateKey: _privateKey);
+                    onConfirm: () {
+                      EthereumAddress adr = project.contractAddress;
+                      double _amount =
+                          double.parse(_enteredAmountController.text);
+                      String _privateKey = _privateKeyController.text;
+                      widget._projectModel.invest(
+                          projectContractAddress: adr,
+                          amount: _amount,
+                          privateKey: _privateKey);
+                    },
+                    textConfirm: "invest",
+                    onCancel: () {},
+                    textCancel: "cancel");
               },
-              textConfirm: "invest",
-              onCancel: () {},
-              textCancel: "cancel");
-        },
-        label: const Text("INVEST"),
-        foregroundColor: Colors.white,
-        icon: const Icon(FontAwesomeIcons.ethereum),
-        backgroundColor: Colors.blue,
-        splashColor: AppColor.gradientSecond,
-        elevation: 12,
-        isExtended: true,
-      ),
+              label: const Text("INVEST"),
+              foregroundColor: Colors.white,
+              icon: const Icon(FontAwesomeIcons.ethereum),
+              backgroundColor: Colors.blue,
+              splashColor: AppColor.gradientSecond,
+              elevation: 12,
+              isExtended: true,
+            ),
     );
   }
 }

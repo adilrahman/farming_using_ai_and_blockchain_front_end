@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:farming_using_ai_and_blockchain_front_end/data_model/crowdfunding/project_data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +13,7 @@ import 'dart:convert';
 class InvesorsProjectListModel extends ChangeNotifier {
   var username;
   var ethAddress;
-
+  var myContribution = 0.0;
   List<Project> allProjects = []; // used to store all fethced projects
   List<Project> myProjects = []; // used to store only invested projects
   List<dynamic> contributorsListOfProject = [];
@@ -53,7 +55,9 @@ class InvesorsProjectListModel extends ChangeNotifier {
     ["Fundraising", Colors.green],
     ["Expired", Colors.red],
     ["Successful", Colors.grey],
-    ["Cancelled", Colors.yellow]
+    ["Cancelled", Colors.yellow],
+    ["Completed", Colors.orangeAccent],
+    ["Closed", Colors.red]
   ];
 
   bool isLoading = false;
@@ -140,6 +144,11 @@ class InvesorsProjectListModel extends ChangeNotifier {
       var _projectSummary = await _client!
           .call(contract: _tmpContract, function: _getSummary, params: []);
 
+      var _isProjectClosing = _tmpContract.function("isProjectClosing");
+
+      var _isProjectClosingResult = await _client!.call(
+          contract: _tmpContract, function: _isProjectClosing, params: []);
+
       String _goalAmount_tmp =
           convertionWeiToEth(false, double.parse(_projectSummary[6].toString()))
               .toString();
@@ -172,21 +181,21 @@ class InvesorsProjectListModel extends ChangeNotifier {
       final difference = expired.difference(rightNow).inDays;
 
       Project _tmpProject = Project(
-        contractAddress: myProjectsAddress[i],
-        creator: _projectSummary[0].toString(),
-        creatorName: _projectSummary[1].toString(),
-        phoneNumber: _projectSummary[2].toString(),
-        raiseBy: d12.toString(),
-        projectName: _projectSummary[4].toString(),
-        projectDescription: _projectSummary[5].toString(),
-        goalAmount: _goalAmount_tmp,
-        currentBalance: _currentBalance,
-        minimunContribution: _minimunContribution_tmp,
-        state: int.parse(_projectSummary[9].toString()),
-        numberOfContributors: int.parse(_projectSummary[10].toString()),
-        expiredAtInDays: difference.toString(),
-        landLocation: _projectSummary[11].toString(),
-      );
+          contractAddress: myProjectsAddress[i],
+          creator: _projectSummary[0].toString(),
+          creatorName: _projectSummary[1].toString(),
+          phoneNumber: _projectSummary[2].toString(),
+          raiseBy: d12.toString(),
+          projectName: _projectSummary[4].toString(),
+          projectDescription: _projectSummary[5].toString(),
+          goalAmount: _goalAmount_tmp,
+          currentBalance: _currentBalance,
+          minimunContribution: _minimunContribution_tmp,
+          state: int.parse(_projectSummary[9].toString()),
+          numberOfContributors: int.parse(_projectSummary[10].toString()),
+          expiredAtInDays: difference.toString(),
+          landLocation: _projectSummary[11].toString(),
+          projectClosing: _isProjectClosingResult[0]);
 
       allProjects.add(_tmpProject);
 
@@ -291,6 +300,49 @@ class InvesorsProjectListModel extends ChangeNotifier {
     }
   }
 
+  setApproval(_projectContractAddress, privateKey) async {
+    List<dynamic> credDetails = await getCredentials(privateKey);
+
+    var _credentials = credDetails[0];
+    var _ownAddress = credDetails[1];
+
+    var _tmpContract = DeployedContract(
+        ContractAbi.fromJson(_abiOfProject!, "Project"),
+        _projectContractAddress);
+
+    var _setApproval = _tmpContract.function("setClose");
+
+    await _client!.sendTransaction(
+        _credentials,
+        Transaction.callContract(
+          contract: _tmpContract,
+          function: _setApproval,
+          parameters: [],
+        ));
+
+    notifyListeners();
+  }
+
+  getMyContributionAmount(_projectContractAddress) async {
+    var _ownAddress = EthereumAddress.fromHex(ethAddress);
+
+    var _tmpContract = DeployedContract(
+        ContractAbi.fromJson(_abiOfProject!, "Project"),
+        _projectContractAddress);
+
+    var _myContribution = _tmpContract.function("getMyTotalContribution");
+
+    var _myContributionAmount = await _client!.call(
+        sender: _ownAddress,
+        contract: _tmpContract,
+        function: _myContribution,
+        params: []);
+    var amount = double.parse(_myContributionAmount[0].toString());
+    amount = convertionWeiToEth(false, amount);
+    log(amount.toString());
+    myContribution = amount;
+  }
+
   getMyContributedProjects() async {
     var _ownAddress = EthereumAddress.fromHex(ethAddress);
     var myProjectsAddress = await _client!.call(
@@ -312,6 +364,11 @@ class InvesorsProjectListModel extends ChangeNotifier {
 
       var _projectSummary = await _client!
           .call(contract: _tmpContract, function: _getSummary, params: []);
+
+      var _isProjectClosing = _tmpContract.function("isProjectClosing");
+
+      var _isProjectClosingResult = await _client!.call(
+          contract: _tmpContract, function: _isProjectClosing, params: []);
 
       String _goalAmount_tmp =
           convertionWeiToEth(false, double.parse(_projectSummary[6].toString()))
@@ -358,7 +415,8 @@ class InvesorsProjectListModel extends ChangeNotifier {
           state: int.parse(_projectSummary[9].toString()),
           numberOfContributors: int.parse(_projectSummary[10].toString()),
           expiredAtInDays: difference.toString(),
-          landLocation: _projectSummary[11].toString());
+          landLocation: _projectSummary[11].toString(),
+          projectClosing: _isProjectClosingResult[0]);
 
       myProjects.add(_tmpProject);
 
