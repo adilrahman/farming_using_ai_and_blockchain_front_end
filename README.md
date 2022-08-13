@@ -27,11 +27,14 @@ farmers
 
 ## ARCHITECTURE
 
-[architecture pic]
+
+![image](https://drive.google.com/uc?export=view&id=187N079IJKutAoDjLp5tkhPKVv7FRjqSk)
 
 
 ## REST API DESIGN
-[pic]
+![image](https://drive.google.com/uc?export=view&id=1KA4nWnFdQ6ucwq7Dho8mAIjjUvvg2X03)
+
+
 
 #### 1. Crop Recommendation
 
@@ -78,11 +81,13 @@ mechanism that helps in the validation of the transactions.
 
 ### Class Diagram Of Crowdfunding
 
-[pic Class Diagram Of Crowdfunding]
+
+![pic Class Diagram Of Crowdfunding](https://drive.google.com/uc?export=view&id=1DNKT6K1ARYgY9E9_s51DufpxeMur1h_m)
+
 
 ### State Transfer Diagram Of Crowdfunding
 
-[pic State Transfer Diagram Of Crowdfunding]
+![pic State Transfer Diagram Of Crowdfunding](https://drive.google.com/uc?export=view&id=1snca_p1rAoBmSVvt3dtZCAbpNYvF8dwI)
 
 #### 1. FUNDRAISING STATE
 When a project is created it will be initialized to the Fundraising state. So in this state,
@@ -133,7 +138,7 @@ is collected from kaggle.com[url]
 
 #### Accuracy Of Different Ml Algorithms On Crop Recommendation Dataset
 
-[pic of accuracy metrcs]
+![pic of accuracy metrcs](https://drive.google.com/uc?export=view&id=1ejbrs0uTLhWdmNoHvVcyX4BHekQltaDF)
 
 - This system will recommend possible crops and it will allow a user to explore the
 possible crops they can grow on the field to make more educated decisions. For this, various
@@ -153,7 +158,7 @@ information obtained from the analysis we formulated a custom dataset that consi
 minimum, mean, and maximum values of each and every crop's nutrients values such as
 nitrogen (n), phosphorus (p), and potassium (k)
 
-[pic custon dataset]
+![pic custon dataset](https://drive.google.com/uc?export=view&id=1vEP4gx5q4rZtB49l6yE2DhL1fdPW0o_p)
 
 - So, based on this dataset and given input it will check if the given values are higher
 than the maximum or lower than the minimum, and Based on the evaluation it will return
@@ -174,9 +179,11 @@ or "safe to use fertilizers"
 this, we have used the dataset named PlantVillage which is collected from kaggle.com[link]. For
 prediction, we have used transfer learning technique with Resnet50 model
 
-[pic of model summery]
+![pic of model summery](https://drive.google.com/uc?export=view&id=1HQOe_UsiZgf1ipDarrZdk9XFMzB1Jusj)
 
-[accuracy]
+
+![accuracy](https://drive.google.com/uc?export=view&id=1uNNz61PMnPD5FkUH-70dw8YFctjlCVi2)
+
 
 ## SCREENSHOTS OF MOBILE APPLICATION
 
