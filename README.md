@@ -1,4 +1,4 @@
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=5800F7&background=FF000000&width=435&lines=FARMING+USING+AI+AND+BLOCKCHAIN)](https://git.io/typing-svg)
+# FARMING USING AI AND BLOCKCHAIN
 `` Bachelor’s degree final project ``
 
 ## PROJECT SCOPE
@@ -187,4 +187,17 @@ prediction, we have used transfer learning technique with Resnet50 model
 
 ## SCREENSHOTS OF MOBILE APPLICATION
 
+![image](https://drive.google.com/uc?export=view&id=1-a3pGOuuflfHxWeY8NitaobNF3FttBSf)
+
+![image](https://drive.google.com/uc?export=view&id=1rpeUQJBWDzWmL1NHF7RSY8uyecNmtT_g)
+
+
+![image](https://drive.google.com/uc?export=view&id=19XUFBcwyjPZfaog-ONtzg0LOCPKKFXHU)
+
+![image](https://drive.google.com/uc?export=view&id=1uCgxirJJYGlh8LxWjtdfznUFuc7VOPyU)
+
+
+![image](https://drive.google.com/uc?export=view&id=1w8TExUh-RovmLBsvPwGeReUoeSpFDpRF)
+
+![image](https://drive.google.com/uc?export=view&id=1Y1PD60btiymiA_ZgbjHKpKM8GDdt4ulU)
 
