@@ -1,5 +1,20 @@
-# FARMING USING AI AND BLOCKCHAIN
-`` Bachelor’s degree final project ``
+
+
+<p align="center">
+
+  <a target="_blank">
+    <img alt="amplication-logo" height="250" alt="Amplication Logo" src="https://drive.google.com/uc?export=view&id=1FPnl1iekg-Afmee-kTs6BhfbvXyXUK0x"/>
+  </a>
+</p>
+<h3 align="center">
+  <b>
+    <a>
+      FARMING USING AI AND BLOCKCHAIN
+    </a>
+  </b>
+</h3>
+
+
 
 ## PROJECT SCOPE
 
@@ -201,3 +216,7 @@ prediction, we have used transfer learning technique with Resnet50 model
 
 ![image](https://drive.google.com/uc?export=view&id=1Y1PD60btiymiA_ZgbjHKpKM8GDdt4ulU)
 
+---
+
+**Follow us**<br>
+https://www.linkedin.com/in/adil-rahman-80b17a23a/
